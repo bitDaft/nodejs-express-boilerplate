@@ -1,0 +1,18 @@
+// #The function to execute when migrations are run
+export const up = (knex) => {
+  return knex.schema.createTable("table_name", (t) => {
+    t.increments("id").notNullable().unique().primary();
+    t.json("additional_information");
+    t.datetime("created_at")
+      .defaultTo(knex.raw("CURRENT_TIMESTAMP"))
+      .notNullable();
+    t.datetime("updated_at")
+      .defaultTo(knex.raw("CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"))
+      .notNullable();
+  });
+};
+
+// #The function to execute when migrations are being rolled back
+export const down = (knex) => {
+  return knex.schema.dropTable("table_name");
+};

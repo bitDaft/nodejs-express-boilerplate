@@ -1,0 +1,5 @@
+{
+  "ENV_PREFIX":"APP",
+  "auth_url": "https://www.example.com/oauth/authorize",
+  "token_url": "http://www.example.com/oauth/token"
+}

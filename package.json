@@ -1,0 +1,56 @@
+{
+  "name": "app",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "an nodejs app boilerplate",
+  "main": "./bin/www.js",
+  "scripts": {
+    "start": "NODE_ENV=production node --experimental-json-modules ./bin/www.js",
+    "dev": "nodemon --experimental-json-modules -r dotenv/config ./bin/www.js dotenv_config_path=./environment/.development.env dotenv_config_debug=true",
+    "knex:d": "DOTENV_CONFIG_PATH=./environment/.development.env node -r dotenv/config ./node_modules/knex/bin/cli.js --knexfile ./knexfile.js --esm migrate:latest",
+    "knex:p": "NODE_ENV=production npx knex --knexfile ./knexfile.js --esm migrate:latest",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "app"
+  ],
+  "imports": {
+    "#": ".",
+    "#app": "./app.js",
+    "#config": "./src/config/index.js",
+    "#controllers/*": "./src/controllers/*/index.js",
+    "#common/*": "./src/controllers/common/*.js",
+    "#middlewares": "./src/middlewares/index.js",
+    "#models": "./database/models/index.js",
+    "#conns": "./database/conn/index.js",
+    "#routes": "./src/routes/index.js",
+    "#routes/*": "./src/routes/*/index.js",
+    "#utils/*": "./src/utils/*.js",
+    "#util/*": "./src/utils/*",
+    "#cache": "./src/utils/cache.js",
+    "#knexfile": "./knexfile.js"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0",
+    "nodemon": "^2.0.7"
+  },
+  "dependencies": {
+    "axios": "^0.21.1",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-jwt": "^6.1.0",
+    "form-data": "^4.0.0",
+    "formidable": "^1.2.2",
+    "helmet": "^4.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.95.6",
+    "morgan": "^1.10.0",
+    "mysql2": "^2.2.5",
+    "node-cache": "^5.1.2",
+    "node-schedule": "^2.0.0",
+    "nodemailer": "^6.6.3",
+    "objection": "^2.2.15",
+    "rate-limiter-flexible": "^2.2.2"
+  }
+}

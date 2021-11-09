@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "module": "es6",
+    "target": "es6",
+    "paths": {
+      "#": ["."],
+      "#app": ["./app.js"],
+      "#config": ["./src/config/index.js"],
+      "#controllers/*": ["./src/controllers/*/index.js"],
+      "#common/*": ["./src/controllers/common/*.js"],
+      "#middlewares": ["./src/middlewares/index.js"],
+      "#models": ["./database/models/index.js"],
+      "#conns": ["./database/conn/index.js"],
+      "#routes": ["./src/routes/index.js"],
+      "#routes/*": ["./src/routes/*/index.js"],
+      "#utils/*": ["./src/utils/*.js"],
+      "#util/*": ["./src/utils/*"],
+      "#cache": ["./src/utils/cache.js"]
+    }
+  },
+  "exclude": ["node_modules"]
+}

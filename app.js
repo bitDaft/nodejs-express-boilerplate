@@ -1,0 +1,41 @@
+// #Package imports
+import express from "express";
+import logger from "morgan";
+import cors from "cors";
+import helmet from "helmet";
+
+// #Other imports
+import routes from "#routes";
+import {
+  finalErrorHandler,
+  standardErrorHandler,
+  standardSuccessHandler,
+} from "#utils/responseHandlers";
+import { routerHandler } from "#utils/routerHandler";
+import { rateLimiterMiddleware } from "#middlewares";
+
+// #Create express application
+let app = express();
+
+// #Setup middlewares
+app.use(logger("dev"));
+app.use(helmet());
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(rateLimiterMiddleware);
+
+// #Initialize routes
+app.use(routes);
+
+// #Special function to handle throwing error globally
+// ?This functionality will be part of express 5
+// ?So this can be removed once next express version releases
+routerHandler(app._router);
+
+// #Response handlers
+app.use(standardSuccessHandler);
+app.use(standardErrorHandler);
+app.use(finalErrorHandler);
+
+export default app;
