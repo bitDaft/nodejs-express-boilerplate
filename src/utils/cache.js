@@ -1,12 +1,15 @@
 import NodeCache from "node-cache";
-
-const opt = {
-  stdTTL: 300,
-  checkperiod: 300,
-};
+import { MINUTE, SECOND } from "#utils/timeConstants";
 
 // #Used when defining the cache keys and time
 export const BASIC_KEY = (token) => `${token}_basic`;
-export const BASIC_KEY_TIMEOUT = 60 * 60 * 24 * 7; // in seconds, = 1 week
 
-export const basic_cache = new NodeCache(opt);
+const opt = {
+  stdTTL: (5 * MINUTE) / 1000,
+  checkperiod: (30 * SECOND) / 1000,
+};
+
+export const basic_cache = new NodeCache({
+  ...opt,
+  stdTTL: (30 * MINUTE) / 1000,
+});

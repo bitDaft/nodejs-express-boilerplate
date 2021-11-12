@@ -11,10 +11,7 @@ export const standardErrorHandler = (err, req, res, next) =>
   res.headersSent
     ? console.error("[Error] Sent already:", err)
     : // #Handle error
-    err instanceof Failure &&
-      err.statusCode !== 500 &&
-      err.type &&
-      err.type !== "INTERNAL"
+    err instanceof Failure && err.type && err.type !== "INTERNAL"
     ? console.error(err) & res.status(err.statusCode).json(err)
     : next(err);
 
