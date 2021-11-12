@@ -6,10 +6,12 @@
   "description": "an nodejs app boilerplate",
   "main": "./bin/www.js",
   "scripts": {
-    "start": "NODE_ENV=production node --experimental-json-modules ./bin/www.js",
+    "start": "cross-env NODE_ENV=production node --experimental-json-modules ./bin/www.js",
     "dev": "nodemon --experimental-json-modules -r dotenv/config ./bin/www.js dotenv_config_path=./environment/.development.env dotenv_config_debug=true",
-    "knex:d": "DOTENV_CONFIG_PATH=./environment/.development.env node -r dotenv/config ./node_modules/knex/bin/cli.js --knexfile ./knexfile.js --esm migrate:latest",
-    "knex:p": "NODE_ENV=production npx knex --knexfile ./knexfile.js --esm migrate:latest",
+    "knex:d": "cross-env node -r dotenv/config ./node_modules/knex/bin/cli.js  --knexfile ./knexfile.js --esm $npm_config_c dotenv_config_path=./environment/.development.env",
+    "knex:d:w": "cross-env node -r dotenv/config ./node_modules/knex/bin/cli.js  --knexfile ./knexfile.js --esm %npm_config_c% dotenv_config_path=./environment/.development.env",
+    "knex:p": "cross-env NODE_ENV=production npx knex --knexfile ./knexfile.js --esm $npm_config_c",
+    "knex_running_example": "npm run knex:d:w --c=migrate:latest",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -32,6 +34,7 @@
     "#knexfile": "./knexfile.js"
   },
   "devDependencies": {
+    "cross-env": "^7.0.3",
     "dotenv": "^10.0.0",
     "nodemon": "^2.0.7"
   },

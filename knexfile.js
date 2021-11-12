@@ -1,9 +1,9 @@
-import config from "#config";
+import config from "./src/config/index.js";
 
 export default {
   [config.NODE_ENV]: {
     client: config.DB_client,
-    debug: config.DB_debug === "true",
+    debug: config.DB_debug,
     connection: {
       host: config.DB_host,
       user: config.DB_user,
