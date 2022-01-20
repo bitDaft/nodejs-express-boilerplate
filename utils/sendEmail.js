@@ -4,7 +4,7 @@ import config from "#config";
 
 const SMTPconfig = {
   host: config.SMTP_host,
-  port: Number(config.SMTP_port),
+  port: config.SMTP_port,
   auth: {
     user: config.SMTP_user,
     pass: config.SMTP_pass,
