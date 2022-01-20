@@ -2,16 +2,16 @@ import fs from 'fs';
 import path from 'path';
 import process from 'process';
 
-import { default as configFile } from './config.json';
+import { __dirname } from '#utils/getFileDir';
 
-const envPrefix = `${configFile.ENV_PREFIX}_`;
+import { default as config } from './config.json';
 
-let config = { ...configFile };
+const envPre = config.ENV_PREFIX ?? '';
 
 // # Custom parsing of values to correct types from string and validation checks
 // ^ Add or change env key validation here based on requirement
 const validateAndGetParsedValue = (new_key) => {
-  const key = `${envPrefix}${new_key}`;
+  const key = `${envPre}${new_key}`;
   const value = process.env[key];
   switch (new_key) {
     case 'DB_debug':
@@ -21,51 +21,38 @@ const validateAndGetParsedValue = (new_key) => {
     case 'DB_port':
     case 'PORT':
     case 'SMTP_port':
-      if (isNaN(+value))
-        throw Error(`Invalid value provided for env variable ${key}`);
+      if (isNaN(+value)) throw Error(`Invalid value provided for env variable ${key}`);
       return +value;
     default:
       return value;
   }
 };
 
-console.log(import.meta);
-console.log(path.join(process.cwd(), config.ENV_file_path));
+const mergeConfigs = async () => {
+  const dotOpt = {
+    path: path.join(__dirname(import.meta), '../environment', config.ENV_filename ?? '.env'),
+    debug: true,
+  };
 
-const initConfig = async () => {
-  if (process.env.NODE_ENV !== 'production') {
-    const dotenv_options = {
-      // ^ This may be switched to any other file as needed
-      path: path.join(process.cwd(), config.ENV_file_path),
-      debug: true,
-    };
-
-    if (!fs.existsSync(dotenv_options.path)) {
-      console.error(
-        `Env file at path '${dotenv_options.path}' does not exist. Please create it before proceeding!`
-      );
-      throw Error(
-        `Env file at path '${dotenv_options.path}' does not exist. Please create it before proceeding!`
-      );
-    }
-
-    await import('dotenv').then((dotenv) => {
-      dotenv.config(dotenv_options);
-
-      // # Combines the info from process.env into config for uniform access
-      for (const key in process.env) {
-        if (key.startsWith(envPrefix)) {
-          if (!process.env[key]) {
-            console.error(`Environment variable ${key} not set`);
-            throw Error(`Environment variable ${key} not set`);
-          }
-          const new_key = key.split(envPrefix)[1];
-          config[new_key] = validateAndGetParsedValue(new_key);
-        }
-      }
-    });
+  if (!fs.existsSync(dotOpt.path)) {
+    throw Error(`Env file '${dotOpt.path}' does not exist. Please create it!`);
   }
+
+  let dotenv = await import('dotenv');
+  dotenv.config(dotOpt);
+
+  for (const key in process.env) {
+    if (!key.startsWith(envPre)) continue;
+    if (!process.env[key]) throw Error(`Environment variable ${key} not set`);
+    const new_key = key.split(envPre)[1];
+    config[new_key] = validateAndGetParsedValue(new_key);
+  }
+};
+
+const init = async () => {
+  // # Combines process.env into config for uniform access if not prod
+  if (process.env.NODE_ENV !== 'production') await mergeConfigs();
   return config;
 };
 
-export default await initConfig();
+export default await init();
