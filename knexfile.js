@@ -1,4 +1,4 @@
-import config from "./src/config/index.js";
+import config from "./config/index.js";
 
 export default {
   [config.NODE_ENV]: {
