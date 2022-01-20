@@ -17,7 +17,9 @@
       "#utils/*": ["./utils/*.js"],
       "#json/*": ["./json/*"],
       "#cache": ["./utils/cache.js"]
-    }
+    },
+    "resolveJsonModule": true,
+    "moduleResolution": "node"
   },
   "exclude": ["node_modules"]
 }
