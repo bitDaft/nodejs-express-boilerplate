@@ -8,5 +8,6 @@
   "semi": true,
   "trailingComma": "es5",
   "bracketSameLine": false,
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "printWidth": 100
 }
