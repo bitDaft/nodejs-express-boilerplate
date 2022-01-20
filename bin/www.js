@@ -18,5 +18,5 @@ app.set("port", port);
 const server = http.createServer(app);
 
 server.listen(port, () => {
-  console.log("Listening on port : " + port);
+  console.log("Running -> Listening on port : " + port);
 });
