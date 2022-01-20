@@ -1,13 +1,24 @@
 {
-  "name": "app",
+  "name": "nodejs-starter",
   "version": "1.0.1",
   "private": true,
   "type": "module",
-  "description": "an nodejs app boilerplate",
+  "description": "an nodejs express starter app boilerplate",
+  "keywords": [
+    "app"
+  ],
+  "homepage": "https://github.com/bitDaft",
+  "license": "MIT",
+  "author": "Tausif ali <tausif@bitdaft.dev> (https://github.com/bitDaft)",
+  "funding": "https://ko-fi.com/bitdaft",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bitDaft/nodejs-starter.git"
+  },
   "main": "./bin/www.js",
   "scripts": {
-    "start": "NODE_ENV=production node --experimental-json-modules ./bin/www.js",
-    "dev": "nodemon --experimental-json-modules  ./bin/www.js",
+    "start": "NODE_ENV=production node ./bin/www.js",
+    "dev": "nodemon ./bin/www.js",
     "migrate": "knex --esm migrate:latest",
     "migrate:one": "knex --esm migrate:up",
     "migrate:make": "knex --esm migrate:make",
@@ -18,9 +29,6 @@
     "seed:make": "knex --esm seed:make",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [
-    "app"
-  ],
   "imports": {
     "#": ".",
     "#app": "./app.js",
@@ -33,6 +41,7 @@
     "#routes": "./src/routes/index.js",
     "#routes/*": "./src/routes/*/index.js",
     "#utils/*": "./utils/*.js",
+    "#lib/*": "./lib/*.js",
     "#json/*": "./json/*",
     "#cache": "./utils/cache.js",
     "#knexfile": "./knexfile.js"

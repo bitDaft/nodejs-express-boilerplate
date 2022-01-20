@@ -10,8 +10,8 @@ import {
   finalErrorHandler,
   standardErrorHandler,
   standardSuccessHandler,
-} from "#utils/responseHandlers";
-import { routerHandler } from "#utils/routerHandler";
+} from "#lib/responseHandlers";
+import { routerHandler } from "#lib/routerHandler";
 import { rateLimiterMiddleware } from "#middlewares";
 
 // #Create express application

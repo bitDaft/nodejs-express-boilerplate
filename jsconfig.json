@@ -15,6 +15,7 @@
       "#routes": ["./src/routes/index.js"],
       "#routes/*": ["./src/routes/*/index.js"],
       "#utils/*": ["./utils/*.js"],
+      "#lib/*": ["./lib/*.js"],
       "#json/*": ["./json/*"],
       "#cache": ["./utils/cache.js"]
     },
