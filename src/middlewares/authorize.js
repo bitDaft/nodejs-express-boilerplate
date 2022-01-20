@@ -3,7 +3,7 @@ import { User } from "#models";
 import jwt from "express-jwt";
 
 import config from "#config";
-import { Failure } from "#utils/responseHelpers";
+import { Failure } from "#lib/responseHelpers";
 
 export default (roles = []) => {
   if (typeof roles === "string") {

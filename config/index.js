@@ -4,8 +4,8 @@ import process from 'process';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
-import { __dirname } from '#utils/getFileDir';
-import { jsonl } from '#utils/json';
+import { __dirname } from '#lib/getFileDir';
+import { jsonl } from '#lib/jsonLoader';
 
 // TODO: this needs to be replaced once node supports json imports natively
 const config = await jsonl(path.join(__dirname(import.meta), 'config.json'));

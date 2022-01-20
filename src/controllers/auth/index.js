@@ -1,7 +1,7 @@
 import { default as jwt } from "jsonwebtoken";
 
-import { Failure } from "#utils/responseHelpers";
-import { easyCatch } from "#utils/easyCatch";
+import { Failure } from "#lib/responseHelpers";
+import { easyCatch } from "#lib/easyCatch";
 import config from "#config";
 
 import {

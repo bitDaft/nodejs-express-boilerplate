@@ -10,7 +10,7 @@ import {
   resetPassword,
   revokeToken,
 } from "#controllers/auth";
-import { Failure, Success } from "#utils/responseHelpers";
+import { Failure, Success } from "#lib/responseHelpers";
 const router = express.Router();
 
 const verify = async (req, res, next) => {

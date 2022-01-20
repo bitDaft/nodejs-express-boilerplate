@@ -2,8 +2,8 @@ import crypto from "crypto";
 
 import { BaseModel } from "#conns";
 import { RefreshToken, Role } from "#models";
-import { randomToken } from "#utils/randomTokenString";
-import { MINUTE } from "#utils/timeConstants";
+import { randomToken } from "#lib/randomTokenString";
+import { MINUTE } from "#lib/timeConstants";
 
 export default class User extends BaseModel {
   static get tableName() {

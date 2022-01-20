@@ -1,7 +1,7 @@
 import express from "express";
 
 import { Pong } from "#controllers/test";
-import { Success } from "#utils/responseHelpers";
+import { Success } from "#lib/responseHelpers";
 
 const router = express.Router();
 

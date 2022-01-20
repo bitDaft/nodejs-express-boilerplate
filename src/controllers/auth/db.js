@@ -1,6 +1,6 @@
 import { RefreshToken, User } from "#models";
-import { randomToken } from "#utils/randomTokenString";
-import { DAY, MINUTE } from "#utils/timeConstants";
+import { randomToken } from "#lib/randomTokenString";
+import { DAY, MINUTE } from "#lib/timeConstants";
 
 export const createUser = (name, email, password) => {
   return User.query()
