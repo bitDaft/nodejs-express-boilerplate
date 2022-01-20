@@ -1,17 +1,21 @@
 {
   "name": "app",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "type": "module",
   "description": "an nodejs app boilerplate",
   "main": "./bin/www.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node --experimental-json-modules ./bin/www.js",
-    "dev": "nodemon --experimental-json-modules -r dotenv/config ./bin/www.js dotenv_config_path=./environment/.development.env dotenv_config_debug=true",
-    "knex:d": "cross-env node -r dotenv/config ./node_modules/knex/bin/cli.js  --knexfile ./knexfile.js --esm $npm_config_c dotenv_config_path=./environment/.development.env",
-    "knex:d:w": "cross-env node -r dotenv/config ./node_modules/knex/bin/cli.js  --knexfile ./knexfile.js --esm %npm_config_c% dotenv_config_path=./environment/.development.env",
-    "knex:p": "cross-env NODE_ENV=production npx knex --knexfile ./knexfile.js --esm $npm_config_c",
-    "knex_running_example": "npm run knex:d:w --c=migrate:latest",
+    "start": "NODE_ENV=production node --experimental-json-modules ./bin/www.js",
+    "dev": "nodemon --experimental-json-modules  ./bin/www.js",
+    "migrate": "knex --esm migrate:latest",
+    "migrate:one": "knex --esm migrate:up",
+    "migrate:make": "knex --esm migrate:make",
+    "migrate:list": "knex --esm migrate:list",
+    "rollback": "knex --esm migrate:rollback",
+    "rollback:one": "knex --esm migrate:down",
+    "seed": "knex --esm seed:run",
+    "seed:make": "knex --esm seed:make",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
@@ -20,7 +24,7 @@
   "imports": {
     "#": ".",
     "#app": "./app.js",
-    "#config": "./src/config/index.js",
+    "#config": "./config/index.js",
     "#controllers/*": "./src/controllers/*/index.js",
     "#common/*": "./src/controllers/common/*.js",
     "#middlewares": "./src/middlewares/index.js",
@@ -28,32 +32,32 @@
     "#conns": "./database/conn/index.js",
     "#routes": "./src/routes/index.js",
     "#routes/*": "./src/routes/*/index.js",
-    "#utils/*": "./src/utils/*.js",
-    "#util/*": "./src/utils/*",
-    "#cache": "./src/utils/cache.js",
+    "#utils/*": "./utils/*.js",
+    "#json/*": "./json/*",
+    "#cache": "./utils/cache.js",
     "#knexfile": "./knexfile.js"
   },
   "devDependencies": {
-    "cross-env": "^7.0.3",
-    "dotenv": "^10.0.0",
-    "nodemon": "^2.0.7"
+    "dotenv": "^14.2.0",
+    "nodemon": "^2.0.15",
+    "semver": "^7.3.5"
   },
   "dependencies": {
-    "axios": "^0.21.1",
+    "axios": "^0.25.0",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
+    "express": "^4.17.2",
     "express-jwt": "^6.1.0",
     "form-data": "^4.0.0",
-    "formidable": "^1.2.2",
-    "helmet": "^4.6.0",
+    "formidable": "^2.0.1",
+    "helmet": "^5.0.1",
     "jsonwebtoken": "^8.5.1",
-    "knex": "^0.95.6",
+    "knex": "^1.0.1",
     "morgan": "^1.10.0",
-    "mysql2": "^2.2.5",
+    "mysql2": "^2.3.3",
     "node-cache": "^5.1.2",
-    "node-schedule": "^2.0.0",
-    "nodemailer": "^6.6.3",
-    "objection": "^2.2.15",
-    "rate-limiter-flexible": "^2.2.2"
+    "node-schedule": "^2.1.0",
+    "nodemailer": "^6.7.2",
+    "objection": "^3.0.1",
+    "rate-limiter-flexible": "^2.3.6"
   }
 }
