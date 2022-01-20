@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import process from 'process';
+import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 
 import { __dirname } from '#utils/getFileDir';
 
@@ -50,8 +52,13 @@ const mergeConfigs = async () => {
 };
 
 const init = async () => {
-  // # Combines process.env into config for uniform access if not prod
+  // # Combines cli args into config for uniform access
+  const parsedArgs = yargs(hideBin(process.argv)).argv;
+  for (let key in parsedArgs) config[key] = parsedArgs[key];
+
+  // # Combines process.env into config for uniform access
   if (process.env.NODE_ENV !== 'production') await mergeConfigs();
+
   return config;
 };
 

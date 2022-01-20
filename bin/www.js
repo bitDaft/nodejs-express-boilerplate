@@ -1,18 +1,13 @@
 #!/usr/bin/env node
 "use strict";
 
-// #Application entry point.
+// # Application entry point.
 import http from "http";
-import app from "#app";
 
 import config from "#config";
+import app from "#app";
 
 const port = config.PORT;
-
-if (isNaN(+port)) {
-  throw Error("Invalid port provided");
-}
-
 app.set("port", port);
 
 const server = http.createServer(app);
