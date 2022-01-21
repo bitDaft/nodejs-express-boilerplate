@@ -13,4 +13,4 @@ fs.readdirSync(__dirname(import.meta))
     jsonFiles[filename] = jsonData;
   });
 
-export const jsonFiles;
+export default await jsonFiles;

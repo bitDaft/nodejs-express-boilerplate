@@ -42,7 +42,7 @@
     "#routes/*": "./src/routes/*/index.js",
     "#utils/*": "./utils/*.js",
     "#lib/*": "./lib/*.js",
-    "#json/*": "./json/*",
+    "#json": "./json/index.js",
     "#cache": "./utils/cache.js",
     "#knexfile": "./knexfile.js"
   },
