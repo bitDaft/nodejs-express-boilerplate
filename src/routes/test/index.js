@@ -1,7 +1,7 @@
-import express from "express";
+import express from 'express';
 
-import { Pong } from "#controllers/test";
-import { Success } from "#lib/responseHelpers";
+import { Pong } from '#controllers/test';
+import { Success } from '#lib/responseHelpers';
 
 const router = express.Router();
 
@@ -11,6 +11,6 @@ const pingHandler = async (req, res, next) => {
   next();
 };
 
-router.get("/ping", pingHandler);
+router.get('/ping', pingHandler);
 
 export default router;
