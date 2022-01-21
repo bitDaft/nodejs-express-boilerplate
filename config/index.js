@@ -18,6 +18,7 @@ const validateAndGetParsedValue = (new_key) => {
   const key = `${envPre}${new_key}`;
   const value = process.env[key];
   switch (new_key) {
+    case 'PROXY':
     case 'DB_debug':
       return value === 'true';
     case 'DB_pool_max':
