@@ -5,10 +5,10 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
 import { __dirname } from '#lib/getFileDir';
-import { jsonl } from '#lib/jsonLoader';
+import jsonLoader from '#lib/jsonLoader';
 
 // TODO: this needs to be replaced once node supports json imports natively
-const config = await jsonl(path.join(__dirname(import.meta), 'config.json'));
+const config = await jsonLoader(path.join(__dirname(import.meta), 'config.json'));
 
 const envPre = config.ENV_PREFIX ?? '';
 
