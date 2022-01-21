@@ -29,8 +29,8 @@ app.use(rateLimiterMiddleware);
 app.use(routes);
 
 // #Special function to handle throwing error globally
-// ?This functionality will be part of express 5
-// ?So this can be removed once next express version releases
+// TODO: This functionality will be part of express 5
+// TODO: So this can be removed once next express version releases
 routerHandler(app._router);
 
 // #Response handlers
