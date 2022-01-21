@@ -8,6 +8,7 @@ import helmet from "helmet";
 import routes from "#routes";
 import {
   finalErrorHandler,
+  normalErrorHandler,
   standardErrorHandler,
   standardSuccessHandler,
 } from "#lib/responseHandlers";
@@ -30,11 +31,12 @@ app.use(routes);
 
 // #Special function to handle throwing error globally
 // TODO: This functionality will be part of express 5
-// TODO: So this can be removed once next express version releases
+// TODO: So this should be removed once next express version releases
 routerHandler(app._router);
 
 // #Response handlers
 app.use(standardSuccessHandler);
+app.use(normalErrorHandler);
 app.use(standardErrorHandler);
 app.use(finalErrorHandler);
 
