@@ -5,4 +5,3 @@ export const rateLimiterMiddleware = async (req, res, next) =>
     .consume(req.ip)
     .then(() => next())
     .catch(() => res.status(429).send('Too Many Requests'));
-

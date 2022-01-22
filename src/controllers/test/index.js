@@ -1,3 +1,3 @@
-import { exampleGetAllData } from "./db.js";
+import { exampleGetAllData } from './db.js';
 
-export const Pong = async () => "pong";
+export const Pong = async () => 'pong';
