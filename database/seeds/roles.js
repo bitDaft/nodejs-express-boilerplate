@@ -4,7 +4,7 @@ export const { seed } = {
     return knex("role")
       .del()
       .then(() => {
-        // ^ Inserts seed entries
+        // # Inserts seed entries here
         return knex("role").insert([{ name: "user" }, { name: "admin" }]);
       });
   },
