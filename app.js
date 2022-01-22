@@ -9,13 +9,9 @@ import helmet from 'helmet';
 
 // # Other imports
 import routes from '#routes';
-import {
-  finalErrorHandler,
-  normalErrorHandler,
-  standardErrorHandler,
-  standardSuccessHandler,
-} from '#lib/responseHandlers';
+import { finalErrorHandler, normalErrorHandler, standardErrorHandler } from '#lib/responseHandlers';
 import { rateLimiterMiddleware } from '#middlewares';
+import { injectSuccessHandlerMiddleware } from '#lib/routerInjectSuccesHandler';
 import config from '#config';
 
 // # Create express application
@@ -35,8 +31,10 @@ app.use(rateLimiterMiddleware);
 // # Initialize routes
 app.use(routes);
 
+// # Inject Success handler
+injectSuccessHandlerMiddleware(routes);
+
 // # Response handlers
-app.use(standardSuccessHandler);
 app.use(normalErrorHandler);
 app.use(standardErrorHandler);
 app.use(finalErrorHandler);
