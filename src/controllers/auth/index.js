@@ -79,7 +79,7 @@ export const registerUser = async (name, email, password) => {
   let password_re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
 
   let search_index = password.search(password_re);
-  // #throw error if search index is anything other than 0
+  // # Throw error if search index is anything other than 0
   if (search_index) {
     throw new Failure(
       'Password must have a minimum length of 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character'
@@ -244,7 +244,7 @@ export const resetPassword = async (token, password) => {
   let password_re = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
 
   let search_index = password.search(password_re);
-  // #throw error if search index is anything other than 0
+  // # Throw error if search index is anything other than 0
   if (search_index) {
     throw new Failure(
       'Password must have a minimum length of 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character'

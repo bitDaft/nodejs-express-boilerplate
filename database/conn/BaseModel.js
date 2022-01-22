@@ -10,7 +10,7 @@ export default class BaseModel extends Model {
   }
 
   $beforeValidate(jsonSchema, json, opt) {
-    // #Converting datetime to iso string for schema validation
+    // # Converting datetime to iso string for schema validation
     for (let propertyName in jsonSchema.properties) {
       let schema = jsonSchema.properties[propertyName];
       if (schema && schema.format === "date-time") {
@@ -24,7 +24,7 @@ export default class BaseModel extends Model {
   }
 
   static async beforeInsert({ inputItems }) {
-    // #Removing datetime iso string tz info, use this fn if field in DB is DATETIME and not TIMESTAMP
+    // # Removing datetime iso string tz info, use this fn if field in DB is DATETIME and not TIMESTAMP
     for (let item of inputItems) {
       for (let key in item) {
         if (
@@ -39,7 +39,7 @@ export default class BaseModel extends Model {
   }
 
   static async beforeUpdate({ inputItems }) {
-    // #Removing datetime iso string tz info, use this fn if field in DB is DATETIME and not TIMESTAMP
+    // # Removing datetime iso string tz info, use this fn if field in DB is DATETIME and not TIMESTAMP
     for (let item of inputItems) {
       for (let key in item) {
         if (

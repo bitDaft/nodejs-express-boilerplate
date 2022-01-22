@@ -13,20 +13,20 @@ export default (roles = []) => {
   roles = roles.map((_) => _.toLowerCase());
 
   return [
-    // authenticate JWT token and attach user to request object (req.user)
+    // # Authenticate JWT token and attach user to request object (req.user)
     jwt({
       secret: config.JWT_SECRET,
       algorithms: ['HS256'],
     }),
 
-    // In case JWT fails, handle it here itself
+    // # In case JWT fails, handle it here itself
     (err, req, res, next) => {
       if (err.name === 'UnauthorizedError') {
         return next(new Failure('Unauthorized', 401));
       }
     },
 
-    // authorize based on user role
+    // # Authorize based on user role
     async (req, res, next) => {
       let authCatch = easyCatch('Unable to get user');
       let users = await getUserById(req.user.id).catch(authCatch('user fetch authorize'));
@@ -34,11 +34,11 @@ export default (roles = []) => {
       let user = users[0];
 
       if (!user || (roles.length && !roles.includes(user.role.name.toLowerCase()))) {
-        // account no longer exists or role not authorized
+        // # Account no longer exists or role not authorized
         return next(new Failure('Unauthorized', 401));
       }
 
-      // authentication and authorization successful
+      // # Authentication and authorization successful
       req.user = user;
       req.role = user.role;
       req.refresh_token = user.refresh_token;
