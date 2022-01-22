@@ -17,3 +17,6 @@ node-schedule
 nodemailer
 objection
 rate-limiter-flexible
+
+
+env filename  in config

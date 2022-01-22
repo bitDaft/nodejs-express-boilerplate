@@ -3,3 +3,5 @@ environment/*
 package-lock.json
 node_modules/
 # knexfile.*
+
+*.log
