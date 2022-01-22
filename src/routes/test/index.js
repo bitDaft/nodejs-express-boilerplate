@@ -2,7 +2,6 @@ import express from 'express';
 
 import { Pong } from '#controllers/test';
 import { Success } from '#lib/responseHelpers';
-import { __dirname } from '#lib/getFileDir';
 
 const router = express.Router();
 
