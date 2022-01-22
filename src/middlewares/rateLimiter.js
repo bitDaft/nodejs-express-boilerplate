@@ -1,7 +1,8 @@
-import { middlewareLimiter } from "#utils/rateLimiters";
+import { limiterMiddleware } from '#utils/rateLimiters';
 
-export default async (req, res, next) =>
-  middlewareLimiter
+export const rateLimiterMiddleware = async (req, res, next) =>
+  limiterMiddleware
     .consume(req.ip)
     .then(() => next())
-    .catch(() => res.status(429).send("Too Many Requests"));
+    .catch(() => res.status(429).send('Too Many Requests'));
+
