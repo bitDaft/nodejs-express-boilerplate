@@ -1,3 +1,6 @@
+// # Special function to handle throwing error globally within every route and middleware
+import '#lib/routerExceptionHandler';
+
 // # Package imports
 import express from 'express';
 import logger from 'morgan';
@@ -12,7 +15,6 @@ import {
   standardErrorHandler,
   standardSuccessHandler,
 } from '#lib/responseHandlers';
-import { routerExceptionHandler } from '#lib/routerExceptionHandler';
 import { rateLimiterMiddleware } from '#middlewares';
 import config from '#config';
 
@@ -32,11 +34,6 @@ app.use(rateLimiterMiddleware);
 
 // # Initialize routes
 app.use(routes);
-
-// # Special function to handle throwing error globally
-// TODO: This functionality will be part of express 5
-// TODO: So this should be removed once next express version releases
-routerExceptionHandler(app);
 
 // # Response handlers
 app.use(standardSuccessHandler);
