@@ -6,7 +6,7 @@ import http from 'http';
 
 import config from '#config';
 import app from '#app';
-import json from '#json';
+import '#json';
 
 const port = config.PORT;
 app.set('port', port);

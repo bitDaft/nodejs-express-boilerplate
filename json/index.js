@@ -5,12 +5,17 @@ import path from 'path';
 
 const jsonFiles = {};
 
-fs.readdirSync(__dirname(import.meta))
-  .filter((file) => file.endsWith('.json'))
-  .forEach(async (file) => {
-    const jsonData = await jsonLoader(file);
-    const filename = path.basename(file).split(".json")[0];
-    jsonFiles[filename] = jsonData;
-  });
+const loadFiles = async () => {
+  const dirname = __dirname(import.meta);
+  const files = fs.readdirSync(dirname).filter((file) => file.endsWith('.json'));
+  for (const filename of files) {
+    const jsonData = await jsonLoader(path.join(dirname, filename));
+    const name = path.basename(filename).split('.json')[0];
+    jsonFiles[name] = jsonData;
+  }
+  console.info('Completed loading of all JSON files');
+};
 
-export default await jsonFiles;
+await loadFiles();
+
+export default jsonFiles;
