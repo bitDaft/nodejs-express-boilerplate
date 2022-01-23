@@ -20,3 +20,4 @@ rate-limiter-flexible
 
 
 env filename  in config
+reformat ratelimiter nased on login and tier if available or free
