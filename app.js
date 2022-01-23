@@ -6,6 +6,7 @@ import express from 'express';
 import logger from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
+import cookieParser from "cookie-parser";
 
 // # Other imports
 import routes from '#routes';
@@ -20,10 +21,18 @@ let app = express();
 // # Check proxy enabled or not
 if (config.PROXY) app.set('trust proxy', config.PROXY);
 
+var corsOptions = {
+  credentials: true,
+  origin: function (origin, callback) {
+    callback(null, origin);
+  },
+};
+
 // # Setup middlewares
 app.use(logger('dev'));
 app.use(helmet());
-app.use(cors());
+app.use(cors(corsOptions));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(rateLimiterMiddleware);

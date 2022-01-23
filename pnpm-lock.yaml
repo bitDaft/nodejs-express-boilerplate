@@ -2,6 +2,7 @@ lockfileVersion: 5.3
 
 specifiers:
   axios: ^0.25.0
+  cookie-parser: ^1.4.6
   cors: ^2.8.5
   dotenv: ^14.2.0
   express: ^4.17.2
@@ -19,11 +20,11 @@ specifiers:
   nodemon: ^2.0.15
   objection: ^3.0.1
   rate-limiter-flexible: ^2.3.6
-  semver: ^7.3.5
   yargs: ^17.3.1
 
 dependencies:
   axios: 0.25.0
+  cookie-parser: 1.4.6
   cors: 2.8.5
   express: 4.17.2
   express-jwt: 6.1.0
@@ -44,7 +45,6 @@ dependencies:
 devDependencies:
   dotenv: 14.2.0
   nodemon: 2.0.15
-  semver: 7.3.5
 
 packages:
 
@@ -325,6 +325,14 @@ packages:
   /content-type/1.0.4:
     resolution: {integrity: sha512-hIP3EEPs8tB9AT1L+NUqtwOAps4mk2Zob89MWXMHjHWg9milF/j4osnnQLXBCBFBk/tvIG/tUc9mOUJiPBhPXA==}
     engines: {node: '>= 0.6'}
+    dev: false
+
+  /cookie-parser/1.4.6:
+    resolution: {integrity: sha512-z3IzaNjdwUC2olLIB5/ITd0/setiaFMLYiZJle7xg5Fe9KWAceil7xszYfHHBtDFYLSgJduS2Ty0P1uJdPDJeA==}
+    engines: {node: '>= 0.8.0'}
+    dependencies:
+      cookie: 0.4.1
+      cookie-signature: 1.0.6
     dev: false
 
   /cookie-signature/1.0.6:
