@@ -12,6 +12,8 @@ const config = await jsonLoader(path.join(__dirname(import.meta), 'config.json')
 
 const envPre = config.ENV_PREFIX ?? '';
 
+config.NODE_ENV = process.env.NODE_ENV || 'development';
+
 // # Custom parsing of values to correct types from string and validation checks
 // ^ Add or change env key validation here based on requirement
 const validateAndGetParsedValue = (new_key) => {
@@ -60,7 +62,7 @@ const init = async () => {
   for (let key in parsedArgs) config[key] = parsedArgs[key];
 
   // # Combines process.env into config for uniform access
-  if (process.env.NODE_ENV !== 'production') await mergeConfigs();
+  if (config.NODE_ENV !== 'production') await mergeConfigs();
 
   return config;
 };
