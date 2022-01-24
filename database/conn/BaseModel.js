@@ -12,6 +12,7 @@ const supportsReturning = ['pg', 'mssql'].includes(config.DB_client);
 export default class BaseModel extends Model {
   static concurrency = 10;
   static useLimitInFirst = true;
+  static uid = 'uid';
 
   static get jsonSchema() {
     const filename = this.name[0].toLowerCase() + this.name.slice(1);
