@@ -15,9 +15,13 @@ export default class BaseModel extends Model {
   static get jsonSchema() {
     const filename = this.name[0].toLowerCase() + this.name.slice(1);
     if (!jsonSchemas.hasOwnProperty(filename)) {
-      jsonSchemas[filename] = jsonLoaderSync(
-        path.join(__dirname(import.meta), '../schema', filename + '.json')
-      );
+      try {
+        jsonSchemas[filename] = jsonLoaderSync(
+          path.join(__dirname(import.meta), '../schema', filename + '.json')
+        );
+      } catch (e) {
+        jsonSchemas[filename] = null;
+      }
     }
     return jsonSchemas[filename];
   }
