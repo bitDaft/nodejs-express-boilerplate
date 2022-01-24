@@ -1,4 +1,5 @@
 import path from 'path';
+import fs from 'fs';
 
 import { __dirname } from '#lib/getFileDir';
 import { jsonLoaderSync } from '#lib/jsonLoader';
@@ -15,12 +16,14 @@ export default class BaseModel extends Model {
   static get jsonSchema() {
     const filename = this.name[0].toLowerCase() + this.name.slice(1);
     if (!jsonSchemas.hasOwnProperty(filename)) {
-      try {
-        jsonSchemas[filename] = jsonLoaderSync(
-          path.join(__dirname(import.meta), '../schema', filename + '.json')
+      const filepath = path.join(__dirname(import.meta), '../schema', filename + '.json');
+      if (!fs.existsSync(filepath)) {
+        console.warn(
+          `Schema file for model '${this.name}' missing. It is recommended to create a JSON schema file for it at '${filepath}'`
         );
-      } catch (e) {
         jsonSchemas[filename] = null;
+      } else {
+        jsonSchemas[filename] = jsonLoaderSync(filepath);
       }
     }
     return jsonSchemas[filename];
