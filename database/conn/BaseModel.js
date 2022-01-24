@@ -1,19 +1,30 @@
-import { Model } from "./dbinit.js";
+import path from 'path';
+
+import { __dirname } from '#lib/getFileDir';
+import { jsonLoaderSync } from '#lib/jsonLoader';
+import { Model } from './dbinit.js';
+
+const jsonSchemas = {};
 
 export default class BaseModel extends Model {
-  static get concurrency() {
-    return 10;
-  }
+  static concurrency = 10;
+  static useLimitInFirst = true;
 
-  static get useLimitInFirst() {
-    return true;
+  static get jsonSchema() {
+    const filename = this.name[0].toLowerCase() + this.name.slice(1);
+    if (!jsonSchemas.hasOwnProperty(filename)) {
+      jsonSchemas[filename] = jsonLoaderSync(
+        path.join(__dirname(import.meta), '../schema', filename + '.json')
+      );
+    }
+    return jsonSchemas[filename];
   }
 
   $beforeValidate(jsonSchema, json, opt) {
     // # Converting datetime to iso string for schema validation
     for (let propertyName in jsonSchema.properties) {
       let schema = jsonSchema.properties[propertyName];
-      if (schema && schema.format === "date-time") {
+      if (schema && schema.format === 'date-time') {
         const valueToValidate = json[propertyName];
         if (valueToValidate && valueToValidate.getTime()) {
           json[propertyName] = valueToValidate.toISOString();
@@ -28,8 +39,8 @@ export default class BaseModel extends Model {
     for (let item of inputItems) {
       for (let key in item) {
         if (
-          typeof item[key] === "string" &&
-          item[key].indexOf("T") === 10 &&
+          typeof item[key] === 'string' &&
+          item[key].indexOf('T') === 10 &&
           new Date(item[key]).getTime()
         ) {
           item[key] = item[key].slice(0, 19);
@@ -43,8 +54,8 @@ export default class BaseModel extends Model {
     for (let item of inputItems) {
       for (let key in item) {
         if (
-          typeof item[key] === "string" &&
-          item[key].indexOf("T") === 10 &&
+          typeof item[key] === 'string' &&
+          item[key].indexOf('T') === 10 &&
           new Date(item[key]).getTime()
         ) {
           item[key] = item[key].slice(0, 19);
