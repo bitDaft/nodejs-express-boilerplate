@@ -1,12 +1,12 @@
 import path from 'path';
 import fs from 'fs';
-import { compose } from 'objection';
+import { Model, compose } from 'objection';
 import softDelete from 'objection-soft-delete';
 
 import { __dirname } from '#lib/getFileDir';
 import { jsonLoaderSync } from '#lib/jsonLoader';
-import { Model } from './dbinit.js';
 import config from '#config';
+import { knexI } from '#conns';
 
 const jsonSchemas = {};
 const supportsReturning = ['pg', 'mssql'].includes(config.DB_client);
@@ -14,6 +14,8 @@ const supportsReturning = ['pg', 'mssql'].includes(config.DB_client);
 const mixins = compose(
   softDelete({ columnName: 'is_deleted', deletedValue: true, notDeletedValue: false })
 );
+let knexKeys = Object.keys(knexI);
+if (knexKeys.length === 1) Model.knex(knexI[knexKeys[0]]);
 
 export default class BaseModel extends mixins(Model) {
   static concurrency = 10;
