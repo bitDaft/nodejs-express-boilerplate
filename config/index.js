@@ -5,12 +5,12 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
 import { __dirname } from '#lib/getFileDir';
-import { jsonLoader } from '#lib/jsonLoader';
+import { jsonLoaderSync } from '#lib/jsonLoader';
 
 // TODO: this needs to be replaced once node supports json imports natively
-const config = await jsonLoader(path.join(__dirname(import.meta), 'config.json'));
+const config = jsonLoaderSync(path.join(__dirname(import.meta), 'config.json'));
 
-const envPre = config.ENV_PREFIX ?? '';
+const envPre = config.ENV_PREFIX || '';
 
 config.NODE_ENV = process.env.NODE_ENV || 'development';
 
@@ -49,7 +49,7 @@ const validateAndGetParsedValue = (new_key) => {
 
 const mergeConfigs = async () => {
   const dotOpt = {
-    path: path.join(__dirname(import.meta), '../environment', config.ENV_filename ?? '.env'),
+    path: path.join(__dirname(import.meta), '../environment', config.ENV_filename || '.env'),
     debug: true,
   };
 
