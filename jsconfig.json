@@ -1,4 +1,5 @@
 {
+  "exclude": ["node_modules", "node_modules/"],
   "compilerOptions": {
     "baseUrl": ".",
     "module": "es6",
@@ -22,6 +23,5 @@
     },
     "resolveJsonModule": true,
     "moduleResolution": "node"
-  },
-  "exclude": ["node_modules"]
+  }
 }

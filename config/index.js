@@ -4,8 +4,9 @@ import process from 'process';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
-import { __dirname } from '#lib/getFileDir';
-import { jsonLoaderSync } from '#lib/jsonLoader';
+import { __dirname } from '../lib/getFileDir.js';
+import { jsonLoaderSync } from '../lib/jsonLoader.js';
+import { injectEnv } from './injectEnv.js';
 
 // TODO: this needs to be replaced once node supports json imports natively
 const config = jsonLoaderSync(path.join(__dirname(import.meta), 'config.json'));
@@ -47,18 +48,8 @@ const validateAndGetParsedValue = (new_key) => {
   }
 };
 
-const mergeConfigs = async () => {
-  const dotOpt = {
-    path: path.join(__dirname(import.meta), '../environment', config.ENV_filename || '.env'),
-    debug: true,
-  };
-
-  if (!fs.existsSync(dotOpt.path)) {
-    throw Error(`Env file '${dotOpt.path}' does not exist. Please create it!`);
-  }
-
-  let dotenv = await import('dotenv');
-  dotenv.config(dotOpt);
+const mergeConfigs = () => {
+  injectEnv(config);
 
   for (const key in process.env) {
     if (!key.startsWith(envPre)) continue;
@@ -80,18 +71,21 @@ const parseFromConfig = () => {
   }
 };
 
-const init = async () => {
+export const init = (extra = {}) => {
   // # Combines cli args into config for uniform access
   const parsedArgs = yargs(hideBin(process.argv)).argv._;
   for (let key in parsedArgs) config[key] = parsedArgs[key];
 
   // # Combines process.env into config for uniform access
-  if (config.NODE_ENV !== 'production') await mergeConfigs();
+  if (config.NODE_ENV !== 'production') mergeConfigs();
 
   // # parse any grouped multi key values like for multitenant db connections
   parseFromConfig();
 
+  for (let key in extra) config[key] = parsedArgs[key];
   return config;
 };
 
-export default await init();
+init();
+
+export default config;
