@@ -1,5 +1,7 @@
 import path from 'path';
 import fs from 'fs';
+import { compose } from 'objection';
+import softDelete from 'objection-soft-delete';
 
 import { __dirname } from '#lib/getFileDir';
 import { jsonLoaderSync } from '#lib/jsonLoader';
@@ -9,10 +11,14 @@ import config from '#config';
 const jsonSchemas = {};
 const supportsReturning = ['pg', 'mssql'].includes(config.DB_client);
 
-export default class BaseModel extends Model {
+const mixins = compose(
+  softDelete({ columnName: 'is_deleted', deletedValue: true, notDeletedValue: false })
+);
+
+export default class BaseModel extends mixins(Model) {
   static concurrency = 10;
   static useLimitInFirst = true;
-  static uid = 'uid';
+  static uidProp = 'uid';
 
   static get jsonSchema() {
     const filename = this.name[0].toLowerCase() + this.name.slice(1);
@@ -81,7 +87,11 @@ export default class BaseModel extends Model {
 
   async $beforeUpdate(context) {
     await super.$beforeUpdate(context);
-    this.updated_at = new Date();
+    if (context.softDelete) {
+    } else if (context.undelete) {
+    } else {
+      this.updated_at = new Date();
+    }
   }
 
   static get QueryBuilder() {

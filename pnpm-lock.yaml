@@ -19,6 +19,7 @@ specifiers:
   nodemailer: ^6.7.2
   nodemon: ^2.0.15
   objection: ^3.0.1
+  objection-soft-delete: ^1.0.7
   rate-limiter-flexible: ^2.3.6
   yargs: ^17.3.1
 
@@ -39,6 +40,7 @@ dependencies:
   node-schedule: 2.1.0
   nodemailer: 6.7.2
   objection: 3.0.1_knex@1.0.1
+  objection-soft-delete: 1.0.7_objection@3.0.1
   rate-limiter-flexible: 2.3.6
   yargs: 17.3.1
 
@@ -1232,6 +1234,14 @@ packages:
   /object-keys/1.1.1:
     resolution: {integrity: sha512-NuAESUOUMrlIXOfHKzD6bpPu3tYt3xvjNdRIQ+FeT0lNb4K8WR70CaDxhuNguS2XG+GjkyMwOzsN5ZktImfhLA==}
     engines: {node: '>= 0.4'}
+    dev: false
+
+  /objection-soft-delete/1.0.7_objection@3.0.1:
+    resolution: {integrity: sha512-YGGk48DdLiK2gkyXCY4ByItWad+UCHm2VzfsYg8AnD+zhVuCN7FJhjkT8XOwQvCGprqLYuFN7ij/ClLnghUKxA==}
+    peerDependencies:
+      objection: '>= 0.8'
+    dependencies:
+      objection: 3.0.1_knex@1.0.1
     dev: false
 
   /objection/3.0.1_knex@1.0.1:
