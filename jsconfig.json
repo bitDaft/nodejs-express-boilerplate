@@ -17,7 +17,8 @@
       "#utils/*": ["./utils/*.js"],
       "#lib/*": ["./lib/*.js"],
       "#json": ["./json/index.js"],
-      "#cache": ["./utils/cache.js"]
+      "#cache": ["./utils/cache.js"],
+      "#knexfile": ["./knexfile.js"]
     },
     "resolveJsonModule": true,
     "moduleResolution": "node"
