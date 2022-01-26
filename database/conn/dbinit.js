@@ -5,11 +5,11 @@ import { generateKnexConfig } from '#knexfile';
 
 const knexI = {};
 
-for (let key in config.DB) {
-  const knexConfig = generateKnexConfig(config.DB[key]);
+for (let key in config.db) {
+  const knexConfig = generateKnexConfig(config.db[key]);
   knexI[key] = Knex(knexConfig);
 }
 
-delete config.DB;
+delete config.db;
 
 export { knexI };
