@@ -19,7 +19,7 @@ import config from '#config';
 let app = express();
 
 // # Check proxy enabled or not
-if (config.PROXY) app.set('trust proxy', config.PROXY);
+if (config.proxy) app.set('trust proxy', config.proxy);
 
 var corsOptions = {
   credentials: true,
