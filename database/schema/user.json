@@ -21,26 +21,30 @@
       "type": "string",
       "description": "hashed password of the user"
     },
+    "role_id": {
+      "type": "integer",
+      "description": "the ID of the role associated to this user"
+    },
     "verification_token": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "token used to verify the user"
     },
     "verification_on": {
-      "type": "string",
+      "type": ["string", "null"],
       "format": "date-time",
       "description": "when the user was verified"
     },
     "verification_expiry": {
-      "type": "string",
+      "type": ["string", "null"],
       "format": "date-time",
       "description": "the time before which user should verify"
     },
     "reset_token": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "token used to reset the user password"
     },
     "reset_token_expiry": {
-      "type": "string",
+      "type": ["string", "null"],
       "format": "date-time",
       "description": "the time before which user should reset their password"
     },
@@ -51,6 +55,10 @@
     "valid": {
       "type": "boolean",
       "description": "whether the user account is valid or not"
+    },
+    "is_deleted": {
+      "type": "boolean",
+      "description": "whether the record has been deleted"
     },
     "additional_information": {
       "type": ["object", "null"],

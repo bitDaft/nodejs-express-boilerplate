@@ -12,7 +12,8 @@ export const up = (knex) => {
     t.string("reset_token");
     t.datetime("reset_token_expiry");
     t.string("salt").notNullable();
-    t.boolean("valid").defaultTo(false);
+    t.boolean("valid").notNullable().defaultTo(false);
+    t.boolean('is_deleted').notNullable().defaultTo(false);
     t.json("additional_information");
     t.datetime("created_at")
       .defaultTo(knex.raw("CURRENT_TIMESTAMP"))

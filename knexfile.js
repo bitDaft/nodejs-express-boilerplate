@@ -1,27 +1,39 @@
-import config from "./config/index.js";
+import config from './config/index.js';
 
-export default {
-  [config.NODE_ENV]: {
-    client: config.DB_client,
-    debug: config.DB_debug,
+export const generateKnexConfig = (conf, id = 0) => {
+  return {
+    client: conf.client,
+    debug: conf.debug || false,
     connection: {
-      host: config.DB_host,
-      user: config.DB_user,
-      password: config.DB_pass,
-      database: config.DB_db,
-      timezone: "Z",
+      host: conf.host,
+      user: conf.user,
+      password: conf.pass,
+      database: conf.db,
+      timezone: 'Z',
     },
     pool: {
-      min: config.DB_pool_min,
-      max: config.DB_pool_max,
+      min: conf.poolMin || 2,
+      max: conf.poolMax || 10,
     },
-    migrations: {
-      tableName: "knex_migrations",
-      directory: "./database/migrations",
-      stub: "./database/migrations/stub",
+    userParams: {
+      client: conf.client + id,
     },
-    seeds: {
-      directory: "./database/seeds",
+  };
+};
+
+export default async () => {
+  const autoConf = config.db[config.d];
+  return {
+    [config.NODE_ENV]: {
+      ...generateKnexConfig(autoConf),
+      migrations: {
+        tableName: '__knex_migrations',
+        directory: `./database/migrations/${config.d}`,
+        stub: `./database/migrations/stub`,
+      },
+      seeds: {
+        directory: './database/seeds',
+      },
     },
-  },
+  };
 };

@@ -15,7 +15,7 @@ export default (roles = []) => {
   return [
     // # Authenticate JWT token and attach user to request object (req.user)
     jwt({
-      secret: config.JWT_SECRET,
+      secret: config.jwtSecret,
       algorithms: ['HS256'],
     }),
 

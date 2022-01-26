@@ -1,32 +1,41 @@
 import path from 'path';
 import fs from 'fs';
+import { Model, compose } from 'objection';
+import softDelete from 'objection-soft-delete';
 
 import { __dirname } from '#lib/getFileDir';
 import { jsonLoaderSync } from '#lib/jsonLoader';
-import { Model } from './dbinit.js';
 import config from '#config';
+import { knexI } from '#conns';
 
-const jsonSchemas = {};
-const supportsReturning = ['pg', 'mssql'].includes(config.DB_client);
+const jsonSchemasCache = {};
+const returningCache = {};
 
-export default class BaseModel extends Model {
+const mixins = compose(
+  softDelete({ columnName: 'is_deleted', deletedValue: true, notDeletedValue: false })
+);
+let knexKeys = Object.keys(knexI);
+if (knexKeys.length === 1) Model.knex(knexI[knexKeys[0]]);
+
+export default class BaseModel extends mixins(Model) {
   static concurrency = 10;
   static useLimitInFirst = true;
+  static uidProp = 'uid';
 
   static get jsonSchema() {
     const filename = this.name[0].toLowerCase() + this.name.slice(1);
-    if (!jsonSchemas.hasOwnProperty(filename)) {
+    if (!jsonSchemasCache.hasOwnProperty(filename)) {
       const filepath = path.join(__dirname(import.meta), '../schema', filename + '.json');
       if (!fs.existsSync(filepath)) {
         console.warn(
           `Schema file for model '${this.name}' missing. It is recommended to create a JSON schema file for it at '${filepath}'`
         );
-        jsonSchemas[filename] = null;
+        jsonSchemasCache[filename] = null;
       } else {
-        jsonSchemas[filename] = jsonLoaderSync(filepath);
+        jsonSchemasCache[filename] = jsonLoaderSync(filepath);
       }
     }
-    return jsonSchemas[filename];
+    return jsonSchemasCache[filename];
   }
 
   $beforeValidate(jsonSchema, json, opt) {
@@ -80,12 +89,28 @@ export default class BaseModel extends Model {
 
   async $beforeUpdate(context) {
     await super.$beforeUpdate(context);
-    this.updated_at = new Date();
+    if (context.softDelete) {
+    } else if (context.undelete) {
+    } else {
+      this.updated_at = new Date();
+    }
+  }
+
+  static query(...args) {
+    this.knex(args[0]);
+    return super.query(...args);
   }
 
   static get QueryBuilder() {
+    let supportsReturning = returningCache[this.knex().context.userParams.client];
+    if (!supportsReturning) {
+      supportsReturning = returningCache[this.knex().context.userParams.client] = [
+        'pg',
+        'mssql',
+      ].includes(this.knex().context.userParams.client);
+    }
     // # Wrapping some fns to use returning if it supports it
-    return class extends super.QueryBuilder {
+    return class extends Model.QueryBuilder {
       insertAndFetch(body) {
         return supportsReturning
           ? Array.isArray(body)

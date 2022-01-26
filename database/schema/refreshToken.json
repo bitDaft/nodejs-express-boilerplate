@@ -21,6 +21,10 @@
       "format": "date-time",
       "description": "the time this refresh token expires"
     },
+    "is_deleted": {
+      "type": "boolean",
+      "description": "whether the record has been deleted"
+    },
     "additional_information": {
       "type": ["object", "null"],
       "description": "any additional information for this record"

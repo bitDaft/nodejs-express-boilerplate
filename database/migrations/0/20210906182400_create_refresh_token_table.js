@@ -5,6 +5,7 @@ export const up = (knex) => {
     t.foreign("user_id").references("user.id").onDelete(knex.raw("CASCADE"));
     t.string("refresh_token").notNullable().unique();
     t.datetime("expires").notNullable();
+    t.boolean('is_deleted').notNullable().defaultTo(false);
     t.json("additional_information");
     t.datetime("created_at")
       .defaultTo(knex.raw("CURRENT_TIMESTAMP"))
