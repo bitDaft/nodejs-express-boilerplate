@@ -3,7 +3,6 @@ import path from 'path';
 import fs from 'fs';
 
 import { __dirname } from '../lib/getFileDir.js';
-import { Failure } from '#lib/responseHelpers';
 
 export const injectEnv = (config) => {
   let filename = null;

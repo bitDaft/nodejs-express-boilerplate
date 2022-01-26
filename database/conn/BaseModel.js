@@ -97,7 +97,7 @@ export default class BaseModel extends mixins(Model) {
   }
 
   static query(...args) {
-    this.knex(args[0]);
+    if (args[0]) this.knex(args[0]);
     return super.query(...args);
   }
 
