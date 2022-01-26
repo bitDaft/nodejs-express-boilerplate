@@ -43,7 +43,7 @@ export const loginUser = async (email, password) => {
   }
   let user = users[0];
 
-  let jwtToken = jwt.sign({ sub: user.id, id: user.id }, config.JWT_SECRET, {
+  let jwtToken = jwt.sign({ sub: user.id, id: user.id }, config.jwtSecret, {
     expiresIn: '15m',
   });
 
@@ -152,7 +152,7 @@ export const refreshToken = async (token_string) => {
 
   let user = token.user;
 
-  let jwtToken = jwt.sign({ sub: user.id, id: user.id }, config.JWT_SECRET, {
+  let jwtToken = jwt.sign({ sub: user.id, id: user.id }, config.jwtSecret, {
     expiresIn: '15m',
   });
 

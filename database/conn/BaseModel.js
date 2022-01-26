@@ -9,6 +9,7 @@ import config from '#config';
 import { knexI } from '#conns';
 
 const jsonSchemas = {};
+// TODO: how to handle this now with support for multitenancy
 const supportsReturning = ['pg', 'mssql'].includes(config.DB_client);
 
 const mixins = compose(

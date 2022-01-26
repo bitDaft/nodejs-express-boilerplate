@@ -2,7 +2,7 @@ import { sendEmail } from "#lib/sendEmail";
 import config from "#config";
 
 export const sendRegistrationSuccessEmail = async (name, email, token) => {
-  let verify_url = `${config.APP_URL}/verify?token=${token}`;
+  let verify_url = `${config.url}/verify?token=${token}`;
   const subject = `Welcome ${name}!!`;
   const html = `
     <h1>Registraion Successful</h1>
@@ -29,7 +29,7 @@ export const sendVerificationSuccessEmail = async (email) => {
 };
 
 export const sendForgotPasswordEmail = async (email, token) => {
-  let reset_password_link = `${config.APP_URL}/reset-password?token=${token}`;
+  let reset_password_link = `${config.url}/reset-password?token=${token}`;
   const subject = `Password reset request!!`;
   const html = `
     <h1>Password reset request recieved</h1>

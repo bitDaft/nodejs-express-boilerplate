@@ -17,6 +17,7 @@ export const generateKnexConfig = (conf) => {
     },
   };
 };
+
 const autoConf = config.db[config.d];
 
 export default {
