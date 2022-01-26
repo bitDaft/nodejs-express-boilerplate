@@ -12,22 +12,23 @@ export const generateKnexConfig = (conf) => {
       timezone: 'Z',
     },
     pool: {
-      min: conf.pool_min || 2,
-      max: conf.pool_max || 10,
+      min: conf.poolMin || 2,
+      max: conf.poolMax || 10,
     },
+  };
+};
+const autoConf = config.db[config.d];
+
+export default {
+  [config.NODE_ENV]: {
+    ...generateKnexConfig(autoConf),
     migrations: {
       tableName: '__knex_migrations',
-      directory: './database/migrations',
-      stub: './database/migrations/stub',
+      directory: `./database/migrations/${config.d}`,
+      stub: `./database/migrations/stub`,
     },
     seeds: {
       directory: './database/seeds',
     },
-  };
+  },
 };
-const keys = Object.keys(config.DB);
-const autoConf = config.DB[keys[0]];
-
-export default {
-  [config.NODE_ENV]:  generateKnexConfig(autoConf),
-}
