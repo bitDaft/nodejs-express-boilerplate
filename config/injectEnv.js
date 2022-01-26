@@ -3,6 +3,7 @@ import path from 'path';
 import fs from 'fs';
 
 import { __dirname } from '../lib/getFileDir.js';
+import { Failure } from '#lib/responseHelpers';
 
 export const injectEnv = (config) => {
   let filename = null;
@@ -16,5 +17,10 @@ export const injectEnv = (config) => {
   if (!fs.existsSync(dotOpt.path)) {
     throw Error(`Env file '${dotOpt.path}' does not exist. Please create it!`);
   }
-  dotenv.config(dotOpt);
+  let output = dotenv.config(dotOpt).parsed;
+  for(let key in output){
+    if(!output[key]){
+      throw Error(`Key ${key} has no value set`)
+    }
+  }
 };

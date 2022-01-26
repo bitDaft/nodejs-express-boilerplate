@@ -1,6 +1,6 @@
 import config from './config/index.js';
 
-export const generateKnexConfig = (conf) => {
+export const generateKnexConfig = (conf, id = 0) => {
   return {
     client: conf.client,
     debug: conf.debug || false,
@@ -15,21 +15,25 @@ export const generateKnexConfig = (conf) => {
       min: conf.poolMin || 2,
       max: conf.poolMax || 10,
     },
+    userParams: {
+      client: conf.client + id,
+    },
   };
 };
 
-const autoConf = config.db[config.d];
-
-export default {
-  [config.NODE_ENV]: {
-    ...generateKnexConfig(autoConf),
-    migrations: {
-      tableName: '__knex_migrations',
-      directory: `./database/migrations/${config.d}`,
-      stub: `./database/migrations/stub`,
+export default async () => {
+  const autoConf = config.db[config.d];
+  return {
+    [config.NODE_ENV]: {
+      ...generateKnexConfig(autoConf),
+      migrations: {
+        tableName: '__knex_migrations',
+        directory: `./database/migrations/${config.d}`,
+        stub: `./database/migrations/stub`,
+      },
+      seeds: {
+        directory: './database/seeds',
+      },
     },
-    seeds: {
-      directory: './database/seeds',
-    },
-  },
+  };
 };

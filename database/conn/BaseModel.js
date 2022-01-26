@@ -8,9 +8,8 @@ import { jsonLoaderSync } from '#lib/jsonLoader';
 import config from '#config';
 import { knexI } from '#conns';
 
-const jsonSchemas = {};
-// TODO: how to handle this now with support for multitenancy
-const supportsReturning = ['pg', 'mssql'].includes(config.DB_client);
+const jsonSchemasCache = {};
+const returningCache = {};
 
 const mixins = compose(
   softDelete({ columnName: 'is_deleted', deletedValue: true, notDeletedValue: false })
@@ -25,18 +24,18 @@ export default class BaseModel extends mixins(Model) {
 
   static get jsonSchema() {
     const filename = this.name[0].toLowerCase() + this.name.slice(1);
-    if (!jsonSchemas.hasOwnProperty(filename)) {
+    if (!jsonSchemasCache.hasOwnProperty(filename)) {
       const filepath = path.join(__dirname(import.meta), '../schema', filename + '.json');
       if (!fs.existsSync(filepath)) {
         console.warn(
           `Schema file for model '${this.name}' missing. It is recommended to create a JSON schema file for it at '${filepath}'`
         );
-        jsonSchemas[filename] = null;
+        jsonSchemasCache[filename] = null;
       } else {
-        jsonSchemas[filename] = jsonLoaderSync(filepath);
+        jsonSchemasCache[filename] = jsonLoaderSync(filepath);
       }
     }
-    return jsonSchemas[filename];
+    return jsonSchemasCache[filename];
   }
 
   $beforeValidate(jsonSchema, json, opt) {
@@ -97,9 +96,21 @@ export default class BaseModel extends mixins(Model) {
     }
   }
 
+  static query(...args) {
+    this.knex(args[0]);
+    return super.query(...args);
+  }
+
   static get QueryBuilder() {
+    let supportsReturning = returningCache[this.knex().context.userParams.client];
+    if (!supportsReturning) {
+      supportsReturning = returningCache[this.knex().context.userParams.client] = [
+        'pg',
+        'mssql',
+      ].includes(this.knex().context.userParams.client);
+    }
     // # Wrapping some fns to use returning if it supports it
-    return class extends super.QueryBuilder {
+    return class extends Model.QueryBuilder {
       insertAndFetch(body) {
         return supportsReturning
           ? Array.isArray(body)
