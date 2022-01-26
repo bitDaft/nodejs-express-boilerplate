@@ -1,11 +1,11 @@
-import fs from 'fs';
 import path from 'path';
 import process from 'process';
-import yargs from 'yargs';
+import yargs, { strict, strictCommands } from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
 import { __dirname } from '../lib/getFileDir.js';
 import { jsonLoaderSync } from '../lib/jsonLoader.js';
+
 import { injectEnv } from './injectEnv.js';
 
 // TODO: this needs to be replaced once node supports json imports natively
@@ -48,41 +48,114 @@ const validateAndGetParsedValue = (new_key) => {
   }
 };
 
-const mergeConfigs = () => {
-  injectEnv(config);
+const yargsCheck = (arr) => {
+  // yargs(arr)
+  // .command('get', 'make a get HTTP request', {
+  //   url: {
+  //     alias: 'u',
+  //     default: 'http://yargs.js.org/'
+  //   }
+  // })
+  // .help('h')
+  // .argv
+  let tmp1 = yargs(arr).env(envPre).argv;
+  console.log(tmp1);
+  const defKey = Object.keys(tmp1.db);
+  let tmp = yargs(arr)
+    .scriptName('npm run')
+    .usage('Usage: npm run <command> -- -- [options]')
+    // .usage('Usage: knex --esm <command> -- [options]')
+    .command({
+      command: 'migrate',
+      desc: 'Run all remaining migration',
+    })
+    .command({
+      command: 'migrate:one',
+      desc: 'Run the next migration in line',
+    })
+    .command({
+      command: 'migrate:make <filename>',
+      desc: 'Create a new migration',
+    })
+    .command({
+      command: 'migrate:list',
+      desc: 'List all migrations',
+    })
+    .command({
+      command: 'rollback',
+      desc: 'Revert last migration batch',
+    })
+    .command({
+      command: 'rollback:one',
+      desc: 'Revert a single migration',
+    })
+    .command({
+      command: 'seed',
+      desc: 'Run all seeds',
+    })
+    .command({
+      command: 'seed:make <filename>',
+      desc: 'Create a new seed',
+      builder: (yargs) => {
+        yargs.positional('filename', {
+          description: 'The name of the seed file',
+          type: 'string',
+        });
+      },
+    })
+    .positional('filename', {
+      description: 'The name of file for migrate:make and seed:make',
+      default: 'test',
+    })
+    .option({
+      database: {
+        description: 'Select the database to run the associated migration',
+        required: defKey.length > 1,
+        alias: 'd',
+        choices: defKey.map(Number),
+        nargs: 1,
+        number: true,
+      },
+    })
+    .example('npm run migrate -- -- -d 1', 'run all migrations for database 1')
+    .example('npm run seed -- -- -d 2', 'run all seeds for database 2')
+    .example('knex --esm migrate:latest -- -d 1', 'run all migrations for database 1')
+    .example('knex --esm seed:run -- -d 2', 'run all seeds for database 2');
+  if (defKey.length === 1) tmp.default('database', +defKey[0]);
+  else tmp.demandOption('database', 'Provide the db to be used with -d or --database option');
 
-  for (const key in process.env) {
-    if (!key.startsWith(envPre)) continue;
-    if (!process.env[key]) throw Error(`Environment variable ${key} not set`);
-    const new_key = key.split(envPre)[1];
-    config[new_key] = validateAndGetParsedValue(new_key);
-  }
-};
+  tmp.env(envPre);
 
-const parseFromConfig = () => {
-  for (let key in config) {
-    let match = key.match(regex);
-    if (!match) continue;
-    const { field, index, key: nkey } = match.groups;
-    if (!config.hasOwnProperty(field)) config[field] = {};
-    if (!config[field].hasOwnProperty(+index)) config[field][+index] = {};
-    config[field][+index][nkey] = config[key];
-    delete config[key];
-  }
+  tmp
+    .help('h')
+    .alias('h', 'help')
+    .showHelpOnFail(true)
+    .epilogue('For more information, visit https://github.com/bitDaft/express-sql-template');
+  console.log('----------------------');
+  console.log(tmp.argv);
+  return tmp.argv;
 };
 
 export const init = (extra = {}) => {
-  // # Combines cli args into config for uniform access
-  const parsedArgs = yargs(hideBin(process.argv)).argv._;
-  for (let key in parsedArgs) config[key] = parsedArgs[key];
-
   // # Combines process.env into config for uniform access
-  if (config.NODE_ENV !== 'production') mergeConfigs();
+  if (config.NODE_ENV !== 'production') injectEnv(config);
 
   // # parse any grouped multi key values like for multitenant db connections
-  parseFromConfig();
+  // parseFromConfig();
 
-  for (let key in extra) config[key] = parsedArgs[key];
+  // # Combines extra into config for uniform access
+  for (let key in extra) config[key] = extra[key];
+
+  // # Combines cli args into config for uniform access
+  let arr = hideBin(process.argv);
+  let idx = arr.indexOf('--');
+  if (~idx) arr.splice(idx, 1);
+
+  const parsedArgs = yargsCheck(arr);
+  for (let key in parsedArgs) config[key] = parsedArgs[key];
+
+  console.log(parsedArgs);
+  console.log(config);
   return config;
 };
 
