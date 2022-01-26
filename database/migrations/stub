@@ -2,6 +2,7 @@
 export const up = (knex) => {
   return knex.schema.createTable("table_name", (t) => {
     t.increments("id").notNullable().unique().primary();
+    t.boolean('is_deleted').notNullable().defaultTo(false);
     t.json("additional_information");
     t.datetime("created_at")
       .defaultTo(knex.raw("CURRENT_TIMESTAMP"))

@@ -4,12 +4,12 @@ specifiers:
   axios: ^0.25.0
   cookie-parser: ^1.4.6
   cors: ^2.8.5
-  dotenv: ^14.2.0
+  dotenv: ^14.3.0
   express: ^4.17.2
   express-jwt: ^6.1.0
   form-data: ^4.0.0
   formidable: ^2.0.1
-  helmet: ^5.0.1
+  helmet: ^5.0.2
   jsonwebtoken: ^8.5.1
   knex: ^1.0.1
   morgan: ^1.10.0
@@ -19,6 +19,7 @@ specifiers:
   nodemailer: ^6.7.2
   nodemon: ^2.0.15
   objection: ^3.0.1
+  objection-soft-delete: ^1.0.7
   rate-limiter-flexible: ^2.3.6
   yargs: ^17.3.1
 
@@ -30,7 +31,7 @@ dependencies:
   express-jwt: 6.1.0
   form-data: 4.0.0
   formidable: 2.0.1
-  helmet: 5.0.1
+  helmet: 5.0.2
   jsonwebtoken: 8.5.1
   knex: 1.0.1_mysql2@2.3.3
   morgan: 1.10.0
@@ -39,11 +40,12 @@ dependencies:
   node-schedule: 2.1.0
   nodemailer: 6.7.2
   objection: 3.0.1_knex@1.0.1
+  objection-soft-delete: 1.0.7_objection@3.0.1
   rate-limiter-flexible: 2.3.6
   yargs: 17.3.1
 
 devDependencies:
-  dotenv: 14.2.0
+  dotenv: 14.3.0
   nodemon: 2.0.15
 
 packages:
@@ -454,8 +456,8 @@ packages:
       is-obj: 2.0.0
     dev: true
 
-  /dotenv/14.2.0:
-    resolution: {integrity: sha512-05POuPJyPpO6jqzTNweQFfAyMSD4qa4lvsMOWyTRTdpHKy6nnnN+IYWaXF+lHivhBH/ufDKlR4IWCAN3oPnHuw==}
+  /dotenv/14.3.0:
+    resolution: {integrity: sha512-PCTcOQSXVo9FI1dB7AichJXMEvmiGCq0gnCpjfDUc8505uR+2MeLXWe+Ue4PN5UXa2isHSa78sr7L59fk+2mnQ==}
     engines: {node: '>=12'}
     dev: true
 
@@ -734,8 +736,8 @@ packages:
       function-bind: 1.1.1
     dev: false
 
-  /helmet/5.0.1:
-    resolution: {integrity: sha512-iyYpGYH2nbQVaQtauYDnemWg45S2RyGvJ+iKj+V9jp7Dc1NTtAJHmD+hFOSYS7Xdwe1GeyVEYSydggXLOg6TKQ==}
+  /helmet/5.0.2:
+    resolution: {integrity: sha512-QWlwUZZ8BtlvwYVTSDTBChGf8EOcQ2LkGMnQJxSzD1mUu8CCjXJZq/BXP8eWw4kikRnzlhtYo3lCk0ucmYA3Vg==}
     engines: {node: '>=12.0.0'}
     dev: false
 
@@ -1234,6 +1236,14 @@ packages:
     engines: {node: '>= 0.4'}
     dev: false
 
+  /objection-soft-delete/1.0.7_objection@3.0.1:
+    resolution: {integrity: sha512-YGGk48DdLiK2gkyXCY4ByItWad+UCHm2VzfsYg8AnD+zhVuCN7FJhjkT8XOwQvCGprqLYuFN7ij/ClLnghUKxA==}
+    peerDependencies:
+      objection: '>= 0.8'
+    dependencies:
+      objection: 3.0.1_knex@1.0.1
+    dev: false
+
   /objection/3.0.1_knex@1.0.1:
     resolution: {integrity: sha512-rqNnyQE+C55UHjdpTOJEKQHJGZ/BGtBBtgxdUpKG4DQXRUmqxfmgS/MhPWxB9Pw0mLSVLEltr6soD4c0Sddy0Q==}
     engines: {node: '>=12.0.0'}
@@ -1389,7 +1399,7 @@ packages:
     resolution: {integrity: sha512-/vxpCXddiX8NGfGO/mTafwjq4aFa/71pvamip0++IQk3zG8cbCj0fifNPrjjF1XMXUne91jL9OoxmdykoEtifQ==}
     engines: {node: '>= 10.13.0'}
     dependencies:
-      resolve: 1.21.0
+      resolve: 1.22.0
     dev: false
 
   /registry-auth-token/4.2.1:
@@ -1421,8 +1431,8 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /resolve/1.21.0:
-    resolution: {integrity: sha512-3wCbTpk5WJlyE4mSOtDLhqQmGFi0/TD9VPwmiolnk8U0wRgMEktqCXd3vy5buTO3tljvalNvKrjHEfrd2WpEKA==}
+  /resolve/1.22.0:
+    resolution: {integrity: sha512-Hhtrw0nLeSrFQ7phPp4OOcVjLPIeMnRlr5mcnVuMe7M/7eBn98A3hmFRLoFo3DLZkivSYwhRUJTyPyWAk56WLw==}
     hasBin: true
     dependencies:
       is-core-module: 2.8.1

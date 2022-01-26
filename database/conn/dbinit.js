@@ -1,10 +1,15 @@
-import Knex from "knex";
-import { Model } from "objection";
+import Knex from 'knex';
 
-import config from "#config";
-import knex_config from "#knexfile";
+import config from '#config';
+import { generateKnexConfig } from '#knexfile';
 
-const knex = Knex(knex_config[config.NODE_ENV]);
-Model.knex(knex);
+const knexI = {};
 
-export { knex, Model };
+for (let key in config.db) {
+  const knexConfig = generateKnexConfig(config.db[key], key);
+  knexI[key] = Knex(knexConfig);
+}
+
+delete config.db;
+
+export { knexI };

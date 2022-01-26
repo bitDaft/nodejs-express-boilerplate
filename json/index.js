@@ -1,5 +1,5 @@
 import { __dirname } from '#lib/getFileDir';
-import jsonLoader from '#lib/jsonLoader';
+import { jsonLoader } from '#lib/jsonLoader';
 import fs from 'fs';
 import path from 'path';
 

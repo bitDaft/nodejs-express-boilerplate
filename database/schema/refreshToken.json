@@ -1,0 +1,43 @@
+{
+  "title": "Refresh_Token",
+  "description": "Holds all the refresh tokens in use",
+  "type": "object",
+  "required": ["user_id", "refresh_token", "expires"],
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "the unique key"
+    },
+    "user_id": {
+      "type": "integer",
+      "description": "the ID of the user that uses this refresh token"
+    },
+    "refresh_token": {
+      "type": "string",
+      "description": "the refresh token"
+    },
+    "expires": {
+      "type": "string",
+      "format": "date-time",
+      "description": "the time this refresh token expires"
+    },
+    "is_deleted": {
+      "type": "boolean",
+      "description": "whether the record has been deleted"
+    },
+    "additional_information": {
+      "type": ["object", "null"],
+      "description": "any additional information for this record"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "when this record was created and added to db"
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "date-time",
+      "description": "the date time of the last update of the record"
+    }
+  }
+}

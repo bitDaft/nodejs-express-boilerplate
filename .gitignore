@@ -3,5 +3,5 @@ environment/*
 package-lock.json
 node_modules/
 # knexfile.*
-
+pnpm-lock.yaml
 *.log

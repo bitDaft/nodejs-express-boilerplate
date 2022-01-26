@@ -8,7 +8,7 @@ import config from '#config';
 import app from '#app';
 import '#json';
 
-const port = config.PORT;
+const port = config.port;
 app.set('port', port);
 
 const server = http.createServer(app);

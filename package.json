@@ -47,7 +47,7 @@
     "#knexfile": "./knexfile.js"
   },
   "devDependencies": {
-    "dotenv": "^14.2.0",
+    "dotenv": "^14.3.0",
     "nodemon": "^2.0.15"
   },
   "dependencies": {
@@ -58,7 +58,7 @@
     "express-jwt": "^6.1.0",
     "form-data": "^4.0.0",
     "formidable": "^2.0.1",
-    "helmet": "^5.0.1",
+    "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
     "knex": "^1.0.1",
     "morgan": "^1.10.0",
@@ -67,6 +67,7 @@
     "node-schedule": "^2.1.0",
     "nodemailer": "^6.7.2",
     "objection": "^3.0.1",
+    "objection-soft-delete": "^1.0.7",
     "rate-limiter-flexible": "^2.3.6",
     "yargs": "^17.3.1"
   }
