@@ -1,10 +1,8 @@
-import { User } from '#models';
-
 import jwt from 'express-jwt';
 
 import config from '#config';
 import { Failure } from '#lib/responseHelpers';
-import { easyCatch } from '#lib/easyCatch';
+import { easyCatch } from '#utils/easyCatch';
 
 export default (roles = []) => {
   if (typeof roles === 'string') {
