@@ -1,4 +1,4 @@
-import { sendEmail } from "#lib/sendEmail";
+import { sendEmail } from "#utils/sendEmail";
 import config from "#config";
 
 export const sendRegistrationSuccessEmail = async (name, email, token) => {
