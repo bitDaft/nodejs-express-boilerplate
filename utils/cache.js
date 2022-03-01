@@ -9,7 +9,12 @@ const opt = {
   checkperiod: (30 * SECOND) / 1000,
 };
 
-export const basic_cache = new NodeCache({
+export const basicCache = new NodeCache({
+  ...opt,
+  stdTTL: (30 * MINUTE) / 1000,
+});
+
+export const userCache = new NodeCache({
   ...opt,
   stdTTL: (30 * MINUTE) / 1000,
 });
