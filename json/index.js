@@ -1,7 +1,8 @@
-import { __dirname } from '#lib/getFileDir';
-import { jsonLoader } from '#lib/jsonLoader';
 import fs from 'fs';
 import path from 'path';
+
+import { __dirname } from '#lib/getFileDir';
+import { jsonLoader } from '#lib/jsonLoader';
 
 const jsonFiles = {};
 
