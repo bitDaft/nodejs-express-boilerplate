@@ -16,6 +16,10 @@
       "type": "string",
       "description": "the refresh token"
     },
+    "ua": {
+      "type": "string",
+      "description": "the user agent that created this token"
+    },
     "expires": {
       "type": "string",
       "format": "date-time",
