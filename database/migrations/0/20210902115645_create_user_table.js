@@ -4,7 +4,7 @@ export const up = (knex) => {
     t.string("name").notNullable();
     t.string("email").notNullable();
     t.string("password").notNullable();
-    t.integer("role_id").unsigned().defaultTo(1);
+    t.integer("role_id").unsigned().defaultTo(3);
     t.foreign("role_id").references("role.id").onDelete(knex.raw("SET NULL"));
     t.string("verification_token");
     t.datetime("verification_on");

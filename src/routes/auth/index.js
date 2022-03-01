@@ -10,92 +10,56 @@ import {
   resetPassword,
   revokeToken,
 } from '#controllers/auth';
-import { Failure, Success } from '#lib/responseHelpers';
+import { authorize } from '#middlewares';
+
 const router = express.Router();
 
-const verify = async (req, res) => {
-  const verification_token = req.query.token;
-  let response_data = await verifyUser(verification_token);
-  if (response_data.valid) {
-    return new Success('You have been verified successfully');
-  } else {
-    throw new Failure('User could not be verified', 500, 'UNKNOWN_ERROR');
-  }
-};
-
-const refreshTokens = async (req, res) => {
-  const refresh_token = req.query.token;
-  let response_data = await refreshToken(refresh_token);
-  if (response_data) {
-    return new Success(response_data);
-  } else {
-    throw new Failure('User token could not be refreshed', 500, 'UNKNOWN_ERROR');
-  }
-};
-
-const revokeTokens = async (req, res) => {
-  const token = req.query.token;
-  let response_data = await revokeToken(token);
-  if (response_data) {
-    return new Success("User's token has been revoked");
-  } else {
-    throw new Failure('User token could not be revoked', 500, 'UNKNOWN_ERROR');
-  }
-};
-
-const validateTheResetToken = async (req, res) => {
-  const token = req.query.token;
-  let response_data = await validateResetToken(token);
-  if (response_data) {
-    return new Success("User's token is valid");
-  } else {
-    throw new Failure('User token could not be validated', 500, 'UNKNOWN_ERROR');
-  }
-};
-
-const registerNewUser = async (req, res) => {
-  const { name, email, password } = req.body;
-  let response_data = await registerUser(name, email, password);
-  if (response_data) {
-    return new Success('User has been registered. Please check your email to verify.');
-  } else {
-    throw new Failure(
-      'User could not be registered. Please contact support.',
-      500,
-      'UNKNOWN_ERROR'
-    );
-  }
-};
-
-const loginExistingUser = async (req, res) => {
+const loginExistingUser = async (req) => {
   const { email, password } = req.body;
-  let response_data = await loginUser(email, password);
-  return new Success(response_data);
+  return await loginUser(email, password);
 };
 
-const requestPasswordChange = async (req, res) => {
+const registerNewUser = async (req) => {
+  const { name, email, password } = req.body;
+  await registerUser(name, email, password);
+  return 'User has been registered. Please check your email to verify';
+};
+
+const verify = async (req) => {
+  const verification_token = req.query.token;
+  await verifyUser(verification_token);
+  return 'You have been verified successfully';
+};
+
+const refreshTokens = async (req) => {
+  const refresh_token = req.query.token;
+  return await refreshToken(refresh_token);
+};
+
+const revokeTokens = async (req) => {
+  const token = req.query.token;
+  const refreshTokens = req.refresh_tokens;
+  await revokeToken(token, refreshTokens);
+  return "User's token has been revoked";
+};
+
+const requestPasswordChange = async (req) => {
   const { email } = req.body;
-  let response_data = await forgotPassword(email);
-  if (response_data) {
-    return new Success('Please check your email to reset password');
-  } else {
-    throw new Failure('Password could not be reset. Please contact support.', 500, 'UNKNOWN_ERROR');
-  }
+  await forgotPassword(email);
+  return 'Please check your email to reset password';
 };
 
-const resetUserPassword = async (req, res) => {
+const validateTheResetToken = async (req) => {
+  const token = req.query.token;
+  await validateResetToken(token);
+  return "User's token is valid";
+};
+
+const resetUserPassword = async (req) => {
   const token = req.query.token;
   const { password } = req.body;
-  let response_data = await resetPassword(token, password);
-  if (response_data) {
-    return new Success("User's password has been reset");
-  } else {
-    throw new Failure(
-      'User password could not be reset. Please contact support',
-      500,
-      'UNKNOWN_ERROR'
-    );
-  }
+  await resetPassword(token, password);
+  return "User's password has been reset";
 };
 
 router.post('/login', loginExistingUser);
@@ -103,7 +67,7 @@ router.post('/register', registerNewUser);
 router.get('/verify', verify);
 
 router.get('/refresh-token', refreshTokens);
-router.get('/revoke-token', revokeTokens);
+router.get('/revoke-token', authorize(), revokeTokens);
 
 router.post('/forgot-password', requestPasswordChange);
 router.get('/validate-reset-token', validateTheResetToken);

@@ -1,6 +1,7 @@
 import config from './config/index.js';
 
 export const generateKnexConfig = (conf, id = 0) => {
+  id = '_' + id;
   switch (conf.client) {
     case 'mysql':
     case 'mysql2':

@@ -2,7 +2,7 @@
   "title": "User",
   "description": "Holds information regarding the user",
   "type": "object",
-  "required": ["name", "email", "password"],
+  "required": ["name", "email", "password", "salt"],
   "properties": {
     "id": {
       "type": "integer",

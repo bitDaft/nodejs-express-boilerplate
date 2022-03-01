@@ -4,9 +4,9 @@
 // # Application entry point.
 import http from 'http';
 
+import '#json';
 import config from '#config';
 import app from '#app';
-import '#json';
 
 const port = config.port;
 app.set('port', port);
