@@ -1,5 +1,5 @@
 import crypto from "crypto";
 
-export const randomToken = () => {
-  return crypto.randomBytes(40).toString("hex");
+export const randomToken = (length = 40) => {
+  return crypto.randomBytes(length).toString("hex");
 };

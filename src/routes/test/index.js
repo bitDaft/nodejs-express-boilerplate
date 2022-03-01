@@ -4,10 +4,7 @@ import { Pong } from '#controllers/test';
 
 const router = express.Router();
 
-const pingHandler = async (req, res) => {
-  let response_data = await Pong();
-  return response_data;
-};
+const pingHandler = async (req, res) => await Pong();
 
 router.get('/ping', pingHandler);
 

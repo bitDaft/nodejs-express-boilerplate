@@ -14,12 +14,12 @@ export const injectEnv = (config) => {
   };
 
   if (!fs.existsSync(dotOpt.path)) {
-    throw Error(`Env file '${dotOpt.path}' does not exist. Please create it!`);
+    throw Error(`Env file '${dotOpt.path}' does not exist. Please change or create it!`);
   }
   let output = dotenv.config(dotOpt).parsed;
-  for(let key in output){
-    if(!output[key]){
-      throw Error(`Key ${key} has no value set`)
+  for (let key in output) {
+    if (output[key] === undefined) {
+      throw Error(`Key ${key} has no value set`);
     }
   }
 };

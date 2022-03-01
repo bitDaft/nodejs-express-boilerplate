@@ -14,7 +14,7 @@ export default class User extends BaseModel {
   }
 
   validatePassword(password) {
-    let pass_hash = crypto.scryptSync(password, this.salt, 64).toString('hex');
+    const pass_hash = crypto.scryptSync(password, this.salt, 64).toString('hex');
     return pass_hash === this.password;
   }
 
@@ -49,8 +49,8 @@ export default class User extends BaseModel {
           to: 'role.id',
         },
       },
-      refresh_token: {
-        relation: this.HasOneRelation,
+      refresh_tokens: {
+        relation: this.HasManyRelation,
         modelClass: RefreshToken,
         join: {
           from: 'user.id',

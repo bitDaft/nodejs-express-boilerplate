@@ -2,7 +2,8 @@ import jwt from 'express-jwt';
 
 import config from '#config';
 import { Failure } from '#lib/responseHelpers';
-import { easyCatch } from '#utils/easyCatch';
+import { userCache } from '#utils/cache';
+import { getUserById } from './db.js';
 
 export default (roles = []) => {
   if (typeof roles === 'string') {
@@ -26,10 +27,12 @@ export default (roles = []) => {
 
     // # Authorize based on user role
     async (req, res, next) => {
-      let authCatch = easyCatch('Unable to get user');
-      let users = await getUserById(req.user.id).catch(authCatch('user fetch authorize'));
-
-      let user = users[0];
+      let user = userCache.get(req.user.id);
+      if (!user) {
+        let users = await getUserById(req.user.id);
+        user = users[0];
+        userCache.set(req.user.id, user);
+      }
 
       if (!user || (roles.length && !roles.includes(user.role.name.toLowerCase()))) {
         // # Account no longer exists or role not authorized
@@ -39,8 +42,7 @@ export default (roles = []) => {
       // # Authentication and authorization successful
       req.user = user;
       req.role = user.role;
-      req.refresh_token = user.refresh_token;
-      // await user.wallet.validateTokens();
+      req.refresh_tokens = user.refresh_tokens;
 
       next();
     },
