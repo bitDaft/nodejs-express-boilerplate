@@ -15,9 +15,6 @@ const envPre = config.ENV_PREFIX || '';
 
 config.NODE_ENV = process.env.NODE_ENV || 'development';
 
-const regex =
-  /(?<field>[A-Z]+)_(?<index>\d+)_(?<key>client|host|port|user|pass|db|debug|pool_min|pool_max)/;
-
 // # Custom parsing of values to correct types from string and validation checks
 const validateAndParseBooleanConfig = (config) => {
   for (let key in config) {
@@ -50,6 +47,12 @@ const yargsCheck = (arr) => {
     .command({
       command: 'migrate:make <filename>',
       desc: 'Create a new migration',
+      builder: (yargs) => {
+        yargs.positional('filename', {
+          description: 'The name of the migration file',
+          type: 'string',
+        });
+      },
     })
     .command({
       command: 'migrate:list',
@@ -76,6 +79,10 @@ const yargsCheck = (arr) => {
           type: 'string',
         });
       },
+    })
+    .command({
+      command: 'help',
+      desc: 'Show this help',
     })
     .positional('filename', {
       description: 'The name of file for migrate:make and seed:make',
@@ -111,7 +118,7 @@ const yargsCheck = (arr) => {
 };
 
 export const init = (extra = {}) => {
-  // # Combines process.env into config for uniform access
+  // # Loads env vars from file
   if (config.NODE_ENV !== 'production') injectEnv(config);
 
   // # Combines extra into config for uniform access
@@ -125,7 +132,7 @@ export const init = (extra = {}) => {
   const parsedArgs = yargsCheck(arr);
   for (let key in parsedArgs) config[key] = parsedArgs[key];
 
-  // # parse any boolean value in config since yargs does not parse it
+  // # Parse any boolean value in config since yargs does not parse it
   validateAndParseBooleanConfig(config);
 
   delete config._;
