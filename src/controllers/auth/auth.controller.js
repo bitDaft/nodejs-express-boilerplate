@@ -8,8 +8,8 @@ import {
   sendVerificationSuccessEmail,
   sendPasswordResetSuccessEmail,
   sendForgotPasswordEmail,
-} from './notification.js';
-import { basicUser } from './util.js';
+} from './auth.notification.js';
+import { basicUser } from './auth.util.js';
 import {
   getUserWithEmail,
   getUserWithEmailAndValid,
@@ -22,7 +22,7 @@ import {
   patchUserInstance,
   clearResetUserInstance,
   getUserWithResetToken,
-} from './db.js';
+} from './auth.db.js';
 import {
   validateForgotPassword,
   validateLogin,
@@ -30,7 +30,7 @@ import {
   validateRegister,
   validateValidateResetToken,
   validateVerify,
-} from './validate.js';
+} from './auth.validate.js';
 
 const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
 
