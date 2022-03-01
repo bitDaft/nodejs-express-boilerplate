@@ -54,7 +54,7 @@ export const validateValidateResetToken = ({ token }, cb = (key, value) => {}) =
   cb('token', token);
 };
 
-export const validateValidateResetToken = ({ token, password }, cb = (key, value) => {}) => {
+export const validateRestPassword = ({ token, password }, cb = (key, value) => {}) => {
   if (typeof token !== 'string' && !token) {
     throw new Failure('Invalid reset token given');
   }
@@ -62,4 +62,5 @@ export const validateValidateResetToken = ({ token, password }, cb = (key, value
   if (typeof password !== 'string' && !password) {
     throw new Failure('Invalid password given');
   }
+  cb('password', password);
 };
