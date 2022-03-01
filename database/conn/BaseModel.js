@@ -5,7 +5,6 @@ import softDelete from 'objection-soft-delete';
 
 import { __dirname } from '#lib/getFileDir';
 import { jsonLoaderSync } from '#lib/jsonLoader';
-import config from '#config';
 import { knexI } from '#conns';
 
 const jsonSchemasCache = {};
@@ -42,7 +41,7 @@ export default class BaseModel extends mixins(Model) {
     // # Converting datetime to iso string for schema validation
     for (let propertyName in jsonSchema.properties) {
       let schema = jsonSchema.properties[propertyName];
-      if (schema && schema.format === 'date-time') {
+      if (schema && schema?.format === 'date-time') {
         const valueToValidate = json[propertyName];
         if (valueToValidate?.getTime?.()) {
           json[propertyName] = valueToValidate.toISOString();
@@ -103,11 +102,11 @@ export default class BaseModel extends mixins(Model) {
 
   static get QueryBuilder() {
     let supportsReturning = returningCache[this.knex().context.userParams.client];
-    if (!supportsReturning) {
+    if (supportsReturning === undefined) {
       supportsReturning = returningCache[this.knex().context.userParams.client] = [
         'pg',
         'mssql',
-      ].includes(this.knex().context.userParams.client);
+      ].includes(this.knex().context.userParams.client.split('_')[0]);
     }
     // # Wrapping some fns to use returning if it supports it
     return class extends Model.QueryBuilder {
