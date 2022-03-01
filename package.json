@@ -3,7 +3,7 @@
   "version": "0.1.1",
   "private": true,
   "type": "module",
-  "description": "an nodejs express starter app boilerplate",
+  "description": "a nodejs express starter app boilerplate",
   "keywords": [
     "app"
   ],
@@ -27,6 +27,7 @@
     "rollback:one": "knex --esm migrate:down",
     "seed": "knex --esm seed:run",
     "seed:make": "knex --esm seed:make",
+    "help" : "npm run migrate -- -- -h",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "imports": {
