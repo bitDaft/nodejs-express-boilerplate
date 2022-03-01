@@ -6,14 +6,14 @@ import express from 'express';
 import logger from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
-import cookieParser from "cookie-parser";
+import cookieParser from 'cookie-parser';
 
 // # Other imports
-import routes from '#routes';
-import { finalErrorHandler, normalErrorHandler, standardErrorHandler } from '#lib/responseHandlers';
-import { rateLimiterMiddleware } from '#middlewares';
-import { injectSuccessHandlerMiddleware } from '#lib/routerInjectSuccesHandler';
 import config from '#config';
+import routes from '#routes';
+import { injectSuccessHandlerMiddleware } from '#lib/routerInjectSuccesHandler';
+import { normalErrorHandler, standardErrorHandler, finalErrorHandler } from '#lib/responseHandlers';
+import { rateLimiterMiddleware } from '#middlewares';
 
 // # Create express application
 let app = express();
@@ -35,6 +35,9 @@ app.use(cors(corsOptions));
 app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// ^ may need to reorganize ratelimiter if the api can be called by 3rd partie with API key
+// ^ so we can have different rates for different types of access
 app.use(rateLimiterMiddleware);
 
 // # Initialize routes
@@ -43,7 +46,7 @@ app.use(routes);
 // # Inject Success handler
 injectSuccessHandlerMiddleware(routes);
 
-// # Response handlers
+// # Error handlers
 app.use(normalErrorHandler);
 app.use(standardErrorHandler);
 app.use(finalErrorHandler);
