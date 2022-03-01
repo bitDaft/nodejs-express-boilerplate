@@ -1,3 +1,1 @@
-import { exampleGetAllData } from './db.js';
-
-export const Pong = async () => 'pong';
+export * from './test.controller.js';
