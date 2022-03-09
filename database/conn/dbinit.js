@@ -11,16 +11,20 @@ for (let key in config.db) {
   knexMain[key] = Knex(knexConfig);
 }
 
+// TODO : fix this to implement getting the correct config info for a tenant
+const getTenantConfig = async (tenant) => {
+  return {};
+};
+
 const getMainKnexInstance = (dbKey) => {
   return knexMain[dbKey];
 };
 
-const getTenantKnexInstance = (tenant) => {
+const getTenantKnexInstance = async (tenant) => {
   let knexInstance = knexTenant[tenant];
   if (knexInstance === undefined) {
-    // TODO : fix this to implement getting the correct config for a tenant
-    tenantConfig = {};
-    let knexConfig = generateKnexConfig(tenantConfig, 99);
+    const tenantConfig = await getTenantConfig(tenant);
+    const knexConfig = generateKnexConfig(tenantConfig, 99);
     knexTenant[tenant] = knexInstance = Knex(knexConfig);
   }
   return knexInstance;
