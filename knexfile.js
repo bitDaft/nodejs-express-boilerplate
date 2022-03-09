@@ -75,6 +75,8 @@ const getSqlite3Config = (conf, id) => {
 export default async () => {
   process.on('exit', () => {});
   process.on('SIGINT', process.exit);
+  // ! Wonky hack to get knex scripts running when stuck
+  // ! need to refactor code to get it working properly
   return new Promise((resolve, reject) => {
     setTimeout(async () => {
       const autoConf = await config.db[config.d];
@@ -91,7 +93,6 @@ export default async () => {
           },
         },
       };
-      console.log(tt);
       return resolve(tt);
     }, 10);
   });
