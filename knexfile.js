@@ -89,7 +89,7 @@ export default async () => {
         stub: `./database/migrations/stub`,
       },
       seeds: {
-        directory: './database/seeds',
+        directory: `./database/seeds/${config.d}`,
       },
     },
   };
