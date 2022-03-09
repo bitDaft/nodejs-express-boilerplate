@@ -5,7 +5,7 @@ import softDelete from 'objection-soft-delete';
 
 import { __dirname } from '#lib/getFileDir';
 import { jsonLoaderSync } from '#lib/jsonLoader';
-import { knexI } from '#conns';
+import { knexMain } from '#conns';
 
 const jsonSchemasCache = {};
 const returningCache = {};
@@ -13,8 +13,8 @@ const returningCache = {};
 const mixins = compose(
   softDelete({ columnName: 'is_deleted', deletedValue: true, notDeletedValue: false })
 );
-let knexKeys = Object.keys(knexI);
-if (knexKeys.length === 1) Model.knex(knexI[knexKeys[0]]);
+let knexKeys = Object.keys(knexMain);
+if (knexKeys.length === 1) Model.knex(knexMain[knexKeys[0]]);
 
 export default class BaseModel extends mixins(Model) {
   static concurrency = 10;
