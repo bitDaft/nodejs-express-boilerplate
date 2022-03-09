@@ -1,11 +1,15 @@
 {
   "name": "nodejs-starter",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "a nodejs express starter app boilerplate",
   "keywords": [
-    "app"
+    "app",
+    "objection",
+    "knex",
+    "express",
+    "boilerplate"
   ],
   "homepage": "https://github.com/bitDaft",
   "license": "MIT",
@@ -19,15 +23,15 @@
   "scripts": {
     "start": "NODE_ENV=production node ./bin/www.js",
     "dev": "nodemon ./bin/www.js",
-    "migrate": "knex --esm migrate:latest",
-    "migrate:one": "knex --esm migrate:up",
-    "migrate:make": "knex --esm migrate:make",
-    "migrate:list": "knex --esm migrate:list",
-    "rollback": "knex --esm migrate:rollback",
-    "rollback:one": "knex --esm migrate:down",
-    "seed": "knex --esm seed:run",
-    "seed:make": "knex --esm seed:make",
-    "help" : "npm run migrate -- -- -h",
+    "migrate": "knex --esm migrate:latest -- ",
+    "migrate:one": "knex --esm migrate:up -- ",
+    "migrate:make": "knex --esm migrate:make -- ",
+    "migrate:list": "knex --esm migrate:list -- ",
+    "rollback": "knex --esm migrate:rollback -- ",
+    "rollback:one": "knex --esm migrate:down -- ",
+    "seed": "knex --esm seed:run -- ",
+    "seed:make": "knex --esm seed:make -- ",
+    "h": "knex --esm migrate:latest -- -h",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "imports": {
