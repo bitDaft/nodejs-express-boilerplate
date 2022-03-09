@@ -73,24 +73,26 @@ const getSqlite3Config = (conf, id) => {
 };
 
 export default async () => {
-  process.on('exit', () => {
-    console.log('asd');
+  process.on('exit', () => {});
+  process.on('SIGINT', process.exit);
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      const autoConf = await config.db[config.d];
+      let tt = {
+        [config.NODE_ENV]: {
+          ...generateKnexConfig(autoConf),
+          migrations: {
+            tableName: '__knex_migrations',
+            directory: `./database/migrations/${config.d}/`,
+            stub: `./database/migrations/stub`,
+          },
+          seeds: {
+            directory: `./database/seeds/${config.d}/`,
+          },
+        },
+      };
+      console.log(tt);
+      return resolve(tt);
+    }, 10);
   });
-  process.on('SIGINT', () => {
-    console.log('asasdasdasd');
-  });
-  const autoConf = config.db[config.d];
-  return {
-    [config.NODE_ENV]: {
-      ...generateKnexConfig(autoConf),
-      migrations: {
-        tableName: '__knex_migrations',
-        directory: `./database/migrations/${config.d}`,
-        stub: `./database/migrations/stub`,
-      },
-      seeds: {
-        directory: `./database/seeds/${config.d}`,
-      },
-    },
-  };
 };
