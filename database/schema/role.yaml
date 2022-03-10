@@ -1,0 +1,28 @@
+title: Role
+description: Defines the roles and their permissions
+type: object
+required:
+- name
+properties:
+  id:
+    type: integer
+    description: the unique key
+  name:
+    type: string
+    description: name or username of the user
+  is_deleted:
+    type: boolean
+    description: whether the record has been deleted
+  additional_information:
+    type:
+    - object
+    - 'null'
+    description: any additional information for this record
+  created_at:
+    type: string
+    format: date-time
+    description: when this record was created and added to db
+  updated_at:
+    type: string
+    format: date-time
+    description: the date time of the last update of the record

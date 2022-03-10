@@ -63,8 +63,8 @@ const getSqlite3Config = (conf, id) => {
       timezone: 'Z',
     },
     pool: {
-      min: conf.poolMin || 2,
-      max: conf.poolMax || 10,
+      min: 1,
+      max: 1,
     },
     userParams: {
       client: conf.client + id,
@@ -73,18 +73,27 @@ const getSqlite3Config = (conf, id) => {
 };
 
 export default async () => {
-  const autoConf = config.db[config.d];
-  return {
-    [config.NODE_ENV]: {
-      ...generateKnexConfig(autoConf),
-      migrations: {
-        tableName: '__knex_migrations',
-        directory: `./database/migrations/${config.d}`,
-        stub: `./database/migrations/stub`,
-      },
-      seeds: {
-        directory: './database/seeds',
-      },
-    },
-  };
+  process.on('exit', () => {});
+  process.on('SIGINT', process.exit);
+  // ! Wonky hack to get knex scripts running when stuck
+  // ! need to refactor code to get it working properly
+  return new Promise((resolve, reject) => {
+    setTimeout(async () => {
+      const autoConf = await config.db[config.d];
+      let tt = {
+        [config.NODE_ENV]: {
+          ...generateKnexConfig(autoConf),
+          migrations: {
+            tableName: '__knex_migrations',
+            directory: `./database/migrations/${config.d}/`,
+            stub: `./database/migrations/stub`,
+          },
+          seeds: {
+            directory: `./database/seeds/${config.d}/`,
+          },
+        },
+      };
+      return resolve(tt);
+    }, 10);
+  });
 };

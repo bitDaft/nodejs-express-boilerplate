@@ -34,8 +34,8 @@ const yargsCheck = (arr) => {
   const defKey = Object.keys(tmp1.db);
   let tmp = yargs(arr)
     .scriptName('npm run')
-    .usage('Usage: npm run <command> -- -- [options]')
-    .usage('Usage: knex --esm <command> -- [options]')
+    .usage('Usage: npm run <command> [filename] -- [options]')
+    // .usage('Usage: knex --esm <command> [filename] -- [options]')
     .command({
       command: 'migrate',
       desc: 'Run all remaining migration',
@@ -81,16 +81,18 @@ const yargsCheck = (arr) => {
       },
     })
     .command({
-      command: 'help',
+      command: 'h',
       desc: 'Show this help',
     })
     .positional('filename', {
       description: 'The name of file for migrate:make and seed:make',
     })
-    .example('npm run migrate -- -- -d 1', 'run all migrations for database 1')
-    .example('npm run seed -- -- -d 2', 'run all seeds for database 2')
-    .example('knex --esm migrate:latest -- -d 1', 'run all migrations for database 1')
-    .example('knex --esm seed:run -- -d 2', 'run all seeds for database 2');
+    .example('npm run migrate', 'run all migrations for default database')
+    .example('npm run migrate -- -d 1', 'run all migrations for database 1')
+    .example('npm run migrate:make user -- -d 1', 'create migrations for database 1')
+    .example('npm run seed', 'run all seeds for default database')
+    .example('npm run seed -- -d 2', 'run all seeds for database 2')
+    .example('npm run seed:make roles -- -d 2', 'run all seeds for database 2')
 
   if (tmp1['$0'] !== 'bin/www.js') {
     tmp.option({

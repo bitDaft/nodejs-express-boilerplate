@@ -1,11 +1,15 @@
 {
   "name": "nodejs-starter",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "description": "a nodejs express starter app boilerplate",
   "keywords": [
-    "app"
+    "app",
+    "objection",
+    "knex",
+    "express",
+    "boilerplate"
   ],
   "homepage": "https://github.com/bitDaft",
   "license": "MIT",
@@ -19,15 +23,15 @@
   "scripts": {
     "start": "NODE_ENV=production node ./bin/www.js",
     "dev": "nodemon ./bin/www.js",
-    "migrate": "knex --esm migrate:latest",
-    "migrate:one": "knex --esm migrate:up",
-    "migrate:make": "knex --esm migrate:make",
-    "migrate:list": "knex --esm migrate:list",
-    "rollback": "knex --esm migrate:rollback",
-    "rollback:one": "knex --esm migrate:down",
-    "seed": "knex --esm seed:run",
-    "seed:make": "knex --esm seed:make",
-    "help" : "npm run migrate -- -- -h",
+    "migrate": "knex --esm migrate:latest -- ",
+    "migrate:one": "knex --esm migrate:up -- ",
+    "migrate:make": "knex --esm migrate:make -- ",
+    "migrate:list": "knex --esm migrate:list -- ",
+    "rollback": "knex --esm migrate:rollback -- ",
+    "rollback:one": "knex --esm migrate:down -- ",
+    "seed": "knex --esm seed:run -- ",
+    "seed:make": "knex --esm seed:make -- ",
+    "h": "knex --esm migrate:latest -- -h",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "imports": {
@@ -47,20 +51,20 @@
     "#knexfile": "./knexfile.js"
   },
   "devDependencies": {
-    "dotenv": "^14.3.0",
+    "dotenv": "^14.3.2",
     "nodemon": "^2.0.15"
   },
   "dependencies": {
     "axios": "^0.25.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
-    "express": "^4.17.2",
-    "express-jwt": "^6.1.0",
+    "express": "^4.17.3",
+    "express-jwt": "^6.1.1",
     "form-data": "^4.0.0",
     "formidable": "^2.0.1",
     "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
-    "knex": "^1.0.1",
+    "knex": "^1.0.3",
     "morgan": "^1.10.0",
     "mysql2": "^2.3.3",
     "node-cache": "^5.1.2",
