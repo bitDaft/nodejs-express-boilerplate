@@ -1,13 +1,9 @@
-import path from 'path';
-import fs from 'fs';
 import { Model, compose } from 'objection';
 import softDelete from 'objection-soft-delete';
 
 import { __dirname } from '#lib/getFileDir';
-import { jsonLoaderSync } from '#lib/jsonLoader';
 import { knexMain } from '#conns';
 
-const jsonSchemasCache = {};
 const returningCache = {};
 
 const mixins = compose(
@@ -20,36 +16,6 @@ export default class BaseModel extends mixins(Model) {
   static concurrency = 10;
   static useLimitInFirst = true;
   static uidProp = 'uid';
-
-  static get jsonSchema() {
-    const filename = this.name[0].toLowerCase() + this.name.slice(1);
-    if (!jsonSchemasCache.hasOwnProperty(filename)) {
-      const filepath = path.join(__dirname(import.meta), '../schema', filename + '.json');
-      if (!fs.existsSync(filepath)) {
-        console.warn(
-          `Schema file for model '${this.name}' missing. It is recommended to create a JSON schema file for it at '${filepath}'`
-        );
-        jsonSchemasCache[filename] = null;
-      } else {
-        jsonSchemasCache[filename] = jsonLoaderSync(filepath);
-      }
-    }
-    return jsonSchemasCache[filename];
-  }
-
-  $beforeValidate(jsonSchema, json, opt) {
-    // # Converting datetime to iso string for schema validation
-    for (let propertyName in jsonSchema.properties) {
-      let schema = jsonSchema.properties[propertyName];
-      if (schema && schema?.format === 'date-time') {
-        const valueToValidate = json[propertyName];
-        if (valueToValidate?.getTime?.()) {
-          json[propertyName] = valueToValidate.toISOString();
-        }
-      }
-    }
-    return jsonSchema;
-  }
 
   static async beforeInsert({ inputItems }) {
     // # Removing datetime iso string tz info, use this fn if field in DB is DATETIME and not TIMESTAMP
