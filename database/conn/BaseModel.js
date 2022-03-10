@@ -15,7 +15,7 @@ if (knexKeys.length === 1) Model.knex(knexMain[knexKeys[0]]);
 export default class BaseModel extends mixins(Model) {
   static concurrency = 10;
   static useLimitInFirst = true;
-  static uidProp = 'uid';
+  static uidProp = '#uid';
 
   static async beforeInsert({ inputItems }) {
     // # Removing datetime iso string tz info, use this fn if field in DB is DATETIME and not TIMESTAMP
