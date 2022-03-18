@@ -67,14 +67,14 @@ export const getRefreshTokenWithToken = (token) => {
   return RefreshToken.query().where('refresh_token', token).limit(1).withGraphFetched('user');
 };
 
-export const createRefreshTokenforUser = (user_id) => {
+export const createRefreshTokenforUser = (userId) => {
   return RefreshToken.query().insert({
-    user_id,
+    user_id: userId,
     refresh_token: randomToken(),
     expires: new Date(Date.now() + 90 * DAY),
   });
 };
 
-export const deleteRefreshTokenInstance = (refresh_token) => {
-  return refresh_token.$query().delete();
+export const deleteRefreshTokenInstance = (refreshToken) => {
+  return refreshToken.$query().delete();
 };

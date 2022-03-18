@@ -14,8 +14,8 @@ export default class User extends BaseModel {
   }
 
   validatePassword(password) {
-    const pass_hash = crypto.scryptSync(password, this.salt, 64).toString('hex');
-    return pass_hash === this.password;
+    const passHash = crypto.scryptSync(password, this.salt, 64).toString('hex');
+    return passHash === this.password;
   }
 
   verify() {

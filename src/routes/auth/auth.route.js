@@ -26,19 +26,19 @@ const registerNewUser = async (req) => {
 };
 
 const verify = async (req) => {
-  const verification_token = req.query.token;
-  await verifyUser(verification_token);
+  const verificationToken = req.query.token;
+  await verifyUser(verificationToken);
   return 'You have been verified successfully';
 };
 
 const refreshTokens = async (req) => {
-  const refresh_token = req.query.token;
-  return await refreshToken(refresh_token);
+  const refreshToken = req.query.token;
+  return await refreshToken(refreshToken);
 };
 
 const revokeTokens = async (req) => {
   const token = req.query.token;
-  const refreshTokens = req.refresh_tokens;
+  const refreshTokens = req.refreshTokens;
   await revokeToken(token, refreshTokens);
   return "User's token has been revoked";
 };

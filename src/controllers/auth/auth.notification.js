@@ -2,15 +2,15 @@ import { sendEmail } from '#utils/sendEmail';
 import config from '#config';
 
 export const sendRegistrationSuccessEmail = async (name, email, token) => {
-  let verify_url = `${config.url}/verify?token=${token}`;
+  let verifyUrl = `${config.url}/verify?token=${token}`;
   const subject = `Welcome ${name}!!`;
   const html = `
     <h1>Registraion Successful</h1>
     <h4>Please click the button to verify your email address<h4>
     <br/>
-    <button onclick="${verify_url}">Verify Now</button>
+    <button onclick="${verifyUrl}">Verify Now</button>
     <br />
-    <small>If the button is not working, you can click <a href="${verify_url}">here</a></small>
+    <small>If the button is not working, you can click <a href="${verifyUrl}">here</a></small>
   `;
   return sendEmail(email, subject, html);
 };
@@ -28,7 +28,7 @@ export const sendVerificationSuccessEmail = async (email) => {
 };
 
 export const sendForgotPasswordEmail = async (email, token) => {
-  let reset_password_link = `${config.url}/reset-password?token=${token}`;
+  let resetPasswordLink = `${config.url}/reset-password?token=${token}`;
   const subject = `Password reset request!!`;
   const html = `
     <h1>Password reset request received</h1>
@@ -37,9 +37,9 @@ export const sendForgotPasswordEmail = async (email, token) => {
     <h4>Please click the button below to reset your password<h4>
     <h4>Login to APP now to explore<h4>
     <br/>
-    <button onclick="${reset_password_link}">Reset Password</button>
+    <button onclick="${resetPasswordLink}">Reset Password</button>
     <br />
-    <small>If the button is not working, you can click <a href="${reset_password_link}">here</a></small>
+    <small>If the button is not working, you can click <a href="${resetPasswordLink}">here</a></small>
   `;
   return sendEmail(email, subject, html);
 };

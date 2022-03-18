@@ -46,14 +46,14 @@ export const loginUser = async (email, password) => {
     expiresIn: '15m',
   });
 
-  let refresh_token = await createRefreshTokenforUser(user.id);
+  let refreshToken = await createRefreshTokenforUser(user.id);
 
   return {
     user: basicUser(user),
     role: user.role.name,
-    access_token: jwtToken,
-    refresh_token: refresh_token.refresh_token,
-    expires_at: new Date(Date.now() + 15 * MINUTE).getTime(),
+    accessToken: jwtToken,
+    refreshToken: refreshToken.refresh_token,
+    expiresAt: new Date(Date.now() + 15 * MINUTE).getTime(),
   };
 };
 
@@ -61,8 +61,8 @@ export const registerUser = async (name, email, password) => {
   validateRegister({ name, email, password });
 
   // # Throw error if search index is anything other than 0
-  const search_index = password.search(PASSWORD_RE);
-  if (search_index)
+  const searchIndex = password.search(PASSWORD_RE);
+  if (searchIndex)
     throw new Failure(
       'Password must have a minimum length of 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character(@$!%*?&)'
     );
@@ -121,12 +121,12 @@ export const refreshToken = async (refToken) => {
   const user = token.user;
   await deleteRefreshTokenInstance(token);
 
-  const refresh_token = await createRefreshTokenforUser(user.id);
+  const refreshToken = await createRefreshTokenforUser(user.id);
 
   return {
-    access_token: jwtToken,
-    refresh_token: refresh_token.refresh_token,
-    expires_at: new Date(Date.now() + 15 * MINUTE).getTime(),
+    accessToken: jwtToken,
+    refreshToken: refreshToken.refresh_token,
+    expiresAt: new Date(Date.now() + 15 * MINUTE).getTime(),
   };
 };
 
@@ -173,8 +173,8 @@ export const resetPassword = async (token, password) => {
   validateRestPassword({ token, password });
 
   // # Throw error if search index is anything other than 0
-  const search_index = password.search(PASSWORD_RE);
-  if (search_index)
+  const searchIndex = password.search(PASSWORD_RE);
+  if (searchIndex)
     throw new Failure(
       'Password must have a minimum length of 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character'
     );

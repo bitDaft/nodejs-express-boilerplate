@@ -35,7 +35,7 @@ export default (roles = []) => {
       // # Authentication and authorization successful
       req.user = user;
       req.role = user.role;
-      req.refresh_tokens = user.refresh_tokens;
+      req.refreshTokens = user.refresh_tokens;
 
       next();
     },
