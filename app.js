@@ -36,7 +36,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-// ^ may need to reorganize ratelimiter if the api can be called by 3rd partie with API key
+// ^ may need to reorganize ratelimiter if the api can be called by 3rd parties with API key
 // ^ so we can have different rates for different types of access
 app.use(rateLimiterMiddleware);
 

@@ -18,15 +18,8 @@ export default (roles = []) => {
       algorithms: ['HS256'],
     }),
 
-    // # In case JWT fails, handle it here itself
-    (err, req, res, next) => {
-      if (err.name === 'UnauthorizedError') {
-        return next(new Failure('Unauthorized', 401));
-      }
-    },
-
-    // # Authorize based on user role
     async (req, res, next) => {
+      // # Authorize based on user role
       let user = userCache.get(req.user.id);
       if (!user) {
         let users = await getUserById(req.user.id);

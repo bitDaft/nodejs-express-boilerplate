@@ -74,8 +74,8 @@ export default class BaseModel extends mixins(Model) {
         'mssql',
       ].includes(this.knex().context.userParams.client.split('_')[0]);
     }
-    // # Wrapping some fns to use returning if it supports it
     return class extends Model.QueryBuilder {
+      // # Wrapping some fns to use returning if it supports it
       insertAndFetch(body) {
         return supportsReturning
           ? Array.isArray(body)

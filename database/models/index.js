@@ -5,14 +5,15 @@ import RefreshToken from './refreshToken.js';
 import { initialize } from 'objection';
 import { knexMain } from '#conns';
 
-// # Loads the metadata of all tables at app initialize in case it may be needed
-// ^ Add new models into appropriate array too.
+// ^ Add new models into appropriate db array
 const dbTables = {
   0: [User, Role, RefreshToken],
   1: [],
 };
+
+// # Loads the metadata of all tables at app initialize in case it may be needed
 for (let key in knexMain) {
-  await initialize(knexMain[key], dbTables[key]);
+  if (dbTables[key].length) await initialize(knexMain[key], dbTables[key]);
 }
 
 export { User, Role, RefreshToken };

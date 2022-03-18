@@ -15,7 +15,7 @@ const envPre = config.ENV_PREFIX || '';
 
 config.NODE_ENV = process.env.NODE_ENV || 'development';
 
-// # Custom parsing of values to correct types from string and validation checks
+// # Custom parsing of boolean values
 const validateAndParseBooleanConfig = (config) => {
   for (let key in config) {
     let value = config[key];
@@ -35,7 +35,6 @@ const yargsCheck = (arr) => {
   let tmp = yargs(arr)
     .scriptName('npm run')
     .usage('Usage: npm run <command> [filename] -- [options]')
-    // .usage('Usage: knex --esm <command> [filename] -- [options]')
     .command({
       command: 'migrate',
       desc: 'Run all remaining migration',
