@@ -8,7 +8,7 @@
       "#": ["."],
       "#app": ["./app.js"],
       "#config": ["./config/index.js"],
-      "#middlewares": ["./src/middlewares/index.js"],
+      "#middlewares": ["./middlewares/index.js"],
       "#models": ["./database/models/index.js"],
       "#conns": ["./database/conn/index.js"],
       "#routes": ["./src/routes/index.js"],
