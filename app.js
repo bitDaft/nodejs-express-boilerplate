@@ -29,7 +29,7 @@ var corsOptions = {
 };
 
 // # Setup middlewares
-app.use(logger('dev'));
+app.use(logger(config.NODE_ENV !== 'development' ? 'combined' : 'dev'));
 app.use(helmet());
 app.use(cors(corsOptions));
 app.use(cookieParser());
