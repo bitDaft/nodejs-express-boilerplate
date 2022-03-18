@@ -18,7 +18,7 @@ export const injectEnv = (config) => {
   }
   let output = dotenv.config(dotOpt).parsed;
   for (let key in output) {
-    if (output[key] === undefined) {
+    if (output[key] === undefined || output[key] === '') {
       throw Error(`Key ${key} has no value set`);
     }
   }
