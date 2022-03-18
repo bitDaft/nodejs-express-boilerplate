@@ -91,7 +91,7 @@ const yargsCheck = (arr) => {
     .example('npm run migrate:make user -- -d 1', 'create migrations for database 1')
     .example('npm run seed', 'run all seeds for default database')
     .example('npm run seed -- -d 2', 'run all seeds for database 2')
-    .example('npm run seed:make roles -- -d 2', 'run all seeds for database 2')
+    .example('npm run seed:make roles -- -d 2', 'run all seeds for database 2');
 
   if (tmp1['$0'] !== 'bin/www.js') {
     tmp.option({
