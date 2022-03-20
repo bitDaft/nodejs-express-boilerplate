@@ -11,6 +11,9 @@
     "express",
     "boilerplate"
   ],
+  "engines": {
+    "node": ">=16.11.1"
+  },
   "homepage": "https://github.com/bitDaft",
   "license": "MIT",
   "author": "Tausif ali <tausif@bitdaft.dev> (https://github.com/bitDaft)",
@@ -52,7 +55,8 @@
   },
   "devDependencies": {
     "dotenv": "^14.3.2",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "pino-pretty": "^7.5.4"
   },
   "dependencies": {
     "axios": "^0.25.0",
@@ -72,6 +76,7 @@
     "nodemailer": "^6.7.2",
     "objection": "^3.0.1",
     "objection-soft-delete": "^1.0.7",
+    "pino": "^7.9.1",
     "rate-limiter-flexible": "^2.3.6",
     "yargs": "^17.3.1"
   }

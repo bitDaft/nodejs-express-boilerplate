@@ -3,6 +3,7 @@ import path from 'path';
 
 import { __dirname } from '#lib/getFileDir';
 import { jsonLoader } from '#lib/jsonLoader';
+import log from '#lib/logger';
 
 const jsonFiles = {};
 
@@ -14,7 +15,7 @@ const loadFiles = async () => {
     const name = path.basename(filename).split('.json')[0];
     jsonFiles[name] = jsonData;
   }
-  console.info('Completed loading of all JSON files');
+  log.info('Completed loading of all JSON files');
 };
 
 await loadFiles();

@@ -6,6 +6,7 @@ import http from 'http';
 
 import '#json';
 import config from '#config';
+import log from '#lib/logger';
 import app from '#app';
 
 const port = config.port;
@@ -14,5 +15,5 @@ app.set('port', port);
 const server = http.createServer(app);
 
 server.listen(port, () => {
-  console.log('Running -> Listening on port : ' + port);
+  log.info('Running -> Listening on port : ' + port);
 });
