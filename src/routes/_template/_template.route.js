@@ -1,6 +1,6 @@
 import express from 'express';
 
-import { Pong } from '#controllers/test';
+import { Pong } from '#controllers/_template';
 
 const router = express.Router();
 
