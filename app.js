@@ -14,6 +14,7 @@ import routes from '#routes';
 import { injectSuccessHandlerMiddleware } from '#lib/routerInjectSuccesHandler';
 import { normalErrorHandler, standardErrorHandler, finalErrorHandler } from '#lib/responseHandlers';
 import { idLogsMiddleware, rateLimiterMiddleware } from '#middlewares';
+import log from '#lib/logger';
 
 // # Create express application
 let app = express();
@@ -21,16 +22,20 @@ let app = express();
 // # Check proxy enabled or not
 if (config.proxy) app.set('trust proxy', config.proxy);
 
-var corsOptions = {
+const corsOptions = {
   credentials: true,
   origin: function (origin, callback) {
     callback(null, origin);
   },
 };
 
+const morganConfig = {
+  stream: { write: (msg) => log.info(msg.trim()) },
+};
+
 // # Setup middlewares
 app.use(idLogsMiddleware);
-app.use(morgan(config.NODE_ENV !== 'development' ? 'combined' : 'dev'));
+app.use(morgan(config.NODE_ENV !== 'development' ? 'combined' : 'dev', morganConfig));
 app.use(helmet());
 app.use(cors(corsOptions));
 app.use(cookieParser());
