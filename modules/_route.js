@@ -1,7 +1,7 @@
 import express from 'express';
 
-import template from '#routes/_template';
-import auth from '#routes/auth';
+import template from '#route/_template';
+import auth from '#route/auth';
 
 const router = express.Router();
 

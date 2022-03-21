@@ -34,7 +34,7 @@ import {
 
 const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
 
-export const loginUser = async (email, password) => {
+export const loginExistingUser = async (email, password) => {
   validateLogin({ email, password });
 
   const users = await getUserWithEmailAndValid(email, true);
@@ -57,7 +57,7 @@ export const loginUser = async (email, password) => {
   };
 };
 
-export const registerUser = async (name, email, password) => {
+export const registerNewUser = async (name, email, password) => {
   validateRegister({ name, email, password });
 
   // # Throw error if search index is anything other than 0
@@ -140,7 +140,7 @@ export const revokeToken = async (refToken, refreshTokens) => {
   return true;
 };
 
-export const forgotPassword = async (email) => {
+export const requestPasswordChange = async (email) => {
   validateForgotPassword({ email });
 
   const users = await getUserWithEmailAndValid(email, true);
@@ -169,7 +169,7 @@ export const validateResetToken = async (token) => {
   return user;
 };
 
-export const resetPassword = async (token, password) => {
+export const resetUserPassword = async (token, password) => {
   validateRestPassword({ token, password });
 
   // # Throw error if search index is anything other than 0

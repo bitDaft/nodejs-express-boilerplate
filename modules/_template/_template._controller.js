@@ -1,3 +1,3 @@
 import { exampleGetAllData } from './_template.db.js';
 
-export const Pong = async () => 'pong';
+export const ping = async () => 'pong';

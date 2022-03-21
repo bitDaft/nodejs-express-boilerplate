@@ -1,5 +1,5 @@
 {
-  "exclude": ["node_modules", "node_modules/"],
+  "exclude": ["node_modules", "dist"],
   "compilerOptions": {
     "baseUrl": ".",
     "module": "es6",
@@ -11,9 +11,9 @@
       "#middlewares": ["./middlewares/index.js"],
       "#models": ["./database/models/index.js"],
       "#conns": ["./database/conn/index.js"],
-      "#routes": ["./src/routes/index.js"],
-      "#routes/*": ["./src/routes/*/index.js"],
-      "#controllers/*": ["./src/controllers/*/index.js"],
+      "#routes": ["./modules/_route.js"],
+      // "#route/*": ["./modules/*/*._route.js"], // wont work due to multiple '*' chars
+      // "#controller/*": ["./modules/*/*._controller.js"], // wont work due to multiple '*' chars
       "#utils/*": ["./utils/*.js"],
       "#lib/*": ["./lib/*.js"],
       "#json": ["./json/index.js"],
