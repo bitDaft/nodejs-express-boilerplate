@@ -3,7 +3,7 @@ import '#lib/routerExceptionHandler';
 
 // # Package imports
 import express from 'express';
-import logger from 'morgan';
+import morgan from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
@@ -13,7 +13,7 @@ import config from '#config';
 import routes from '#routes';
 import { injectSuccessHandlerMiddleware } from '#lib/routerInjectSuccesHandler';
 import { normalErrorHandler, standardErrorHandler, finalErrorHandler } from '#lib/responseHandlers';
-import { rateLimiterMiddleware } from '#middlewares';
+import { idLogsMiddleware, rateLimiterMiddleware } from '#middlewares';
 
 // # Create express application
 let app = express();
@@ -29,7 +29,8 @@ var corsOptions = {
 };
 
 // # Setup middlewares
-app.use(logger(config.NODE_ENV !== 'development' ? 'combined' : 'dev'));
+app.use(idLogsMiddleware);
+app.use(morgan(config.NODE_ENV !== 'development' ? 'combined' : 'dev'));
 app.use(helmet());
 app.use(cors(corsOptions));
 app.use(cookieParser());

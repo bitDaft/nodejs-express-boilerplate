@@ -7,22 +7,25 @@ import log from '#lib/logger';
 const knexMain = {};
 const knexTenant = {};
 
+const knexLog = {
+  warn(msg) {
+    log.warn(msg);
+  },
+  error(msg) {
+    log.error(msg);
+  },
+  deprecate(msg) {
+    log.warn(msg);
+  },
+  debug(msg) {
+    const message = `SQL: ${msg.sql} - ${JSON.stringify(msg.bindings)} | ${msg.method}`;
+    log.sql(message);
+  },
+};
+
 for (let key in config.db) {
   const knexConfig = generateKnexConfig(config.db[key], key);
-  knexConfig.log = {
-    warn(msg) {
-      log.warn(msg);
-    },
-    error(msg) {
-      log.error(msg);
-    },
-    deprecate(msg) {
-      log.warn(msg);
-    },
-    debug(msg) {
-      log.sql(msg);
-    },
-  };
+  knexConfig.log = knexLog;
   knexMain[key] = Knex(knexConfig);
 }
 
@@ -40,20 +43,7 @@ const getTenantKnexInstance = async (tenant) => {
   if (knexInstance === undefined) {
     const tenantConfig = await getTenantConfig(tenant);
     const knexConfig = generateKnexConfig(tenantConfig, 99);
-    knexConfig.log = {
-      warn(msg) {
-        log.warn(msg);
-      },
-      error(msg) {
-        log.error(msg);
-      },
-      deprecate(msg) {
-        log.warn(msg);
-      },
-      debug(msg) {
-        log.sql(msg);
-      },
-    };
+    knexConfig.log = knexLog;
     knexTenant[tenant] = knexInstance = Knex(knexConfig);
   }
   return knexInstance;
