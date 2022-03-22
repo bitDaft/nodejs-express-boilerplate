@@ -60,11 +60,11 @@
   },
   "dependencies": {
     "axios": "^0.25.0",
+    "bullmq": "^1.77.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.17.3",
     "express-jwt": "^6.1.1",
-    "form-data": "^4.0.0",
     "formidable": "^2.0.1",
     "helmet": "^5.0.2",
     "jsonwebtoken": "^8.5.1",
