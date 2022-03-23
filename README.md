@@ -1,4 +1,10 @@
-# Nodejs Boilerplate
+# Nodejs Express Boilerplate
+
+This is a opinianated starter template for nodejs express projects 
+
+## File structure
+
+
 
 A Nodejs boilerplate which includes:  
 axios  
