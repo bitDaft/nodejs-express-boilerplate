@@ -2,5 +2,13 @@
   "ENV_PREFIX": "APP",
   "ENV_FILENAME": "",
   "authUrl": "https://www.example.com/oauth/authorize",
-  "tokenUrl": "http://www.example.com/oauth/token"
+  "tokenUrl": "http://www.example.com/oauth/token",
+  "customLevels": {
+    "sql": 21
+  },
+  "customColors": {
+    "sql": "bgGreen",
+    "info": "blue",
+    "debug": "bgBlue"
+  }
 }
