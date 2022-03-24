@@ -18,8 +18,8 @@ const knexLog = {
     log.warn(msg);
   },
   debug(msg) {
-    const message = `SQL: ${msg.sql} - ${JSON.stringify(msg.bindings)} | ${msg.method}`;
-    log.sql(message);
+    const sqlString = msg.bindings.reduce((sql, value) => sql.replace('?', value), msg.sql);
+    log.sql(`${msg.method} => ${sqlString}`);
   },
 };
 

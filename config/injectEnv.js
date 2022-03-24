@@ -9,7 +9,7 @@ export const injectEnv = (config) => {
   if (config.ENV_FILENAME) filename = config.ENV_FILENAME;
 
   const dotOpt = {
-    path: path.join(__dirname(import.meta), 'environment', filename || '.env'),
+    path: path.join(__dirname(import.meta), 'environment', filename),
     debug: true,
   };
 

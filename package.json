@@ -56,7 +56,7 @@
   "devDependencies": {
     "dotenv": "^14.3.2",
     "nodemon": "^2.0.15",
-    "pino-pretty": "^7.5.4"
+    "pino-pretty": "^7.6.0"
   },
   "dependencies": {
     "axios": "^0.25.0",
