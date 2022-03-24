@@ -1,6 +1,6 @@
 {
   "ENV_PREFIX": "APP",
-  "ENV_FILENAME": "",
+  "ENV_FILENAME": ".env",
   "authUrl": "https://www.example.com/oauth/authorize",
   "tokenUrl": "http://www.example.com/oauth/token",
   "customLevels": {
