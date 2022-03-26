@@ -44,14 +44,16 @@
     "#middlewares": "./middlewares/index.js",
     "#models": "./database/models/index.js",
     "#conns": "./database/conn/index.js",
+    "#json": "./json/index.js",
+    "#cache": "./utils/cache.js",
+    "#knexfile": "./knexfile.js",
     "#routes": "./modules/_route.js",
     "#route/*": "./modules/*/*._route.js",
     "#controller/*": "./modules/*/*._controller.js",
+    "#queue/*": "./jobs/queue/*.js",
+    "#worker/*": "./jobs/worker/*.js",
     "#utils/*": "./utils/*.js",
-    "#lib/*": "./lib/*.js",
-    "#json": "./json/index.js",
-    "#cache": "./utils/cache.js",
-    "#knexfile": "./knexfile.js"
+    "#lib/*": "./lib/*.js"
   },
   "devDependencies": {
     "dotenv": "^14.3.2",
