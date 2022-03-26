@@ -2,14 +2,14 @@ import _BaseQueue from './base.js';
 
 class ResultsQueue extends _BaseQueue {
   constructor() {
-    super('response');
+    super('results');
+
+    this._queueEvents.on('completed', ({ jobId, returnvalue }) => {});
+    this._queueEvents.on('failed', ({ jobId, failedReason }) => {});
+    this._queueEvents.on('progress', ({ jobId, data }) => {});
   }
 }
 
 const resultsQueue = new ResultsQueue();
-
-resultsQueue.queue.on('completed', ({ jobId, result }) => {});
-resultsQueue.queue.on('failed', ({ jobId, err }) => {});
-resultsQueue.queue.on('progress', ({ jobId, progress }) => {});
 
 export default resultsQueue;

@@ -1,8 +1,8 @@
 import _BaseQueue from './base.js';
 
-class MailQueue extends _BaseQueue {
+class GeneralQueue extends _BaseQueue {
   constructor() {
-    super('mail');
+    super('general');
 
     this._queueEvents.on('completed', ({ jobId, returnvalue }) => {});
     this._queueEvents.on('failed', ({ jobId, failedReason }) => {});
@@ -10,6 +10,6 @@ class MailQueue extends _BaseQueue {
   }
 }
 
-const mailQueue = new MailQueue();
+const generalQueue = new GeneralQueue();
 
-export default mailQueue;
+export default generalQueue;
