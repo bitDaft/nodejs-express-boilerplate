@@ -8,4 +8,8 @@ class MailQueue extends _BaseQueue {
 
 const mailQueue = new MailQueue();
 
+mailQueue.queue.on('completed', ({ jobId, result }) => {});
+mailQueue.queue.on('failed', ({ jobId, err }) => {});
+mailQueue.queue.on('progress', ({ jobId, progress }) => {});
+
 export default mailQueue;
