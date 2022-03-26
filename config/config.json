@@ -13,7 +13,10 @@
   },
   "queueOptions": {
     "attempts": 3,
-    "backoff": "exponential",
+    "backoff": {
+      "type": "exponential",
+      "delay": 1000
+    },
     "removeOnComplete": true
   }
 }
