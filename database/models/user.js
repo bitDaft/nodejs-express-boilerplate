@@ -2,7 +2,7 @@ import crypto from 'crypto';
 
 import { BaseModel } from '#conns';
 import { RefreshToken, Role } from '#models';
-import { randomToken } from '#utils/randomTokenString';
+import { randomToken } from '#utils/randomToken';
 import { MINUTE } from '#utils/timeConstants';
 
 export default class User extends BaseModel {

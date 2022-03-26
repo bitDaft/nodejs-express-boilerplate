@@ -1,5 +1,5 @@
 import { RefreshToken, User } from '#models';
-import { randomToken } from '#utils/randomTokenString';
+import { randomToken } from '#utils/randomToken';
 import { DAY, MINUTE } from '#utils/timeConstants';
 
 export const createUser = (name, email, password) => {

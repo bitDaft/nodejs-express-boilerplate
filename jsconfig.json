@@ -11,14 +11,16 @@
       "#middlewares": ["./middlewares/index.js"],
       "#models": ["./database/models/index.js"],
       "#conns": ["./database/conn/index.js"],
+      "#json": ["./json/index.js"],
+      "#cache": ["./utils/cache.js"],
+      "#knexfile": ["./knexfile.js"],
       "#routes": ["./modules/_route.js"],
       // "#route/*": ["./modules/*/*._route.js"], // wont work due to multiple '*' chars
       // "#controller/*": ["./modules/*/*._controller.js"], // wont work due to multiple '*' chars
+      "#queue/*": ["./jobs/queue/*.js"],
+      "#worker/*": ["./jobs/worker/*.js"],
       "#utils/*": ["./utils/*.js"],
-      "#lib/*": ["./lib/*.js"],
-      "#json": ["./json/index.js"],
-      "#cache": ["./utils/cache.js"],
-      "#knexfile": ["./knexfile.js"]
+      "#lib/*": ["./lib/*.js"]
     },
     "resolveJsonModule": true,
     "moduleResolution": "node"

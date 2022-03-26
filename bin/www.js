@@ -17,3 +17,5 @@ const server = http.createServer(app);
 server.listen(port, () => {
   log.info('Running -> Listening on port : ' + port);
 });
+
+process.on('SIGINT', process.exit);

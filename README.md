@@ -1,5 +1,7 @@
 # Nodejs Express Boilerplate
 
+[![CodeFactor](https://www.codefactor.io/repository/github/bitdaft/express-sql-template/badge)](https://www.codefactor.io/repository/github/bitdaft/express-sql-template)
+
 This is a opinianated starter template for nodejs express projects 
 
 ## File structure
@@ -27,3 +29,7 @@ rate-limiter-flexible
 env filename  in config  
 reformat ratelimiter nased on login and tier if available or free  
 
+
+
+
+mjml, fix readme, tests
