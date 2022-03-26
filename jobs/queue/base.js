@@ -1,4 +1,4 @@
-import { Queue, QueueScheduler } from 'bullmq';
+import { Queue, QueueScheduler, QueueEvents } from 'bullmq';
 
 import log from '#lib/logger';
 import config from '#config';
@@ -8,12 +8,15 @@ class _BaseQueue {
     if (typeof name !== 'string' || !name) {
       throw new Error(`Please provide a name for the queue`);
     }
-    this._queue = new Queue(name, {
-      connection: config.redis,
-      ...config.queueOptions,
-    });
-    this._queueScheduler = new QueueScheduler(name);
+    const connection = config.redis;
+    this._queue = new Queue(name, { connection, ...config.queueOptions });
+    this._queueEvents = new QueueEvents(name, { connection });
     this.log = log.child({ queueName: name });
+
+    // ^define queuescheduler in each of child queues and workers only if they use delayed-kind-of jobs
+    // this._queueScheduler = new QueueScheduler(name, { connection });
+
+    process.on('exit', async () => await this._queueScheduler.close());
   }
 
   get queue() {
