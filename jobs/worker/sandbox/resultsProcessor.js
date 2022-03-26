@@ -1,4 +1,4 @@
-const resultsProcessor = async (job) => {
+const resultsJobProcessor = async (job) => {
   const data = job.data;
   // ^define your results job types to be processed here
   switch (data.type) {
@@ -13,4 +13,4 @@ const resultsProcessor = async (job) => {
   }
 };
 
-export default resultsProcessor;
+export default resultsJobProcessor;
