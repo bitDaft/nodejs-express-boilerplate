@@ -10,5 +10,10 @@
     "sql": "bgGreen",
     "info": "blue",
     "debug": "bgBlue"
+  },
+  "queueOptions": {
+    "attempts": 3,
+    "backoff": "exponential",
+    "removeOnComplete": true
   }
 }
