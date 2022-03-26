@@ -1,5 +1,5 @@
-import { sendEmail } from '#utils/sendEmail';
 import config from '#config';
+import mailQueue from '#queue/mail';
 
 export const sendRegistrationSuccessEmail = async (name, email, token) => {
   let verifyUrl = `${config.url}/verify?token=${token}`;
@@ -12,7 +12,7 @@ export const sendRegistrationSuccessEmail = async (name, email, token) => {
     <br />
     <small>If the button is not working, you can click <a href="${verifyUrl}">here</a></small>
   `;
-  return sendEmail(email, subject, html);
+  return await mailQueue.add('registration', { email, subject, html });
 };
 
 export const sendVerificationSuccessEmail = async (email) => {
@@ -24,7 +24,7 @@ export const sendVerificationSuccessEmail = async (email) => {
     <h4>Login to APP now to explore<h4>
     <br/>
   `;
-  return sendEmail(email, subject, html);
+  return await mailQueue.add('verification', { email, subject, html });
 };
 
 export const sendForgotPasswordEmail = async (email, token) => {
@@ -41,7 +41,7 @@ export const sendForgotPasswordEmail = async (email, token) => {
     <br />
     <small>If the button is not working, you can click <a href="${resetPasswordLink}">here</a></small>
   `;
-  return sendEmail(email, subject, html);
+  return await mailQueue.add('forgotPassword', { email, subject, html });
 };
 
 export const sendPasswordResetSuccessEmail = async (email) => {
@@ -53,5 +53,5 @@ export const sendPasswordResetSuccessEmail = async (email) => {
     <h4>Login to APP now to explore<h4>
     <br/>
   `;
-  return sendEmail(email, subject, html);
+  return await mailQueue.add('passwordReset', { email, subject, html });
 };
