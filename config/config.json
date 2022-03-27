@@ -1,8 +1,7 @@
 {
   "ENV_PREFIX": "APP",
   "ENV_FILENAME": ".env",
-  "authUrl": "https://www.example.com/oauth/authorize",
-  "tokenUrl": "http://www.example.com/oauth/token",
+  "tokenUrl": "http://www.example.com/token",
   "customLevels": {
     "sql": 21
   },
