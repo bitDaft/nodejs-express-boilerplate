@@ -1,6 +1,6 @@
 import express from 'express';
 
-import template from '#route/_template';
+import test from '#route/test';
 import auth from '#route/auth';
 
 const router = express.Router();
@@ -12,7 +12,7 @@ router.get('/healthcheck', (_, res) => res.status(204).send());
 router.get('/favicon.ico', (_, res) => res.status(404).send());
 
 // # Test route
-router.use('/test', template);
+router.use('/test', test);
 
 // # Auth route
 router.use('/auth', auth);
