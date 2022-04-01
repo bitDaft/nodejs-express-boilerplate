@@ -11,7 +11,7 @@
       "#middlewares": ["./middlewares/index.js"],
       "#models": ["./database/models/index.js"],
       "#conns": ["./database/conn/index.js"],
-      "#json": ["./json/index.js"],
+      "#file": ["./loadFile/index.js"],
       "#cache": ["./utils/cache.js"],
       "#knexfile": ["./knexfile.js"],
       "#routes": ["./modules/_route.js"],

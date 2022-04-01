@@ -4,7 +4,7 @@
 // # Application entry point.
 import http from 'http';
 
-import '#json';
+import '#file';
 import config from '#config';
 import log from '#lib/logger';
 import app from '#app';
