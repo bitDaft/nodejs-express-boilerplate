@@ -2,7 +2,7 @@ import fs from 'fs';
 import path from 'path';
 
 import { __dirname } from '#lib/getFileDir';
-import { jsonLoader } from '#lib/jsonLoader';
+import { jsonLoader } from '#lib/fileLoader';
 import log from '#lib/logger';
 
 const jsonFiles = {};

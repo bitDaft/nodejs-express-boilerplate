@@ -4,7 +4,7 @@ import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
 import { __dirname } from '../lib/getFileDir.js';
-import { jsonLoaderSync } from '../lib/jsonLoader.js';
+import { jsonLoaderSync } from '../lib/fileLoader.js';
 
 import { injectEnv } from './injectEnv.js';
 
