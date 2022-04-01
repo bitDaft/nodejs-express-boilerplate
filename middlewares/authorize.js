@@ -18,8 +18,8 @@ export default (roles = []) => {
       algorithms: ['HS256'],
     }),
 
+    // # Authorize based on user role
     async (req, res, next) => {
-      // # Authorize based on user role
       let user = userCache.get(req.user.id);
       if (!user) {
         let users = await getUserById(req.user.id);
@@ -27,8 +27,8 @@ export default (roles = []) => {
         userCache.set(req.user.id, user);
       }
 
+      // # Account no longer exists or role not authorized
       if (!user || (roles.length && !roles.includes(user.role.name.toLowerCase()))) {
-        // # Account no longer exists or role not authorized
         return next(new Failure('Unauthorized', 401));
       }
 

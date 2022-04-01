@@ -4,7 +4,8 @@ export const getUserById = (id) => {
   return User.query()
     .where({
       id,
-      is_deleted: false,
     })
+    .whereNotDeleted()
+    .limit(1)
     .withGraphFetched('[role refresh_tokens]');
 };

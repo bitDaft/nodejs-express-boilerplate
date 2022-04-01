@@ -34,12 +34,14 @@ import {
 
 const PASSWORD_RE = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/g;
 
-export const loginExistingUser = async (email, password) => {
-  validateLogin({ email, password });
+const getJWTExpiresTime = () => new Date(Date.now() + 15 * MINUTE).getTime();
 
-  const users = await getUserWithEmailAndValid(email, true);
+export const loginExistingUser = async (email, password) => {
+  const inputData = validateLogin({ email, password });
+
+  const users = await getUserWithEmailAndValid(inputData.email, true);
   const user = users[0];
-  if (!user || !user.isVerified || !user.validatePassword(password))
+  if (!user || !user.isVerified() || !user.validatePassword(inputData.password))
     throw new Failure('Invalid Email or Password', 401, 'INVALID');
 
   const jwtToken = jwt.sign({ id: user.id }, config.jwtSecret, {
@@ -53,41 +55,46 @@ export const loginExistingUser = async (email, password) => {
     role: user.role.name,
     accessToken: jwtToken,
     refreshToken: refreshToken.refresh_token,
-    expiresAt: new Date(Date.now() + 15 * MINUTE).getTime(),
+    expiresAt: getJWTExpiresTime(),
   };
 };
 
 export const registerNewUser = async (name, email, password) => {
-  validateRegister({ name, email, password });
+  const inputData = validateRegister({ name, email, password });
 
   // # Throw error if search index is anything other than 0
-  const searchIndex = password.search(PASSWORD_RE);
+  const searchIndex = inputData.password.search(PASSWORD_RE);
   if (searchIndex)
     throw new Failure(
       'Password must have a minimum length of 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character(@$!%*?&)'
     );
 
-  const users = await getUserWithEmail(email);
-  if (users.length) throw new Failure('Email already registered', 400, 'EXISTS');
+  let users = await getUserWithEmail(inputData.email);
+  if (users.length) {
+    if (users[0].isVerified()) {
+      throw new Failure('Email already registered', 401, 'EXISTS');
+    } else if (users[0].verification_expiry > new Date()) {
+      throw new Failure('Email already registered but not verified', 401, 'EXISTS');
+    } else {
+      await deleteUserInstance(users[0]);
+    }
+  }
 
-  const user = await createUser(name, email, password);
+  const user = await createUser(inputData.name, inputData.email, inputData.password);
 
-  await sendRegistrationSuccessEmail(name, email, user.verification_token).catch(async (err) => {
-    await deleteUserInstance(user);
-    throw new Failure('Could not register user. Please try again later', 500);
-  });
+  sendRegistrationSuccessEmail(inputData.name, inputData.email, user.verification_token);
 
   return user;
 };
 
 export const verifyUser = async (token) => {
-  validateVerify({ token });
+  const inputData = validateVerify({ token });
 
-  const users = await getUserWithVerificationToken(token);
+  const users = await getUserWithVerificationToken(inputData.token);
   const user = users[0];
 
   if (!user) throw new Failure('Invalid verification token given');
-  if (user.isVerified) throw new Failure('User has already been verified');
+  if (user.isVerified()) throw new Failure('User has already been verified');
 
   if (new Date(user.verification_expiry).getTime() < Date.now()) {
     await deleteUserInstance(user);
@@ -103,15 +110,15 @@ export const verifyUser = async (token) => {
 };
 
 export const refreshToken = async (refToken) => {
-  validateRefreshToken({ refToken });
+  const inputData = validateRefreshToken({ refToken });
 
-  const tokens = await getRefreshTokenWithToken(refToken);
+  const tokens = await getRefreshTokenWithToken(inputData.refToken);
   const token = tokens[0];
-  if (!token) throw new Failure('Invalid refresh token given');
+  if (!token) throw new Failure('Invalid refresh token provided');
 
-  if (!token.isValid || !token.user) {
+  if (!token.isValid() || !token.user) {
     await deleteRefreshTokenInstance(token);
-    throw new Failure('Invalid or Expired Refresh token. please login again', 400, 'EXPIRED');
+    throw new Failure('Invalid or expired refresh token. Please login again', 400, 'EXPIRED');
   }
 
   const jwtToken = jwt.sign({ id: user.id }, config.jwtSecret, {
@@ -126,14 +133,14 @@ export const refreshToken = async (refToken) => {
   return {
     accessToken: jwtToken,
     refreshToken: refreshToken.refresh_token,
-    expiresAt: new Date(Date.now() + 15 * MINUTE).getTime(),
+    expiresAt: getJWTExpiresTime(),
   };
 };
 
 export const revokeToken = async (refToken, refreshTokens) => {
-  validateRefreshToken({ refToken });
+  const inputData = validateRefreshToken({ refToken });
 
-  const token = refreshTokens.find((token) => token.refresh_token === refToken);
+  const token = refreshTokens.find((token) => token.refresh_token === inputData.refToken);
   if (!token) throw new Failure('Invalid refresh token given');
 
   await deleteRefreshTokenInstance(token);
@@ -141,9 +148,9 @@ export const revokeToken = async (refToken, refreshTokens) => {
 };
 
 export const requestPasswordChange = async (email) => {
-  validateForgotPassword({ email });
+  const inputData = validateForgotPassword({ email });
 
-  const users = await getUserWithEmailAndValid(email, true);
+  const users = await getUserWithEmailAndValid(inputData.email, true);
   const user = users[0];
 
   if (!user) return true;
@@ -151,18 +158,15 @@ export const requestPasswordChange = async (email) => {
   user.reset();
   await patchUserInstance(user);
 
-  await sendForgotPasswordEmail(email, user.reset_token).catch(async (err) => {
-    await clearResetUserInstance(user);
-    throw new Failure('Could not send Password reset email. Please try again later', 500);
-  });
+  sendForgotPasswordEmail(inputData.email, user.reset_token);
 
   return true;
 };
 
 export const validateResetToken = async (token) => {
-  validateValidateResetToken({ token });
+  const inputData = validateValidateResetToken({ token });
 
-  const users = await getUserWithResetToken(token);
+  const users = await getUserWithResetToken(inputData.token);
   const user = users[0];
   if (!user) throw new Failure('Invalid reset token given');
 
@@ -170,18 +174,18 @@ export const validateResetToken = async (token) => {
 };
 
 export const resetUserPassword = async (token, password) => {
-  validateRestPassword({ token, password });
+  const inputData = validateRestPassword({ token, password });
 
   // # Throw error if search index is anything other than 0
-  const searchIndex = password.search(PASSWORD_RE);
+  const searchIndex = inputData.password.search(PASSWORD_RE);
   if (searchIndex)
     throw new Failure(
       'Password must have a minimum length of 8 characters, 1 uppercase letter, 1 lowercase letter, 1 number and 1 special character'
     );
 
-  let user = await validateResetToken(token);
+  let user = await validateResetToken(inputData.token);
 
-  user.setPassword(password);
+  user.setPassword(inputData.password);
   clearResetUserInstance(user);
 
   sendPasswordResetSuccessEmail(user.email);

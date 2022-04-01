@@ -21,23 +21,19 @@ export const createUser = (name, email, password) => {
 };
 
 export const getUserWithEmail = (email) => {
-  return User.query().where('email', email).limit(1).withGraphFetched('[role refresh_tokens]');
+  return User.query().where('email', email).limit(1);
 };
 
 export const getUserWithEmailAndValid = (email, valid) => {
   return User.query()
     .where('email', email)
     .andWhere('valid', valid)
-    .andWhere('is_deleted', false)
     .limit(1)
-    .withGraphFetched('[role refresh_tokens]');
+    .withGraphFetched('role');
 };
 
 export const getUserWithVerificationToken = (token) => {
-  return User.query()
-    .where('verification_token', token)
-    .limit(1)
-    .withGraphFetched('[role refresh_tokens]');
+  return User.query().where('verification_token', token).limit(1);
 };
 
 export const getUserWithResetToken = (token) => {
@@ -45,8 +41,7 @@ export const getUserWithResetToken = (token) => {
     .where('reset_token', token)
     .where('reset_token_expiry', '>', Date.now())
     .andWhere('valid', true)
-    .limit(1)
-    .withGraphFetched('[role refresh_tokens]');
+    .limit(1);
 };
 
 export const patchUserInstance = (user) => {
@@ -60,7 +55,7 @@ export const clearResetUserInstance = (user) => {
 };
 
 export const deleteUserInstance = (user) => {
-  return user.$query().delete();
+  return user.$query().hardDelete();
 };
 
 export const getRefreshTokenWithToken = (token) => {
