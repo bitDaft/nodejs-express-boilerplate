@@ -73,7 +73,7 @@ export const registerNewUser = async (name, email, password) => {
   if (users.length) {
     if (users[0].isVerified()) {
       throw new Failure('Email already registered', 401, 'EXISTS');
-    } else if (users[0].verification_expiry > new Date()) {
+    } else if (new Date(users[0].verification_expiry).getTime() > Date.now()) {
       throw new Failure('Email already registered but not verified', 401, 'EXISTS');
     } else {
       await deleteUserInstance(users[0]);
