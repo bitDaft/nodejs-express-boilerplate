@@ -5,9 +5,23 @@ import { Failure } from '#lib/responseHelpers';
 import { userCache } from '#utils/cache';
 import { getUserById } from './db.js';
 
-export default (roles = []) => {
+const defaultOptions = {
+  ignoreExpiration: false,
+};
+
+export default (roles = [], options = {}) => {
+  if (!(typeof options === 'object' && !Array.isArray(options) && options !== null)) options = {};
+  options = Object.assign({}, defaultOptions, options);
+
+  if (typeof roles === 'object' && !Array.isArray(roles) && roles !== null) {
+    options = Object.assign({}, defaultOptions, roles);
+    roles = '';
+  }
+
   if (typeof roles === 'string') {
     roles = [roles];
+  } else {
+    roles = [];
   }
   roles = roles.map((_) => _.toLowerCase());
 
@@ -16,10 +30,11 @@ export default (roles = []) => {
     jwt({
       secret: config.jwtSecret,
       algorithms: ['HS256'],
+      ignoreExpiration: options.ignoreExpiration,
     }),
 
+    // # Authorize based on user role
     async (req, res, next) => {
-      // # Authorize based on user role
       let user = userCache.get(req.user.id);
       if (!user) {
         let users = await getUserById(req.user.id);
@@ -27,9 +42,9 @@ export default (roles = []) => {
         userCache.set(req.user.id, user);
       }
 
+      // # Account no longer exists or role not authorized
       if (!user || (roles.length && !roles.includes(user.role.name.toLowerCase()))) {
-        // # Account no longer exists or role not authorized
-        return next(new Failure('Unauthorized', 401));
+        throw new Failure('Unauthorized', 401);
       }
 
       // # Authentication and authorization successful

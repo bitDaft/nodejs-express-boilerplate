@@ -2,6 +2,4 @@ import axios from 'axios';
 
 import config from '#config';
 
-export const tokenHttp = axios.create({
-  baseURL: config.tokenUrl,
-});
+export const tokenHttp = axios.create({ baseURL: config.tokenUrl });

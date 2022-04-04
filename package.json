@@ -11,9 +11,6 @@
     "express",
     "boilerplate"
   ],
-  "engines": {
-    "node": ">=16.11.1"
-  },
   "homepage": "https://github.com/bitDaft",
   "license": "MIT",
   "author": "Tausif ali <tausif@bitdaft.dev> (https://github.com/bitDaft)",
@@ -44,7 +41,7 @@
     "#middlewares": "./middlewares/index.js",
     "#models": "./database/models/index.js",
     "#conns": "./database/conn/index.js",
-    "#json": "./json/index.js",
+    "#file": "./loadFile/index.js",
     "#cache": "./utils/cache.js",
     "#knexfile": "./knexfile.js",
     "#routes": "./modules/_route.js",
