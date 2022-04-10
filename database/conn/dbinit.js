@@ -18,6 +18,7 @@ const knexLog = {
     log.warn(msg);
   },
   debug(msg) {
+    if (msg.method === 'columnInfo') return;
     const sqlString = msg.bindings.reduce((sql, value) => sql.replace('?', value), msg.sql);
     log.sql(`${msg.method} => ${sqlString}`);
   },
