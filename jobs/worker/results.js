@@ -11,17 +11,17 @@ const QUEUE_NAME = 'results';
 const connection = config.redis;
 
 const processorFile = path.join(__dirname(import.meta), 'sandbox', `${QUEUE_NAME}Processor.js`);
-const resultsWorker = new Worker(QUEUE_NAME, resultsJobProcessor, { connection });
+const worker = new Worker(QUEUE_NAME, resultsJobProcessor, { connection });
 
-resultsWorker.on('completed', (job, result) => {});
-resultsWorker.on('progress', (job, progress) => {});
-resultsWorker.on('failed', (job, err) => {
+worker.on('completed', (job, result) => {});
+worker.on('progress', (job, progress) => {});
+worker.on('failed', (job, err) => {
   log.error({ err, workerName: QUEUE_NAME });
 });
-resultsWorker.on('error', (err) => {
+worker.on('error', (err) => {
   log.fatal({ err, workerName: QUEUE_NAME });
 });
 
-process.on('exit', async () => await resultsWorker.close());
+process.on('exit', async () => await worker.close());
 
-export default resultsWorker;
+export default worker;

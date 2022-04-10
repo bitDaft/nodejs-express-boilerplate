@@ -11,17 +11,17 @@ const QUEUE_NAME = 'general';
 const connection = config.redis;
 
 const processorFile = path.join(__dirname(import.meta), 'sandbox', `${QUEUE_NAME}Processor.js`);
-const generalWorker = new Worker(QUEUE_NAME, generalJobProcessor, { connection });
+const worker = new Worker(QUEUE_NAME, generalJobProcessor, { connection });
 
-generalWorker.on('completed', (job, result) => {});
-generalWorker.on('progress', (job, progress) => {});
-generalWorker.on('failed', (job, err) => {
+worker.on('completed', (job, result) => {});
+worker.on('progress', (job, progress) => {});
+worker.on('failed', (job, err) => {
   log.error({ err, workerName: QUEUE_NAME });
 });
-generalWorker.on('error', (err) => {
+worker.on('error', (err) => {
   log.fatal({ err, workerName: QUEUE_NAME });
 });
 
-process.on('exit', async () => await generalWorker.close());
+process.on('exit', async () => await worker.close());
 
-export default generalWorker;
+export default worker;

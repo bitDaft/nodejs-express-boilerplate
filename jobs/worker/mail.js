@@ -11,17 +11,17 @@ const QUEUE_NAME = 'mail';
 const connection = config.redis;
 
 const processorFile = path.join(__dirname(import.meta), 'sandbox', `${QUEUE_NAME}Processor.js`);
-const mailWorker = new Worker(QUEUE_NAME, mailJobProcessor, { connection });
+const worker = new Worker(QUEUE_NAME, mailJobProcessor, { connection });
 
-mailWorker.on('completed', (job, result) => {});
-mailWorker.on('progress', (job, progress) => {});
-mailWorker.on('failed', (job, err) => {
+worker.on('completed', (job, result) => {});
+worker.on('progress', (job, progress) => {});
+worker.on('failed', (job, err) => {
   log.error({ err, workerName: QUEUE_NAME });
 });
-mailWorker.on('error', (err) => {
+worker.on('error', (err) => {
   log.fatal({ err, workerName: QUEUE_NAME });
 });
 
-process.on('exit', async () => await mailWorker.close());
+process.on('exit', async () => await worker.close());
 
-export default mailWorker;
+export default worker;
