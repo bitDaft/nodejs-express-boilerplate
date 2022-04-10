@@ -10,7 +10,7 @@ import mailJobProcessor from './sandbox/mailProcessor.js';
 const QUEUE_NAME = 'mail';
 const connection = config.redis;
 
-const processorFile = path.join(__dirname(import.meta), 'sandbox', 'mailProcessor.js');
+const processorFile = path.join(__dirname(import.meta), 'sandbox', `${QUEUE_NAME}Processor.js`);
 const mailWorker = new Worker(QUEUE_NAME, mailJobProcessor, { connection });
 
 mailWorker.on('completed', (job, result) => {});

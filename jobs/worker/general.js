@@ -10,7 +10,7 @@ import generalJobProcessor from './sandbox/generalProcessor.js';
 const QUEUE_NAME = 'general';
 const connection = config.redis;
 
-const processorFile = path.join(__dirname(import.meta), 'sandbox', 'generalProcessor.js');
+const processorFile = path.join(__dirname(import.meta), 'sandbox', `${QUEUE_NAME}Processor.js`);
 const generalWorker = new Worker(QUEUE_NAME, generalJobProcessor, { connection });
 
 generalWorker.on('completed', (job, result) => {});

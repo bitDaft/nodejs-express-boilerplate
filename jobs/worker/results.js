@@ -10,7 +10,7 @@ import resultsJobProcessor from './sandbox/resultsProcessor.js';
 const QUEUE_NAME = 'results';
 const connection = config.redis;
 
-const processorFile = path.join(__dirname(import.meta), 'sandbox', 'resultsProcessor.js');
+const processorFile = path.join(__dirname(import.meta), 'sandbox', `${QUEUE_NAME}Processor.js`);
 const resultsWorker = new Worker(QUEUE_NAME, resultsJobProcessor, { connection });
 
 resultsWorker.on('completed', (job, result) => {});
