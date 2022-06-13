@@ -2,34 +2,40 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/bitdaft/express-sql-template/badge)](https://www.codefactor.io/repository/github/bitdaft/express-sql-template)
 
-This is a opinianated starter template for nodejs express projects 
+This is a opinianated starter template for nodejs express projects
+
+## Features
+
+- Clean structure
+- Hierarchical config with config file, args, and env variables, all accessible through single config object
+- Easy multi-database connection management
+- Message queue, and workers on separate processes
+- Automatic static file loading
+- Module based code encapsulation
+- Logging on separate process with structured logs
+- Easy failure and success handling
 
 ## File structure
 
-
-
-A Nodejs boilerplate which includes:  
-axios  
-cors  
-express  
-express-jwt  
-form-data  
-formidable  
-helmet  
-jsonwebtoken  
-knex  
-morgan  
-mysql2  
-node-cache  
-nodemailer  
-objection  
-rate-limiter-flexible  
-
-
-env filename  in config  
-reformat ratelimiter nased on login and tier if available or free  
-
-
-
-
-mjml, fix readme, tests
+```
+.
+├─bin                 // contains the executable
+├─config              // contains config data
+│ ├─environment       // env file to store env variables
+├─database            // contains files relevant to db
+│ ├─conn              // db connection scripts
+│ ├─migrations        // migrations files
+│ ├─models            // db objection models
+│ ├─schema            // schema description, not used in code
+│ ├─seeds             // seed files
+├─jobs                // contains file for msq queues
+│ ├─queue             // define msg queue
+│ ├─worker            // worker for queue
+│ │ ├─sandbox         // sandboxed worker
+├─lib                 // contains lib files, usually wont need to import or interact with them except for logger and Failure
+├─loadFile            // auto loads files in folder
+├─middlewares         // custom middlewares for express
+├─modules             // contains the actual src
+│ ├─auth              // auth module pre made for most apps
+├─utils               // utils functions
+```

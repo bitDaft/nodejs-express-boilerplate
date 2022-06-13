@@ -18,6 +18,7 @@ const knexLog = {
     log.warn(msg);
   },
   debug(msg) {
+    if (msg.method === 'columnInfo') return;
     const sqlString = msg.bindings.reduce((sql, value) => sql.replace('?', value), msg.sql);
     log.sql(`${msg.method} => ${sqlString}`);
   },
@@ -29,6 +30,8 @@ for (let key in config.db) {
   knexMain[key] = Knex(knexConfig);
 }
 
+// ^ this is only usefull to implement if you're going to implement multi-tenancy
+// ? this will depend on whether same db or different db architecture
 // TODO : fix this to implement getting the correct config info for a tenant
 const getTenantConfig = async (tenant) => {
   return {};

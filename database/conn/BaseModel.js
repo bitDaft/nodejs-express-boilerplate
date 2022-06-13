@@ -1,14 +1,11 @@
 import { Model, compose } from 'objection';
-import softDelete from 'objection-soft-delete';
 
 import { __dirname } from '#lib/getFileDir';
 import { knexMain } from '#conns';
 
 const returningCache = {};
 
-const mixins = compose(
-  softDelete({ columnName: 'is_deleted', deletedValue: true, notDeletedValue: false })
-);
+const mixins = compose();
 let knexKeys = Object.keys(knexMain);
 if (knexKeys.length === 1) Model.knex(knexMain[knexKeys[0]]);
 
@@ -49,15 +46,6 @@ export default class BaseModel extends mixins(Model) {
           item[key] = new Date(item[key]).toISOString().slice(0, 19);
         }
       }
-    }
-  }
-
-  async $beforeUpdate(context) {
-    await super.$beforeUpdate(context);
-    if (context.softDelete) {
-    } else if (context.undelete) {
-    } else {
-      this.updated_at = new Date();
     }
   }
 

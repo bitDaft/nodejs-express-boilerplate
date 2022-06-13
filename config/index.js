@@ -17,15 +17,12 @@ config.NODE_ENV = process.env.NODE_ENV || 'development';
 
 // # Custom parsing of boolean values
 const validateAndParseBooleanConfig = (config) => {
-  for (let key in config) {
+  for (const key in config) {
     let value = config[key];
-    if (typeof value === 'object' && !Array.isArray(value) && value !== null) {
+    if (typeof value === 'object' && !Array.isArray(value) && value !== null)
       validateAndParseBooleanConfig(value);
-    } else if (value === 'true') {
-      config[key] = true;
-    } else if (value === 'false') {
-      config[key] = false;
-    }
+    else if (value === 'true') config[key] = true;
+    else if (value === 'false') config[key] = false;
   }
 };
 
@@ -34,6 +31,7 @@ const yargsCheck = (arr) => {
   const defKey = Object.keys(tmp1.db);
   let tmp = yargs(arr)
     .scriptName('npm run')
+    .usage('Usage: npm run <command> -- [options]')
     .usage('Usage: npm run <command> [filename] -- [options]')
     .command({
       command: 'migrate',
@@ -123,7 +121,7 @@ export const init = (extra = {}) => {
   if (config.NODE_ENV !== 'production') injectEnv(config);
 
   // # Combines extra into config for uniform access
-  for (let key in extra) config[key] = extra[key];
+  for (const key in extra) config[key] = extra[key];
 
   // # Combines cli args into config for uniform access
   let arr = hideBin(process.argv);
@@ -131,7 +129,7 @@ export const init = (extra = {}) => {
   if (~idx) arr.splice(idx, 1);
 
   const parsedArgs = yargsCheck(arr);
-  for (let key in parsedArgs) config[key] = parsedArgs[key];
+  for (const key in parsedArgs) config[key] = parsedArgs[key];
 
   // # Parse any boolean value in config since yargs does not parse it
   validateAndParseBooleanConfig(config);

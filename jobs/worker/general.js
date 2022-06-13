@@ -10,18 +10,24 @@ import generalJobProcessor from './sandbox/generalProcessor.js';
 const QUEUE_NAME = 'general';
 const connection = config.redis;
 
-const processorFile = path.join(__dirname(import.meta), 'sandbox', 'generalProcessor.js');
-const generalWorker = new Worker(QUEUE_NAME, generalJobProcessor, { connection });
+// ^ there is some issue with using sandbox processor due to import issues
+// TODO: Fix using sandbox processor, once update comes to fix import issue
+const processorFile = path.join(__dirname(import.meta), 'sandbox', `${QUEUE_NAME}Processor.js`);
+const worker = new Worker(QUEUE_NAME, generalJobProcessor, { connection });
 
-generalWorker.on('completed', (job, result) => {});
-generalWorker.on('progress', (job, progress) => {});
-generalWorker.on('failed', (job, err) => {
+// ^define queuescheduler in each of child queues and workers only if they use delayed-kind-of or repeatable jobs
+// this._queueScheduler = new QueueScheduler(name, { connection });
+// process.on('exit', async () => await this._queueScheduler.close());
+
+worker.on('completed', (job, result) => {});
+worker.on('progress', (job, progress) => {});
+worker.on('failed', (job, err) => {
   log.error({ err, workerName: QUEUE_NAME });
 });
-generalWorker.on('error', (err) => {
+worker.on('error', (err) => {
   log.fatal({ err, workerName: QUEUE_NAME });
 });
 
-process.on('exit', async () => await generalWorker.close());
+process.on('exit', async () => await worker.close());
 
-export default generalWorker;
+export default worker;
