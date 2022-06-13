@@ -1,11 +1,11 @@
 import express from 'express';
 
-import { ping } from '#controller/_template';
+import { getData } from '#controller/_template';
 
 const router = express.Router();
 
-const pingHandler = async (req, res) => await ping();
+const getHandler = async (req, res) => await getData();
 
-router.get('/ping', pingHandler);
+router.get('/', getHandler);
 
 export default router;

@@ -1,3 +1,5 @@
-import { exampleGetAllData } from './_template.db.js';
+import { GetAllData } from './_template.db.js';
 
-export const ping = async () => 'pong';
+export const getData = async () => {
+   return await GetAllData();
+};

@@ -10,8 +10,14 @@ import generalJobProcessor from './sandbox/generalProcessor.js';
 const QUEUE_NAME = 'general';
 const connection = config.redis;
 
+// ^ there is some issue with using sandbox processor due to import issues
+// TODO: Fix using sandbox processor, once update comes to fix import issue
 const processorFile = path.join(__dirname(import.meta), 'sandbox', `${QUEUE_NAME}Processor.js`);
 const worker = new Worker(QUEUE_NAME, generalJobProcessor, { connection });
+
+// ^define queuescheduler in each of child queues and workers only if they use delayed-kind-of or repeatable jobs
+// this._queueScheduler = new QueueScheduler(name, { connection });
+// process.on('exit', async () => await this._queueScheduler.close());
 
 worker.on('completed', (job, result) => {});
 worker.on('progress', (job, progress) => {});

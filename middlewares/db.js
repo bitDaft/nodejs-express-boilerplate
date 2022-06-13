@@ -5,7 +5,6 @@ export const getUserById = (id) => {
     .where({
       id,
     })
-    .whereNotDeleted()
     .limit(1)
     .withGraphFetched('[role refresh_tokens]');
 };

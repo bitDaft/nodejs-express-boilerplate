@@ -30,6 +30,11 @@ export default class User extends BaseModel {
     this.reset_token_expiry = new Date(Date.now() + 30 * MINUTE);
   }
 
+  clearReset() {
+    this.reset_token = null;
+    this.reset_token_expiry = null;
+  }
+
   isVerified() {
     return !!(
       this.valid &&

@@ -15,7 +15,7 @@ export default (roles = [], options = {}) => {
 
   if (typeof roles === 'object' && !Array.isArray(roles) && roles !== null) {
     options = Object.assign({}, defaultOptions, roles);
-    roles = '';
+    roles = [];
   }
 
   if (typeof roles === 'string') {

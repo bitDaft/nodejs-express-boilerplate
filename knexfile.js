@@ -73,6 +73,8 @@ const getSqlite3Config = (conf, id) => {
 };
 
 export default () => {
+  // ? Sometimes knex cli gets stuck running a command after creating a migration file
+  // ? so we need to ctrl+c, and run it again. this below fix allows that. otherwise forever stuck always
   // ! Wonky hack to get knex scripts running when stuck
   // ! need to find permanent fix
   process.on('exit', () => {});

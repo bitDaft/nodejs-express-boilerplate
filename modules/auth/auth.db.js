@@ -49,13 +49,12 @@ export const patchUserInstance = (user) => {
 };
 
 export const clearResetUserInstance = (user) => {
-  user.reset_token = null;
-  user.reset_token_expiry = null;
+  user.clearReset();
   return patchUserInstance(user);
 };
 
 export const deleteUserInstance = (user) => {
-  return user.$query().hardDelete();
+  return user.$query().delete();
 };
 
 export const getRefreshTokenWithToken = (token) => {

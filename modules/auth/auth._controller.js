@@ -41,7 +41,7 @@ export const loginExistingUser = async (email, password) => {
   const users = await getUserWithEmailAndValid(inputData.email, true);
   const user = users[0];
   if (!user || !user.isVerified() || !user.validatePassword(inputData.password))
-    throw new Failure('Invalid Email or Password', 400, 'USER_INPUT');
+    throw new Failure('Invalid Email or Password', 'USER_INPUT');
 
   const jwtToken = jwt.sign({ id: user.id }, config.jwtSecret, {
     expiresIn: '15m',
@@ -65,9 +65,9 @@ export const registerNewUser = async (name, email, password) => {
   const user = users[0];
   if (user) {
     if (user.isVerified()) {
-      throw new Failure('Email already registered', null, 'ALREADY_REGISTERED');
+      throw new Failure('Email already registered', 409, 'ALREADY_REGISTERED');
     } else if (new Date(user.verification_expiry).getTime() > Date.now()) {
-      throw new Failure('Email already registered', null, 'ALREADY_REGISTERED');
+      throw new Failure('Email already registered', 409, 'ALREADY_REGISTERED');
     } else {
       await deleteUserInstance(user);
     }
@@ -87,14 +87,13 @@ export const verifyUser = async (token) => {
   const user = users[0];
 
   if (!user || user.isVerified())
-    throw new Failure('User has already been verified', null, 'ALREADY_VERIFIED');
+    throw new Failure('User has already been verified', 409, 'ALREADY_VERIFIED');
 
   if (new Date(user.verification_expiry).getTime() < Date.now()) {
     await deleteUserInstance(user);
     throw new Failure(
       'Verification time has expired. please register again',
-      null,
-      'INVALID_TOKEN'
+      'VERIFICATION_EXPIRY'
     );
   }
 
@@ -111,15 +110,11 @@ export const refreshToken = async (refToken) => {
 
   const tokens = await getRefreshTokenWithToken(inputData.refToken);
   const token = tokens[0];
-  if (!token) throw new Failure('Invalid refresh token provided', null, 'INVALID_TOKEN');
+  if (!token) throw new Failure('Invalid refresh token provided', 'INVALID_TOKEN');
 
   if (!token.isValid() || !token.user) {
     await deleteRefreshTokenInstance(token);
-    throw new Failure(
-      'Invalid or expired refresh token. Please login again',
-      null,
-      'INVALID_TOKEN'
-    );
+    throw new Failure('Invalid or expired refresh token. Please login again', 'INVALID_TOKEN');
   }
 
   const jwtToken = jwt.sign({ id: user.id }, config.jwtSecret, {
@@ -142,7 +137,7 @@ export const revokeToken = async (refToken, refreshTokens) => {
   const inputData = validateRefreshToken({ refToken });
 
   const token = refreshTokens.find((token) => token.refresh_token === inputData.refToken);
-  if (!token) throw new Failure('Invalid refresh token given', null, 'INVALID_TOKEN');
+  if (!token) throw new Failure('Invalid refresh token given', 'INVALID_TOKEN');
 
   await deleteRefreshTokenInstance(token);
   return true;
@@ -154,7 +149,7 @@ export const requestPasswordChange = async (email) => {
   const users = await getUserWithEmailAndValid(inputData.email, true);
   const user = users[0];
 
-  if (!user) throw new Failure('Invalid email provided', 400, 'USER_INPUT');
+  if (!user) throw new Failure('Invalid email provided', 'USER_INPUT');
 
   user.reset();
   await patchUserInstance(user);
@@ -169,7 +164,7 @@ export const validateResetToken = async (token) => {
 
   const users = await getUserWithResetToken(inputData.token);
   const user = users[0];
-  if (!user) throw new Failure('Invalid reset token given', 400, 'INVALID_TOKEN');
+  if (!user) throw new Failure('Invalid reset token given', 'INVALID_TOKEN');
 
   return user;
 };
