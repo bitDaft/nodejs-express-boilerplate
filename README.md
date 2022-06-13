@@ -1,6 +1,6 @@
 # Nodejs Express Boilerplate
 
-[![CodeFactor](https://www.codefactor.io/repository/github/bitdaft/express-sql-template/badge)](https://www.codefactor.io/repository/github/bitdaft/express-sql-template)
+[![CodeFactor](https://www.codefactor.io/repository/github/bitdaft/nodejs-objection-boilerplate/badge)](https://www.codefactor.io/repository/github/bitdaft/nodejs-objection-boilerplate)
 
 This is a opinianated starter template for nodejs express projects
 
