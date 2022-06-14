@@ -2,7 +2,7 @@ import config from '#config';
 import mailQueue from '#queue/mail';
 
 export const sendRegistrationSuccessEmail = async (name, email, token) => {
-  let verifyUrl = `${config.url}/verify?token=${token}`;
+  let verifyUrl = `${config.url}/auth/verify?token=${token}`;
   const subject = `Welcome ${name}!!`;
   const html = `
     <h1>Registraion Successful</h1>
@@ -12,7 +12,7 @@ export const sendRegistrationSuccessEmail = async (name, email, token) => {
     <br />
     <small>If the button is not working, you can click <a href="${verifyUrl}">here</a></small>
   `;
-  return await mailQueue.add('registration', { from: email, subject, html });
+  return await mailQueue.add('registration', { from: config.smtpFrom, to: email, subject, html });
 };
 
 export const sendVerificationSuccessEmail = async (email) => {
@@ -24,11 +24,11 @@ export const sendVerificationSuccessEmail = async (email) => {
     <h4>Login to APP now to explore<h4>
     <br/>
   `;
-  return await mailQueue.add('verification', { from: email, subject, html });
+  return await mailQueue.add('verification', { from: config.smtpFrom, to: email, subject, html });
 };
 
 export const sendForgotPasswordEmail = async (email, token) => {
-  let resetPasswordLink = `${config.url}/reset-password?token=${token}`;
+  let resetPasswordLink = `${config.url}/auth/reset-password?token=${token}`;
   const subject = `Password reset request!!`;
   const html = `
     <h1>Password reset request received</h1>
@@ -41,7 +41,7 @@ export const sendForgotPasswordEmail = async (email, token) => {
     <br />
     <small>If the button is not working, you can click <a href="${resetPasswordLink}">here</a></small>
   `;
-  return await mailQueue.add('forgotPassword', { from: email, subject, html });
+  return await mailQueue.add('forgotPassword', { from: config.smtpFrom, to: email, subject, html });
 };
 
 export const sendPasswordResetSuccessEmail = async (email) => {
@@ -53,5 +53,5 @@ export const sendPasswordResetSuccessEmail = async (email) => {
     <h4>Login to APP now to explore<h4>
     <br/>
   `;
-  return await mailQueue.add('passwordReset', { from: email, subject, html });
+  return await mailQueue.add('passwordReset', { from: config.smtpFrom, to: email, subject, html });
 };
