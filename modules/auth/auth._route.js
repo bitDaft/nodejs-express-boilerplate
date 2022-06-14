@@ -39,8 +39,9 @@ const refreshTokenHandler = async (req) => {
 
 const revokeTokenHandler = async (req) => {
   const token = req.query.token;
+  const userId = req.user.id;
   const refreshTokens = req.refreshTokens;
-  await revokeToken(token, refreshTokens);
+  await revokeToken(token, refreshTokens, userId);
   return "User's token has been revoked";
 };
 
@@ -68,7 +69,7 @@ router.post('/register', registerNewUserHandler);
 router.get('/verify', verifyUserHandler);
 
 router.get('/refresh-token', refreshTokenHandler);
-router.get('/revoke-token', authorize(), revokeTokenHandler);
+router.get('/revoke-token', authorize(''), revokeTokenHandler);
 
 router.post('/forgot-password', requestPasswordChangeHandler);
 router.get('/validate-reset-token', validateResetTokenHandler);
