@@ -18,7 +18,7 @@ export default (roles = [], options = {}) => {
     roles = [];
   }
 
-  if (typeof roles === 'string') {
+  if (typeof roles === 'string' && roles.length) {
     roles = [roles];
   } else {
     roles = [];
@@ -31,13 +31,14 @@ export default (roles = [], options = {}) => {
       secret: config.jwtSecret,
       algorithms: ['HS256'],
       ignoreExpiration: options.ignoreExpiration,
+      requestProperty: 'user',
     }),
 
     // # Authorize based on user role
     async (req, res, next) => {
       let user = userCache.get(req.user.id);
       if (!user) {
-        let users = await getUserById(req.user.id);
+        const users = await getUserById(req.user.id);
         user = users[0];
         userCache.set(req.user.id, user);
       }
