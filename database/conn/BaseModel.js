@@ -49,10 +49,12 @@ export default class BaseModel extends mixins(Model) {
     }
   }
 
-  static query(...args) {
-    if (args[0]) this.knex(args[0]);
-    return super.query(...args);
-  }
+  // ? not sure if needed if multi db, need to test
+  // TODO: test if required
+  // static query(...args) {
+  //   if (args[0]) this.knex(args[0]);
+  //   return super.query(...args);
+  // }
 
   static get QueryBuilder() {
     let supportsReturning = returningCache[this.knex().context.userParams.client];

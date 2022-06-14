@@ -32,6 +32,8 @@ import {
   validateValidateResetToken,
   validateVerify,
 } from './auth.validate.js';
+import { MINUTE } from '#utils/timeConstants';
+import { userCache } from '#cache';
 
 const getJWTExpiresTime = () => new Date(Date.now() + 15 * MINUTE).getTime();
 
@@ -117,14 +119,17 @@ export const refreshToken = async (refToken) => {
     throw new Failure('Invalid or expired refresh token. Please login again', 'INVALID_TOKEN');
   }
 
+  const user = token.user;
+
   const jwtToken = jwt.sign({ id: user.id }, config.jwtSecret, {
     expiresIn: '15m',
   });
 
-  const user = token.user;
   await deleteRefreshTokenInstance(token);
 
   const refreshToken = await createRefreshTokenforUser(user.id);
+
+  userCache.del(user.id);
 
   return {
     accessToken: jwtToken,
@@ -133,13 +138,14 @@ export const refreshToken = async (refToken) => {
   };
 };
 
-export const revokeToken = async (refToken, refreshTokens) => {
+export const revokeToken = async (refToken, refreshTokens, userId) => {
   const inputData = validateRefreshToken({ refToken });
 
   const token = refreshTokens.find((token) => token.refresh_token === inputData.refToken);
   if (!token) throw new Failure('Invalid refresh token given', 'INVALID_TOKEN');
 
   await deleteRefreshTokenInstance(token);
+  userCache.del(userId);
   return true;
 };
 
