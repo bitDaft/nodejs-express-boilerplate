@@ -4,8 +4,8 @@
 // # Application entry point.
 import http from 'http';
 
-import '#file';
 import config from '#config';
+import '#file';
 import log from '#lib/logger';
 import app from '#app';
 

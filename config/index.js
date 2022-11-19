@@ -118,7 +118,7 @@ const yargsCheck = (arr) => {
 
 export const init = (extra = {}) => {
   // # Loads env vars from file
-  if (config.NODE_ENV !== 'production') injectEnv(config);
+  if (config.NODE_ENV === 'development') injectEnv(config.ENV_FILENAME);
 
   // # Combines extra into config for uniform access
   for (const key in extra) config[key] = extra[key];
