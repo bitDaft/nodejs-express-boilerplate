@@ -1,9 +1,9 @@
 {
   "name": "nodejs-starter",
-  "version": "0.8.5",
+  "version": "0.9.0",
   "private": true,
   "type": "module",
-  "description": "a nodejs express starter app boilerplate",
+  "description": "an opiniated nodejs express starter app boilerplate",
   "keywords": [
     "app",
     "objection",
