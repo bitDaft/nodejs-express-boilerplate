@@ -1,5 +1,9 @@
 import { Model, compose } from 'objection';
 
+// ^ this config import is not used in this file
+// ^ but due to module resolution of TLA, we need this to prevent loading of this file prematurely
+// ! DO NOT REMOVE THIS CONFIG IMPORT
+import config from '#config';
 import { __dirname } from '#lib/getFileDir';
 import { knexMain } from '#conns';
 
