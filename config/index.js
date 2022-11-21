@@ -3,10 +3,8 @@ import process from 'process';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
 
-import { __dirname } from '../lib/getFileDir.js';
-import { jsonLoaderSync } from '../lib/fileLoader.js';
-
-import { injectEnv } from './injectEnv.js';
+import { __dirname } from '#lib/getFileDir';
+import { jsonLoaderSync } from '#lib/fileLoader';
 
 // TODO: this needs to be replaced once node supports json imports natively
 const config = jsonLoaderSync(path.join(__dirname(import.meta), 'config.json'));
@@ -15,18 +13,22 @@ const envPre = config.ENV_PREFIX || '';
 
 config.NODE_ENV = process.env.NODE_ENV || 'development';
 
-// # Custom parsing of boolean values
-const validateAndParseBooleanConfig = (config) => {
+// # Custom parsing and validating values
+const validateAndParseConfig = (config) => {
   for (const key in config) {
     let value = config[key];
     if (typeof value === 'object' && !Array.isArray(value) && value !== null)
-      validateAndParseBooleanConfig(value);
+      validateAndParseConfig(value);
     else if (value === 'true') config[key] = true;
     else if (value === 'false') config[key] = false;
+    else if (value === '') throw new Error(`Config key ${key} has no value`);
   }
 };
 
-const yargsCheck = (arr) => {
+const yargsCheck = (argvs) => {
+  let arr = hideBin(argvs);
+  let idx = arr.indexOf('--');
+  if (~idx) arr.splice(idx, 1);
   let tmp1 = yargs(arr).env(envPre).argv;
   const defKey = Object.keys(tmp1.db);
   let tmp = yargs(arr)
@@ -116,23 +118,16 @@ const yargsCheck = (arr) => {
   return tmp.argv;
 };
 
-export const init = (extra = {}) => {
+export const init = async () => {
   // # Loads env vars from file
-  if (config.NODE_ENV === 'development') injectEnv(config.ENV_FILENAME);
-
-  // # Combines extra into config for uniform access
-  for (const key in extra) config[key] = extra[key];
-
+  if (config.NODE_ENV === 'development')
+    await import('./injectEnv.js').then((_) => _.injectEnv(config.ENV_FILENAME));
   // # Combines cli args into config for uniform access
-  let arr = hideBin(process.argv);
-  let idx = arr.indexOf('--');
-  if (~idx) arr.splice(idx, 1);
-
-  const parsedArgs = yargsCheck(arr);
+  const parsedArgs = yargsCheck(process.argv);
   for (const key in parsedArgs) config[key] = parsedArgs[key];
 
   // # Parse any boolean value in config since yargs does not parse it
-  validateAndParseBooleanConfig(config);
+  validateAndParseConfig(config);
 
   delete config._;
   delete config.ENV_PREFIX;
@@ -141,6 +136,6 @@ export const init = (extra = {}) => {
   return config;
 };
 
-init();
+await init();
 
 export default config;

@@ -17,5 +17,6 @@
       "delay": 1000
     },
     "removeOnComplete": true
-  }
+  },
+  "smtpFrom": "no-reply@bitdaft.dev"
 }

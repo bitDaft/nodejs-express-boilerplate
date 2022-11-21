@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import path from 'path';
 import fs from 'fs';
 
-import { __dirname } from '../lib/getFileDir.js';
+import { __dirname } from '#lib/getFileDir';
 
 export const injectEnv = (filename) => {
   const dotOpt = {
@@ -10,14 +10,8 @@ export const injectEnv = (filename) => {
     debug: true,
   };
 
-  if (!fs.existsSync(dotOpt.path)) {
+  if (!fs.existsSync(dotOpt.path))
     throw Error(`Env file '${dotOpt.path}' does not exist. Please change or create it!`);
-  }
 
-  let output = dotenv.config(dotOpt).parsed;
-  for (const key in output) {
-    if (output[key] === undefined || output[key] === '') {
-      throw Error(`Key ${key} has no value set`);
-    }
-  }
+  return dotenv.config(dotOpt).parsed;
 };
