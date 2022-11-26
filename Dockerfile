@@ -9,7 +9,7 @@ COPY package*.json ./
 USER node
 
 # the rest of the actual env will have to be passed during the run phase
-ENV NODE_ENV=prodution
+ENV NODE_ENV=production
 
 RUN npm ci
 
