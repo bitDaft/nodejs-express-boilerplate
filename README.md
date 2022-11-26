@@ -32,10 +32,11 @@ This is a opinianated starter template for nodejs express projects
 │ ├─queue             // define msg queue
 │ └─worker            // worker for queue
 │   └─sandbox         // sandboxed worker
-├─lib                 // contains lib files, usually wont need to import or interact with them except for logger and Failure
+├─lib                 // contains lib files, usually wont need to import or interact with them except for 'logger' and 'Failure' objects
 ├─loadFile            // auto loads files in folder
 ├─middlewares         // custom middlewares for express
 ├─modules             // contains the actual src
+│ ├─template          // a template of a module to copy paste when creating new modules
 │ └─auth              // auth module pre made for most apps
 └─utils               // utils functions
 ```
