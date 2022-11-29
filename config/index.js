@@ -121,7 +121,7 @@ const yargsCheck = (argvs) => {
     });
   }
 
-  if (tmp1['$0'] !== 'bin/www.js') {
+  if (~tmp1['$0'].indexOf('knex')) {
     tmp.option({
       database: {
         description: 'Select the database to run the associated migration',
