@@ -1,8 +1,9 @@
-# Nodejs/Express Template <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" style="position:relative;top:2px;height: 2rem;"><path d="M320 0c17.7 0 32 14.3 32 32V96H480c35.3 0 64 28.7 64 64V448c0 35.3-28.7 64-64 64H160c-35.3 0-64-28.7-64-64V160c0-35.3 28.7-64 64-64H288V32c0-17.7 14.3-32 32-32zM208 384c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H208zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H304zm96 0c-8.8 0-16 7.2-16 16s7.2 16 16 16h32c8.8 0 16-7.2 16-16s-7.2-16-16-16H400zM264 256c0-22.1-17.9-40-40-40s-40 17.9-40 40s17.9 40 40 40s40-17.9 40-40zm152 40c22.1 0 40-17.9 40-40s-17.9-40-40-40s-40 17.9-40 40s17.9 40 40 40zM48 224H64V416H48c-26.5 0-48-21.5-48-48V272c0-26.5 21.5-48 48-48zm544 0c26.5 0 48 21.5 48 48v96c0 26.5-21.5 48-48 48H576V224h16z" fill="#00aaff"/></svg>
+# Nodejs/Express Template :robot:
 
-[![CodeFactor](https://www.codefactor.io/repository/github/bitdaft/nodejs-objection-boilerplate/badge)](https://www.codefactor.io/repository/github/bitdaft/nodejs-objection-boilerplate)
+[![CodeFactor](https://www.codefactor.io/repository/github/bitdaft/nodejs-express-boilerplate/badge)](https://www.codefactor.io/repository/github/bitdaft/nodejs-express-boilerplate)
 
-### :rocket: An opinionated template to kickstart your Nodejs/Express project.
+### :rocket: An opinionated template to kickstart your Nodejs/Express project. 
+<img src="https://64.media.tumblr.com/126fc1df4e999677f554c471139b3754/tumblr_oq9dm3D8J11relg8bo1_500.gif" height="150" />
 
 ## Features
 
@@ -15,7 +16,7 @@
 - Logging on separate process with tagged structured logs
 - Easy centralized failure and success handling
 
----
+<img src="https://media.tenor.com/It6WN9CY4HMAAAAM/wow-oh-my-god.gif"/>
 
 ## Quick start
 
@@ -50,9 +51,9 @@ Both static JSON config file and env config file are stored here, in their respe
 
 **NB: make sure to run `npm run FIX_ERR_REQUIRE_ESM_BULLMQ` first after `npm install` to fix bullmq issue with module imports**
 
-### **:tada: :confetti_ball: Thats all there's to know, go ahead and use this template now**
+### **:tada: :confetti_ball: Thats all there is to know, go ahead and use this template now**
 
----
+<img src="https://media.tenor.com/XReQgcgWE8YAAAAM/omg-yay.gif" />
 
 ## File structure
 
@@ -89,6 +90,8 @@ As such,
 - if you have different routing and controller mechanics, `modules` folder goes **_YEEEET_**
 - etc..., you get the idea
 
+<img src="https://media.tenor.com/jSx1KiL3L2UAAAAC/yeet-lion-king.gif" height="200" alt="yeet" />
+
 Removing these folders usually should not cause issues, since they are loosely coupled.
 Even then if you are removing them, please make sure to check where all the imports are used in the rest of the project and make a note on how to replace them
 
@@ -106,9 +109,9 @@ If only 1 db has been specified, it will be auto detected and will use it automa
 
 **NB: For usage on multi-tenancy with dynamic connections, please read the comment in `middleware/authorize.js` about setting it up.**
 
-**_Made with <svg viewBox="0 0 1792 1792" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="position:relative;top:2px;height: 1rem;"><path d="M896 1664q-26 0-44-18l-624-602q-10-8-27.5-26T145 952.5 77 855 23.5 734 0 596q0-220 127-344t351-124q62 0 126.5 21.5t120 58T820 276t76 68q36-36 76-68t95.5-68.5 120-58T1314 128q224 0 351 124t127 344q0 221-229 450l-623 600q-18 18-44 18z" fill="#d92916"></path></svg> and <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="position:relative;top:2px;height: 1rem;"><path d="M169.7 .9c-22.8-1.6-41.9 14-47.5 34.7L110.4 80c.5 0 1.1 0 1.6 0c176.7 0 320 143.3 320 320c0 .5 0 1.1 0 1.6l44.4-11.8c20.8-5.5 36.3-24.7 34.7-47.5C498.5 159.5 352.5 13.5 169.7 .9zM399.8 410.2c.1-3.4 .2-6.8 .2-10.2c0-159.1-128.9-288-288-288c-3.4 0-6.8 .1-10.2 .2L.5 491.9c-1.5 5.5 .1 11.4 4.1 15.4s9.9 5.6 15.4 4.1L399.8 410.2zM176 272c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm128 64c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32zM160 384c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z" fill="#e0c91f"/></svg> by bitDaft_**
+**_Made with :heart: :computer: :pizza: by bitDaft_**
 
----
+
 
 ## TODO
 
