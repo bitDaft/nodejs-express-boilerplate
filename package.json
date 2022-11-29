@@ -26,11 +26,13 @@
     "prod:worker:mail": "NODE_ENV=production node ./jobs/worker/mail.js",
     "prod:worker:general": "NODE_ENV=production node ./jobs/worker/general.js",
     "dev": "NODE_ENV=development nodemon ./bin/www.js",
-    "dev-a": "run-p dev:* worker:*",
+    "dev-a": "run-p dev worker",
     "dev:www": "NODE_ENV=development nodemon ./bin/www.js",
+    "startWorker": "nodemon ./jobs/worker/worker.js -- -w",
     "worker": "run-p worker:*",
-    "worker:mail": "nodemon ./jobs/worker/mail.js",
-    "worker:general": "nodemon ./jobs/worker/general.js",
+    "worker:mail": "npm run startWorker mail",
+    "worker:general": "npm run startWorker general",
+    "worker:results": "npm run startWorker results",
     "migrate": "knex migrate:latest -- ",
     "migrate:one": "knex migrate:up -- ",
     "migrate:make": "knex migrate:make -- ",
@@ -40,7 +42,8 @@
     "seed": "knex seed:run -- ",
     "seed:make": "knex seed:make -- ",
     "h": "node ./bin/www.js -- -h",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "FIX_ERR_REQUIRE_ESM_BULLMQ": "node -e \"['cjs','esm'].map(a=>'./node_modules/bullmq/dist/'+a+'/classes/child-processor.js').map(a=>require('fs').writeFileSync(a,require('fs').readFileSync(a,{encoding:'utf8'}).replace('require(processorFile)','await import(processorFile)')))\""
   },
   "imports": {
     "#": ".",
@@ -69,8 +72,8 @@
     "testcontainers": "^9.0.0"
   },
   "dependencies": {
-    "axios": "^1.1.3",
-    "bullmq": "^1.91.1",
+    "axios": "^1.2.0",
+    "bullmq": "^3.2.2",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.18.2",
