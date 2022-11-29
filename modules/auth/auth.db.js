@@ -1,11 +1,9 @@
-import { getKnexDBInstance } from '#conns';
 import { RefreshToken, User } from '#models';
-import { getDbInstance } from '#utils/getDbInstance';
 import { randomToken } from '#utils/randomToken';
 import { DAY, MINUTE } from '#utils/timeConstants';
 
 export const createUser = (name, email, password) => {
-  return User.query(getDbInstance())
+  return User.query()
     .insert({
       name: name,
       email: email,
@@ -23,11 +21,11 @@ export const createUser = (name, email, password) => {
 };
 
 export const getUserWithEmail = (email) => {
-  return User.query(getDbInstance()).where('email', email).limit(1);
+  return User.query().where('email', email).limit(1);
 };
 
 export const getUserWithEmailAndValid = (email, valid) => {
-  return User.query(getDbInstance())
+  return User.query()
     .where('email', email)
     .andWhere('valid', valid)
     .limit(1)
@@ -35,11 +33,11 @@ export const getUserWithEmailAndValid = (email, valid) => {
 };
 
 export const getUserWithVerificationToken = (token) => {
-  return User.query(getDbInstance()).where('verification_token', token).limit(1);
+  return User.query().where('verification_token', token).limit(1);
 };
 
 export const getUserWithResetToken = (token) => {
-  return User.query(getDbInstance())
+  return User.query()
     .where('reset_token', token)
     .where('reset_token_expiry', '>', Date.now())
     .andWhere('valid', true)
@@ -47,7 +45,7 @@ export const getUserWithResetToken = (token) => {
 };
 
 export const patchUserInstance = (user) => {
-  return user.$query(getDbInstance()).patch();
+  return user.$query().patch();
 };
 
 export const clearResetUserInstance = (user) => {
@@ -56,18 +54,15 @@ export const clearResetUserInstance = (user) => {
 };
 
 export const deleteUserInstance = (user) => {
-  return user.$query(getDbInstance()).delete();
+  return user.$query().delete();
 };
 
 export const getRefreshTokenWithToken = (token) => {
-  return RefreshToken.query(getDbInstance())
-    .where('refresh_token', token)
-    .limit(1)
-    .withGraphFetched('user');
+  return RefreshToken.query().where('refresh_token', token).limit(1).withGraphFetched('user');
 };
 
 export const createRefreshTokenforUser = (userId) => {
-  return RefreshToken.query(getDbInstance()).insert({
+  return RefreshToken.query().insert({
     user_id: userId,
     refresh_token: randomToken(),
     expires: new Date(Date.now() + 90 * DAY),
@@ -75,5 +70,5 @@ export const createRefreshTokenforUser = (userId) => {
 };
 
 export const deleteRefreshTokenInstance = (refreshToken) => {
-  return refreshToken.$query(getDbInstance()).delete();
+  return refreshToken.$query().delete();
 };
