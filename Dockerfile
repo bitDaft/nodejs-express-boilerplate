@@ -13,6 +13,8 @@ ENV NODE_ENV=production
 
 RUN npm ci
 
+RUN npm run FIX_ERR_REQUIRE_ESM_BULLMQ
+
 COPY --chown=node:node . .
 
 EXPOSE 5000
