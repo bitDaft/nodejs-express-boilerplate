@@ -4,9 +4,9 @@ class MailQueue extends _BaseQueue {
   constructor() {
     super('mail');
 
-    this._queueEvents.on('completed', ({ jobId, returnvalue }) => {});
-    this._queueEvents.on('failed', ({ jobId, failedReason }) => {});
-    this._queueEvents.on('progress', ({ jobId, data }) => {});
+    this.queueEvents.on('completed', ({ jobId, returnvalue }) => {});
+    this.queueEvents.on('failed', ({ jobId, failedReason }) => {});
+    this.queueEvents.on('progress', ({ jobId, data }) => {});
   }
 }
 
