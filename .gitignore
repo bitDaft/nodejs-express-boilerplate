@@ -95,6 +95,5 @@ lerna-debug.log
 Thumbs.db
 
 #lock file
-package-lock.json
 pnpm-lock.yaml
 yarn-lock.json

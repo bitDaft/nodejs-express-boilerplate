@@ -1,23 +1,25 @@
 import path from 'path';
-import { QueueScheduler, Worker } from 'bullmq';
+import { Worker } from 'bullmq';
+import fs from 'fs';
 
 import config from '#config';
 import log from '#lib/logger';
 import { __dirname } from '#lib/getFileDir';
 
-import generalJobProcessor from './sandbox/generalProcessor.js';
-
-const QUEUE_NAME = 'general';
+const QUEUE_NAME = config.w;
 const connection = config.redis;
 
 // ^ there is some issue with using sandbox processor due to import issues
+// ! Currently using a work around by manually patching the module via npm script to fix the import 
 // TODO: Fix using sandbox processor, once update comes to fix import issue
 const processorFile = path.join(__dirname(import.meta), 'sandbox', `${QUEUE_NAME}Processor.js`);
-const worker = new Worker(QUEUE_NAME, generalJobProcessor, { connection });
+if (!fs.existsSync(processorFile)) {
+  log.fatal('Unable to find the worker file ' + processorFile + '. Exiting...');
+  process.exit();
+}
+const worker = new Worker(QUEUE_NAME, processorFile, { connection });
 
-// ^define queuescheduler in each of child queues and workers only if they use delayed-kind-of or repeatable jobs
-// this._queueScheduler = new QueueScheduler(name, { connection });
-// process.on('exit', async () => await this._queueScheduler.close());
+log.info('Worker for ' + QUEUE_NAME + ' has started')
 
 worker.on('completed', (job, result) => {});
 worker.on('progress', (job, progress) => {});

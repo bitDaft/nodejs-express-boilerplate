@@ -1,4 +1,4 @@
-import { Queue, QueueScheduler, QueueEvents } from 'bullmq';
+import { Queue, QueueEvents } from 'bullmq';
 
 import log from '#lib/logger';
 import config from '#config';
@@ -9,22 +9,14 @@ class _BaseQueue {
       throw new Error(`Please provide a name for the queue`);
     }
     const connection = config.redis;
-    this._queue = new Queue(name, {
+    this.queue = new Queue(name, {
       connection,
       defaultJobOptions: { ...config.queueOptions, ...opts },
     });
-    this._queueEvents = new QueueEvents(name, { connection });
+    this.queueEvents = new QueueEvents(name, { connection });
     this.log = log.child({ queueName: name });
 
-    // ^define queuescheduler in each of child queues and workers only if they use delayed-kind-of or repeatable jobs
-    // this._queueScheduler = new QueueScheduler(name, { connection });
-    // process.on('exit', async () => await this._queueScheduler.close());
-
-    process.on('exit', async () => await this._queueEvents.close());
-  }
-
-  get queue() {
-    return this._queue;
+    process.on('exit', async () => await this.queueEvents.close());
   }
 
   async add(jobName, jobData, jobOpts = {}) {
@@ -37,17 +29,25 @@ class _BaseQueue {
     return await this.queue.add(jobName, jobData, Object.assign(jobOpts, { lifo: true }));
   }
 
+  async getAllRepeeatable() {
+    return await this.queue.getRepeatableJobs();
+  }
+
   async addRepeat(jobName, jobData, cron, jobOpts = {}) {
     if (typeof cron !== 'string' || !cron) {
       throw new Error('Please provide valid cron string');
     }
     this.log.info({ jobData, jobOpts }, `adding '${jobName}' repeatable job`);
-    return await this.queue.add(jobName, jobData, Object.assign(jobOpts, { repeat: cron }));
+    return await this.queue.add(
+      jobName,
+      jobData,
+      Object.assign(jobOpts, { repeat: { pattern: cron } })
+    );
   }
 
   async removeRepeat(name, cron, jobId) {
     this.log.info({ jobId }, `removing repeating job`);
-    return await this.queue.removeRepeatable(name, { cron }, jobId);
+    return await this.queue.removeRepeatable(name, { pattern: cron }, jobId);
   }
 }
 

@@ -30,28 +30,22 @@ for (let key in config.db) {
   knexMain[key] = Knex(knexConfig);
 }
 
-// ^ this is only usefull to implement if you're going to implement multi-tenancy
-// ? this will depend on whether same db or different db architecture
-// TODO : fix this to implement getting the correct config info for a tenant
-const getTenantConfig = async (tenant) => {
-  return {};
+// ^ this function is used to get the different database connections as defined in the env file
+const getKnexDBInstance = (dbId) => {
+  return knexMain[dbId];
 };
 
-const getMainKnexInstance = (dbKey) => {
-  return knexMain[dbKey];
-};
-
-const getTenantKnexInstance = async (tenant) => {
-  let knexInstance = knexTenant[tenant];
+// ^ this function is when connection details of tenants are stored in a db and need to fetch them and make the connection at runtime
+const getKnexTenantInstance = async (tenantId, tenantInfo) => {
+  let knexInstance = knexTenant[tenantId];
   if (knexInstance === undefined) {
-    const tenantConfig = await getTenantConfig(tenant);
-    const knexConfig = generateKnexConfig(tenantConfig, 99);
+    const knexConfig = generateKnexConfig(tenantInfo, tenantId + '_tenant');
     knexConfig.log = knexLog;
-    knexTenant[tenant] = knexInstance = Knex(knexConfig);
+    knexTenant[tenantId] = knexInstance = Knex(knexConfig);
   }
   return knexInstance;
 };
-
+const dbKeys = Object.keys(config.db);
 delete config.db;
 
-export { knexMain, getTenantKnexInstance, getMainKnexInstance };
+export { dbKeys, getKnexTenantInstance, getKnexDBInstance };

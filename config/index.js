@@ -47,7 +47,7 @@ const yargsCheck = (argvs) => {
       command: 'migrate:make <filename>',
       desc: 'Create a new migration',
       builder: (yargs) => {
-        yargs.positional('filename', {
+        return yargs.positional('filename', {
           description: 'The name of the migration file',
           type: 'string',
         });
@@ -73,7 +73,7 @@ const yargsCheck = (argvs) => {
       command: 'seed:make <filename>',
       desc: 'Create a new seed',
       builder: (yargs) => {
-        yargs.positional('filename', {
+        return yargs.positional('filename', {
           description: 'The name of the seed file',
           type: 'string',
         });
@@ -86,6 +86,9 @@ const yargsCheck = (argvs) => {
     .positional('filename', {
       description: 'The name of file for migrate:make and seed:make',
     })
+    .positional('worker-name', {
+      description: 'The name of file of worker to start an instance of',
+    })
     .example('npm run migrate', 'run all migrations for default database')
     .example('npm run migrate -- -d 1', 'run all migrations for database 1')
     .example('npm run migrate:make user -- -d 1', 'create migrations for database 1')
@@ -93,7 +96,32 @@ const yargsCheck = (argvs) => {
     .example('npm run seed -- -d 2', 'run all seeds for database 2')
     .example('npm run seed:make roles -- -d 2', 'create seed file for database 2');
 
-  if (tmp1['$0'] !== 'bin/www.js') {
+  tmp
+    .command({
+      command: 'startWorker <worker-name>',
+      desc: 'start an worker instance',
+      builder: (yargs) => {
+        return yargs.positional('worker-name', {
+          describe: 'the name of the worker to start',
+          required: true,
+        });
+      },
+    })
+    .example('npm run startWorker mail', 'starts a new worker instance of mail');
+
+  if (tmp1['$0'] === 'jobs/worker/worker.js') {
+    tmp.option({
+      'worker-name': {
+        description: 'name of worker to start instance of',
+        required: true,
+        alias: 'w',
+        nargs: 1,
+        number: false,
+      },
+    });
+  }
+
+  if (~tmp1['$0'].indexOf('knex')) {
     tmp.option({
       database: {
         description: 'Select the database to run the associated migration',

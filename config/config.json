@@ -16,7 +16,8 @@
       "type": "exponential",
       "delay": 1000
     },
-    "removeOnComplete": true
+    "removeOnComplete": true,
+    "removeOnFail": 1000
   },
   "smtpFrom": "no-reply@bitdaft.dev"
 }

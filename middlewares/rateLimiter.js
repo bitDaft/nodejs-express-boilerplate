@@ -1,11 +1,13 @@
-import { limiterMiddleware } from '#utils/rateLimiters';
+import { limiterMiddleware, APIKeylimiterMiddleware } from '#utils/rateLimiters';
 
-export const rateLimiterMiddleware = async (req, res, next) =>
-  limiterMiddleware
+export const rateLimiterMiddleware = async (req, res, next) => {
+  let rateLimiterUsed = limiterMiddleware;
+  if (req.get('X-API')) rateLimiterUsed = APIKeylimiterMiddleware;
+  return rateLimiterUsed
     .consume(req.ip)
     .then(() => next())
     .catch(() => res.status(429).send('Too Many Requests'));
-
+};
 // const headers = {
 //   'Retry-After': rateLimiterRes.msBeforeNext / 1000,
 //   'X-RateLimit-Limit': opts.points,

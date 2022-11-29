@@ -5,13 +5,20 @@ import { Model, compose } from 'objection';
 // ! DO NOT REMOVE THIS CONFIG IMPORT
 import config from '#config';
 import { __dirname } from '#lib/getFileDir';
-import { knexMain } from '#conns';
+import { dbKeys, getKnexDBInstance, getKnexTenantInstance } from '#conns';
+import { dbInstasnceStorage } from '#lib/asyncContexts';
 
 const returningCache = {};
 
+for (let key of dbKeys) {
+  let inst = getKnexDBInstance(key);
+  const clientParam = inst.context.userParams.client;
+  returningCache[clientParam] = ['pg', 'mssql'].includes(clientParam.split('_')[0]);
+}
+
 const mixins = compose();
-let knexKeys = Object.keys(knexMain);
-if (knexKeys.length === 1) Model.knex(knexMain[knexKeys[0]]);
+const singleDb = dbKeys.length === 1;
+if (singleDb) Model.knex(getKnexDBInstance(dbKeys[0]));
 
 export default class BaseModel extends mixins(Model) {
   static concurrency = 10;
@@ -53,21 +60,32 @@ export default class BaseModel extends mixins(Model) {
     }
   }
 
-  // ? not sure if needed if multi db, need to test
-  // TODO: test if required
-  // static query(...args) {
-  //   if (args[0]) this.knex(args[0]);
-  //   return super.query(...args);
-  // }
+  // # this is needed to work with both default and specified db
+  // # context allows to auto fetch the tenant details without user intervention
+  static query(...args) {
+    let knexInstance = undefined;
+    if (!args[0]) {
+      const store = dbInstasnceStorage.getStore();
+      const dynLoad = store?.get('isDynamicLoadTenant');
+      const tenantId = store?.get('tenantId');
+      const tenantInfo = store?.get('tenantInfo');
+      if (dynLoad === true) {
+        knexInstance = getKnexTenantInstance(tenantId, tenantInfo);
+      } else if (dynLoad === false) {
+        knexInstance = getKnexDBInstance(tenantId);
+      }
+    }
+    if (knexInstance) args[0] = knexInstance;
+    if (!singleDb && args[0]) this.knex(args[0]);
+    const superVal = super.query(...args);
+    if (!singleDb && args[0]) this.knex(null);
+    return superVal;
+  }
 
   static get QueryBuilder() {
-    let supportsReturning = returningCache[this.knex().context.userParams.client];
-    if (supportsReturning === undefined) {
-      supportsReturning = returningCache[this.knex().context.userParams.client] = [
-        'pg',
-        'mssql',
-      ].includes(this.knex().context.userParams.client.split('_')[0]);
-    }
+    let supportsReturning = false;
+    const clientParam = this.knex()?.context?.userParams?.client;
+    if (clientParam) supportsReturning = returningCache[clientParam];
     return class extends Model.QueryBuilder {
       // # Wrapping some fns to use returning if it supports it
       insertAndFetch(body) {
