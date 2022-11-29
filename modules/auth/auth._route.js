@@ -69,7 +69,7 @@ router.post('/register', registerNewUserHandler);
 router.get('/verify', verifyUserHandler);
 
 router.get('/refresh-token', refreshTokenHandler);
-router.get('/revoke-token', authorize(''), revokeTokenHandler);
+router.get('/revoke-token', authorize(), revokeTokenHandler);
 
 router.post('/forgot-password', requestPasswordChangeHandler);
 router.get('/validate-reset-token', validateResetTokenHandler);
