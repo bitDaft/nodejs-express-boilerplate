@@ -97,7 +97,14 @@ For example
 - If removing the `database` folder, you will also need you to modify `<module>.db.js` file, as it imports db models to make queries.
 - If removing the `config` folder, you will need to provide an alternative export for the config, with env vars and config keys, as it is used in quite a few places, or you will need to edit those where it is already in usage to suit your needs .
 
-> The removal/replacement of almost all folders except for `config` folder is trivially possible.
+> The removal/replacement of almost all folders except for `config` folder is trivially possible, with very little to change in other files.
+
+## Multi-Tenancy
+
+Multi tenancy support is working, and can have both dynamic connections for each request and have multi db connection at startup.
+If only 1 db has been specified, it will be auto detected and will use it automatically
+
+**NB: For usage on multi-tenancy with dynamic connections, please read the comment in `middleware/authorize.js` about setting it up.**
 
 **_Made with <svg viewBox="0 0 1792 1792" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" style="position:relative;top:2px;height: 1rem;"><path d="M896 1664q-26 0-44-18l-624-602q-10-8-27.5-26T145 952.5 77 855 23.5 734 0 596q0-220 127-344t351-124q62 0 126.5 21.5t120 58T820 276t76 68q36-36 76-68t95.5-68.5 120-58T1314 128q224 0 351 124t127 344q0 221-229 450l-623 600q-18 18-44 18z" fill="#d92916"></path></svg> and <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" style="position:relative;top:2px;height: 1rem;"><path d="M169.7 .9c-22.8-1.6-41.9 14-47.5 34.7L110.4 80c.5 0 1.1 0 1.6 0c176.7 0 320 143.3 320 320c0 .5 0 1.1 0 1.6l44.4-11.8c20.8-5.5 36.3-24.7 34.7-47.5C498.5 159.5 352.5 13.5 169.7 .9zM399.8 410.2c.1-3.4 .2-6.8 .2-10.2c0-159.1-128.9-288-288-288c-3.4 0-6.8 .1-10.2 .2L.5 491.9c-1.5 5.5 .1 11.4 4.1 15.4s9.9 5.6 15.4 4.1L399.8 410.2zM176 272c-17.7 0-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32s-14.3 32-32 32zm128 64c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32zM160 384c0 17.7-14.3 32-32 32s-32-14.3-32-32s14.3-32 32-32s32 14.3 32 32z" fill="#e0c91f"/></svg> by bitDaft_**
 
@@ -110,6 +117,8 @@ For example
 - [x] Add docker support
 - [x] Add testing support
 - [x] Allow dynamic rate limit based on whether request is API key or session API call
-- [ ] Add Multi database connection example on usage
+- [x] Fixed working of multi tenancy and multi database
+- [x] Auto detection of tenant (with little initial setup work)
 - [ ] Add unit, integration test
-- [ ] Complete documentation of in-dept working
+- [ ] Complete proper documentation
+- [ ] Add Multi tenancy connection example
