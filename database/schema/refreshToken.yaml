@@ -2,9 +2,9 @@ title: Refresh_Token
 description: Holds all the refresh tokens in use
 type: object
 required:
-- user_id
-- refresh_token
-- expires
+  - user_id
+  - refresh_token
+  - expires
 properties:
   id:
     type: integer
@@ -12,6 +12,11 @@ properties:
   user_id:
     type: integer
     description: the ID of the user that uses this refresh token
+  parent_id:
+    type:
+      - integer
+      - 'null'
+    description: the ID of the parent refresh token in the chain
   refresh_token:
     type: string
     description: the refresh token
@@ -22,13 +27,13 @@ properties:
     type: string
     format: date-time
     description: the time this refresh token expires
-  is_deleted:
+  valid:
     type: boolean
-    description: whether the record has been deleted
+    description: whether the record is valid
   additional_information:
     type:
-    - object
-    - 'null'
+      - object
+      - 'null'
     description: any additional information for this record
   created_at:
     type: string
