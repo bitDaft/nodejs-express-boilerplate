@@ -10,8 +10,8 @@ import { dbInstasnceStorage } from '#lib/asyncContexts';
 
 const returningCache = {};
 
-for (let key of dbKeys) {
-  let inst = getKnexDBInstance(key);
+for (const key of dbKeys) {
+  const inst = getKnexDBInstance(key);
   const clientParam = inst.context.userParams.client;
   returningCache[clientParam] = ['pg', 'mssql'].includes(clientParam.split('_')[0]);
 }
@@ -28,7 +28,7 @@ export default class BaseModel extends mixins(Model) {
   static async beforeInsert({ inputItems }) {
     // # Removing datetime iso string tz info, use this fn if field in DB is DATETIME and not TIMESTAMP
     for (let item of inputItems) {
-      for (let key in item) {
+      for (const key in item) {
         if (
           typeof item[key] === 'string' &&
           item[key].indexOf('T') === 10 &&
@@ -48,7 +48,7 @@ export default class BaseModel extends mixins(Model) {
   static async beforeUpdate({ inputItems }) {
     // # Removing datetime iso string tz info, use this fn if field in DB is DATETIME and not TIMESTAMP
     for (let item of inputItems) {
-      for (let key in item) {
+      for (const key in item) {
         if (
           typeof item[key] === 'string' &&
           item[key].indexOf('T') === 10 &&

@@ -6,7 +6,7 @@ import RefreshToken from './refreshToken.js';
 // import { dbKeys, getKnexDBInstance } from '#conns';
 
 // # This section is simply to obtain the metadata for the tables from db before the start of the application
-// ? If you feel you need have a need to get the metadata before hand, uncomment these
+// ? If you feel you have a need to get the metadata beforehand, uncomment from line 13-20
 // # otherwise feel free to ignore
 // ^ Add new models into appropriate db's array
 // ^ the number (0,1,...) associated to a db is defined in your env file
