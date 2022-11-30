@@ -45,10 +45,7 @@ export default (roles = [], options = {}) => {
       }
 
       // # Account no longer exists
-      if (!user) {
-        throw new Failure('Not Found', 404);
-      }
-
+      if (!user) return res.status(404).send();
       // # role not authorized
       if (roles.length && !roles.includes(user.role.name.toLowerCase())) {
         throw new Failure('Unauthorized', 401);
@@ -78,7 +75,6 @@ export default (roles = [], options = {}) => {
       // # Authentication and authorization successful
       req.user = user;
       req.role = user.role;
-      req.refreshTokens = user.refresh_tokens;
 
       dbInstasnceStorage.run(store, next);
     },
