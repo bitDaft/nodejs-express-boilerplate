@@ -7,7 +7,7 @@ import { __dirname } from '#lib/getFileDir';
 export const injectEnv = (filename) => {
   const dotOpt = {
     path: path.join(__dirname(import.meta), 'environment', filename),
-    debug: true,
+    debug: false,
   };
 
   if (!fs.existsSync(dotOpt.path))
