@@ -35,7 +35,7 @@ const morganConfig = {
 
 // # Setup middlewares
 app.use(idLogsMiddleware);
-app.use(morgan(config.NODE_ENV !== 'development' ? 'combined' : 'dev', morganConfig));
+app.use(morgan(config.NODE_ENV === 'development' ? 'dev' : 'combined', morganConfig));
 app.use(helmet());
 app.use(cors(corsOptions));
 app.use(cookieParser());

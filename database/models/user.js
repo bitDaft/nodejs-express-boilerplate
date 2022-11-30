@@ -4,6 +4,7 @@ import { BaseModel } from '#conns';
 import { RefreshToken, Role } from '#models';
 import { randomToken } from '#utils/randomToken';
 import { MINUTE } from '#utils/timeConstants';
+import config from '#config';
 
 export default class User extends BaseModel {
   static tableName = 'user';
@@ -27,7 +28,7 @@ export default class User extends BaseModel {
 
   reset() {
     this.reset_token = randomToken();
-    this.reset_token_expiry = new Date(Date.now() + 30 * MINUTE);
+    this.reset_token_expiry = new Date(Date.now() + config.resetTokenDuration * MINUTE);
   }
 
   clearReset() {

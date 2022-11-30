@@ -11,13 +11,14 @@ import app from '#app';
 
 import { init } from './init.js';
 
+const host = config.NODE_ENV === 'development' ? 'localhost' : '0.0.0.0';
 const port = config.port;
 app.set('port', port);
 
 const server = http.createServer(app);
 
 const start = () => {
-  server.listen(port, () => {
+  server.listen(port, host, () => {
     log.info(`Running -> Listening on port : ${port}`);
   });
 };

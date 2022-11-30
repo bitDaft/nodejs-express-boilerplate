@@ -2,7 +2,7 @@ title: Role
 description: Defines the roles and their permissions
 type: object
 required:
-- name
+  - name
 properties:
   id:
     type: integer
@@ -10,13 +10,10 @@ properties:
   name:
     type: string
     description: name or username of the user
-  is_deleted:
-    type: boolean
-    description: whether the record has been deleted
   additional_information:
     type:
-    - object
-    - 'null'
+      - object
+      - 'null'
     description: any additional information for this record
   created_at:
     type: string

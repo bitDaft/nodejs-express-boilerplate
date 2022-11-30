@@ -19,5 +19,15 @@
     "removeOnComplete": true,
     "removeOnFail": 1000
   },
-  "smtpFrom": "no-reply@bitdaft.dev"
+  "smtpFrom": "no-reply@bitdaft.dev",
+  "accessTokenDuration": 15,
+  "refreshTokenDuration": 90,
+  "verificationTokenDuration": 15,
+  "resetTokenDuration": 30,
+  "refreshCookieOption": {
+    "httpOnly": true,
+    "path": "/auth/refresh-token",
+    "secure": false,
+    "sameSite": "Strict"
+  }
 }

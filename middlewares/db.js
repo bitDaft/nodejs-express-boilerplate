@@ -6,5 +6,5 @@ export const getUserById = (id) => {
       id,
     })
     .limit(1)
-    .withGraphFetched('[role refresh_tokens]');
+    .withGraphFetched('[role]');
 };

@@ -1,23 +1,18 @@
+import config from '#config';
 import { RefreshToken, User } from '#models';
 import { randomToken } from '#utils/randomToken';
 import { DAY, MINUTE } from '#utils/timeConstants';
 
 export const createUser = (name, email, password) => {
-  return User.query()
-    .insert({
-      name: name,
-      email: email,
-      password: '',
-      salt: '',
-      valid: false,
-      verification_token: randomToken(),
-      verification_expiry: new Date(Date.now() + 15 * MINUTE),
-    })
-    .then(async (user) => {
-      user.setPassword(password);
-      await patchUserInstance(user);
-      return user;
-    });
+  const user = User.fromJson({
+    name: name,
+    email: email,
+    valid: false,
+    verification_token: randomToken(),
+    verification_expiry: new Date(Date.now() + config.verificationTokenDuration * MINUTE),
+  });
+  user.setPassword(password);
+  return User.query().insert(user);
 };
 
 export const getUserWithEmail = (email) => {
@@ -61,14 +56,19 @@ export const getRefreshTokenWithToken = (token) => {
   return RefreshToken.query().where('refresh_token', token).limit(1).withGraphFetched('user');
 };
 
-export const createRefreshTokenforUser = (userId) => {
+export const createRefreshTokenforUser = (userId, parent_id) => {
   return RefreshToken.query().insert({
     user_id: userId,
     refresh_token: randomToken(),
-    expires: new Date(Date.now() + 90 * DAY),
+    expires: new Date(Date.now() + config.refreshTokenDuration * DAY),
+    parent_id,
   });
 };
 
-export const deleteRefreshTokenInstance = (refreshToken) => {
-  return refreshToken.$query().delete();
+export const invalidateRefreshTokenInstance = (refreshTokenId) => {
+  return RefreshToken.query().patch({ valid: false }).where('id', refreshTokenId);
+};
+
+export const deleteRefreshTokenChain = (refreshTokenId) => {
+  return RefreshToken.query().delete().where('id', refreshTokenId);
 };
