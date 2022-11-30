@@ -36,6 +36,7 @@ Inside each module you will find files for each action, such as:
 You may also create other files for your own purposes.
 
 > ###### A working `auth` module has been defined as an example to learn the usage
+> ###### [Postman collection link](https://documenter.getpostman.com/view/5939662/2s8Yt1r96h)
 
 #### Database
 
