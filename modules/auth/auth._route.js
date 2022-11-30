@@ -12,12 +12,22 @@ import {
   resetUserPassword,
   revokeToken,
 } from '#controller/auth';
+import { DAY } from '#utils/timeConstants';
+import config from '#config';
+import { randomToken } from '#utils/randomToken';
 
 const router = express.Router();
 
-const loginExistingUserHandler = async (req) => {
+const REFRESH_TOKEN_KEY = '__Secure-refresh_token';
+
+const loginExistingUserHandler = async (req, res) => {
   const { email, password } = req.body;
-  return await loginExistingUser(email, password);
+  const userData = await loginExistingUser(email, password);
+  res.cookie(REFRESH_TOKEN_KEY, userData.refreshToken, {
+    expires: new Date(Date.now() + config.refreshTokenDuration * DAY),
+    ...config.refreshCookieOption,
+  });
+  return userData;
 };
 
 const registerNewUserHandler = async (req) => {
@@ -32,16 +42,24 @@ const verifyUserHandler = async (req) => {
   return 'You have been verified successfully';
 };
 
-const refreshTokenHandler = async (req) => {
-  const _refreshToken = req.query.token;
-  return await refreshToken(_refreshToken);
+const refreshTokenHandler = async (req, res) => {
+  const _refreshToken = req.cookies[REFRESH_TOKEN_KEY];
+  const refreshData = await refreshToken(_refreshToken);
+  res.cookie(REFRESH_TOKEN_KEY, refreshData.refreshToken, {
+    expires: new Date(Date.now() + config.refreshTokenDuration * DAY),
+    ...config.refreshCookieOption,
+  });
+  return refreshData;
 };
 
-const revokeTokenHandler = async (req) => {
+const revokeTokenHandler = async (req, res) => {
   const token = req.query.token;
   const userId = req.user.id;
-  const refreshTokens = req.refreshTokens;
-  await revokeToken(token, refreshTokens, userId);
+  await revokeToken(token, userId);
+  res.clearCookie(REFRESH_TOKEN_KEY, {
+    expires: new Date(Date.now() - config.refreshTokenDuration * DAY),
+    ...config.refreshCookieOption,
+  });
   return "User's token has been revoked";
 };
 
