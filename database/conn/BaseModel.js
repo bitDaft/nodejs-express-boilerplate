@@ -62,9 +62,9 @@ export default class BaseModel extends mixins(Model) {
 
   // # this is needed to work with both default and specified db
   // # context allows to auto fetch the tenant details without user intervention
-  static query(...args) {
+  static query(args) {
     let knexInstance = undefined;
-    if (!args[0]) {
+    if (!args) {
       const store = dbInstasnceStorage.getStore();
       const dynLoad = store?.get('isDynamicLoadTenant');
       const tenantId = store?.get('tenantId');
@@ -74,11 +74,12 @@ export default class BaseModel extends mixins(Model) {
       } else if (dynLoad === false) {
         knexInstance = getKnexDBInstance(tenantId);
       }
+    } else {
+      knexInstance = args;
     }
-    if (knexInstance) args[0] = knexInstance;
-    if (!singleDb && args[0]) this.knex(args[0]);
-    const superVal = super.query(...args);
-    if (!singleDb && args[0]) this.knex(null);
+    if (knexInstance) this.knex(knexInstance);
+    const superVal = super.query(knexInstance);
+    if (knexInstance) this.knex(singleDb ? getKnexDBInstance(dbKeys[0]) : null);
     return superVal;
   }
 
