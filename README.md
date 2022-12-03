@@ -126,3 +126,5 @@ If only 1 db has been specified, it will be auto detected and will use it automa
 - [ ] Add unit, integration test
 - [ ] Complete proper documentation
 - [ ] Add Multi tenancy connection example
+- [ ] socket integration?
+- [ ] use redis cache instead of memory cache?

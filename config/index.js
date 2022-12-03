@@ -143,14 +143,14 @@ const yargsCheck = (argvs) => {
     .help('h')
     .alias('h', 'help')
     .showHelpOnFail(true)
-    .epilogue('For more information, visit https://github.com/bitDaft/express-sql-template');
+    .epilogue('For more information, visit https://github.com/bitDaft/nodejs-express-boilerplate');
   return tmp.argv;
 };
 
 export const init = async () => {
   // # Loads env vars from file
   if (config.isDev) await import('./injectEnv.js').then((_) => _.injectEnv(config.ENV_FILENAME));
-  // # Combines cli args into config for uniform access
+  // # Combines cli args and env into config for uniform access
   const parsedArgs = yargsCheck(process.argv);
   for (const key in parsedArgs) config[key] = parsedArgs[key];
 

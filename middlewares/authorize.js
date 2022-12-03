@@ -3,8 +3,9 @@ import { expressjwt as jwt } from 'express-jwt';
 import config from '#config';
 import { Failure } from '#lib/responseHelpers';
 import { userCache, USER_PARENT_REFRESH_KEY } from '#utils/cache';
+import { dbInstanceStorage } from '#lib/asyncContexts';
+
 import { getUserById, getUserRefreshTokenById } from './db.js';
-import { dbInstasnceStorage } from '#lib/asyncContexts';
 
 const defaultOptions = {
   ignoreExpiration: false,
@@ -84,7 +85,7 @@ export default (roles = [], options = {}) => {
       req.user = user;
       req.role = user.role;
 
-      dbInstasnceStorage.run(store, next);
+      dbInstanceStorage.run(store, next);
     },
   ];
 };
