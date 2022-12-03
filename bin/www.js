@@ -11,7 +11,7 @@ import app from '#app';
 
 import { init } from './init.js';
 
-const host = config.NODE_ENV === 'development' ? 'localhost' : '0.0.0.0';
+const host = config.isDev ? 'localhost' : '0.0.0.0';
 const port = config.port;
 app.set('port', port);
 

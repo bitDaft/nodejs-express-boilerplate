@@ -6,7 +6,7 @@ import { Model, compose } from 'objection';
 import config from '#config';
 import { __dirname } from '#lib/getFileDir';
 import { dbKeys, getKnexDBInstance, getKnexTenantInstance } from '#conns';
-import { dbInstasnceStorage } from '#lib/asyncContexts';
+import { dbInstanceStorage } from '#lib/asyncContexts';
 
 const returningCache = {};
 
@@ -65,7 +65,7 @@ export default class BaseModel extends mixins(Model) {
   static query(args) {
     let knexInstance = undefined;
     if (!args) {
-      const store = dbInstasnceStorage.getStore();
+      const store = dbInstanceStorage.getStore();
       const dynLoad = store?.get('isDynamicLoadTenant');
       const tenantId = store?.get('tenantId');
       const tenantInfo = store?.get('tenantInfo');

@@ -14,7 +14,6 @@ import {
 } from '#controller/auth';
 import { DAY } from '#utils/timeConstants';
 import config from '#config';
-import { randomToken } from '#utils/randomToken';
 
 const router = express.Router();
 
@@ -25,6 +24,7 @@ const loginExistingUserHandler = async (req, res) => {
   const userData = await loginExistingUser(email, password);
   res.cookie(REFRESH_TOKEN_KEY, userData.refreshToken, {
     expires: new Date(Date.now() + config.refreshTokenDuration * DAY),
+    secure: !config.isDev,
     ...config.refreshCookieOption,
   });
   return userData;
@@ -47,6 +47,7 @@ const refreshTokenHandler = async (req, res) => {
   const refreshData = await refreshToken(_refreshToken);
   res.cookie(REFRESH_TOKEN_KEY, refreshData.refreshToken, {
     expires: new Date(Date.now() + config.refreshTokenDuration * DAY),
+    secure: !config.isDev,
     ...config.refreshCookieOption,
   });
   return refreshData;
@@ -56,10 +57,6 @@ const revokeTokenHandler = async (req, res) => {
   const token = req.query.token;
   const userId = req.user.id;
   await revokeToken(token, userId);
-  res.clearCookie(REFRESH_TOKEN_KEY, {
-    expires: new Date(Date.now() - config.refreshTokenDuration * DAY),
-    ...config.refreshCookieOption,
-  });
   return "User's token has been revoked";
 };
 

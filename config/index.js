@@ -12,6 +12,7 @@ const config = jsonLoaderSync(path.join(__dirname(import.meta), 'config.json'));
 const envPre = config.ENV_PREFIX || '';
 
 config.NODE_ENV = process.env.NODE_ENV || 'development';
+config.isDev = config.NODE_ENV === 'development';
 
 // # Custom parsing and validating values
 const validateAndParseConfig = (config) => {
@@ -142,15 +143,14 @@ const yargsCheck = (argvs) => {
     .help('h')
     .alias('h', 'help')
     .showHelpOnFail(true)
-    .epilogue('For more information, visit https://github.com/bitDaft/express-sql-template');
+    .epilogue('For more information, visit https://github.com/bitDaft/nodejs-express-boilerplate');
   return tmp.argv;
 };
 
 export const init = async () => {
   // # Loads env vars from file
-  if (config.NODE_ENV === 'development')
-    await import('./injectEnv.js').then((_) => _.injectEnv(config.ENV_FILENAME));
-  // # Combines cli args into config for uniform access
+  if (config.isDev) await import('./injectEnv.js').then((_) => _.injectEnv(config.ENV_FILENAME));
+  // # Combines cli args and env into config for uniform access
   const parsedArgs = yargsCheck(process.argv);
   for (const key in parsedArgs) config[key] = parsedArgs[key];
 

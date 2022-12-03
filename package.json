@@ -1,6 +1,6 @@
 {
   "name": "nodejs-starter",
-  "version": "0.11.1-beta",
+  "version": "1.0.0",
   "private": true,
   "type": "module",
   "description": "an opinionated nodejs express starter app boilerplate",
