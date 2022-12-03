@@ -2,8 +2,8 @@ import { expressjwt as jwt } from 'express-jwt';
 
 import config from '#config';
 import { Failure } from '#lib/responseHelpers';
-import { userCache } from '#utils/cache';
-import { getUserById } from './db.js';
+import { userCache, USER_PARENT_REFRESH_KEY } from '#utils/cache';
+import { getUserById, getUserRefreshTokenById } from './db.js';
 import { dbInstasnceStorage } from '#lib/asyncContexts';
 
 const defaultOptions = {
@@ -37,6 +37,16 @@ export default (roles = [], options = {}) => {
 
     // # Authorize based on user role
     async (req, res, next) => {
+      let parentRefreshTokens = userCache.get(USER_PARENT_REFRESH_KEY(req.user.id));
+      if (!parentRefreshTokens) {
+        parentRefreshTokens = await getUserRefreshTokenById(req.user.id);
+        userCache.set(USER_PARENT_REFRESH_KEY(req.user.id), parentRefreshTokens);
+      }
+
+      if (!parentRefreshTokens.find((rft) => rft.id === req.user.pid)) {
+        throw new Failure('Unauthorized', 401);
+      }
+
       let user = userCache.get(req.user.id);
       if (!user) {
         const users = await getUserById(req.user.id);
@@ -44,16 +54,14 @@ export default (roles = [], options = {}) => {
         userCache.set(req.user.id, user);
       }
 
-      // # Account no longer exists
-      if (!user) return res.status(404).send();
-      // # role not authorized
-      if (roles.length && !roles.includes(user.role.name.toLowerCase())) {
+      // # role not authorized or account no longer exists
+      if (!user || (roles.length && !roles.includes(user.role.name.toLowerCase()))) {
         throw new Failure('Unauthorized', 401);
       }
 
       const store = new Map();
 
-      // !!! VERY IMPORTANT. PLEASE READ AND DO ACCORDINGLY
+      // !!! VERY IMPORTANT. PLEASE READ AND DO ACCORDINGLY FOR MULTI-TENANCY
       // TODO: replace the values for the 2 set fn calls below with appropriate value
       // ^ `isDynamicLoadTenant` field can be true or false
       // ^    if false, it defines that the connection to be made is to one of the existing db connection defined in the env file

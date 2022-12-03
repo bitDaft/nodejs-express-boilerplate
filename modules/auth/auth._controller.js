@@ -33,7 +33,7 @@ import {
   validateVerify,
 } from './auth.validate.js';
 import { MINUTE } from '#utils/timeConstants';
-import { userCache } from '#cache';
+import { userCache, USER_PARENT_REFRESH_KEY } from '#cache';
 
 const getJWTExpiresTime = () =>
   new Date(Date.now() + config.accessTokenDuration * MINUTE).getTime();
@@ -46,11 +46,11 @@ export const loginExistingUser = async (email, password) => {
   if (!user || !user.isVerified() || !user.validatePassword(inputData.password))
     throw new Failure('Invalid Email or Password', 'USER_INPUT');
 
-  const jwtToken = jwt.sign({ id: user.id }, config.jwtSecret, {
+  const refreshToken = await createRefreshTokenforUser(user.id);
+
+  const jwtToken = jwt.sign({ id: user.id, pid: refreshToken.id }, config.jwtSecret, {
     expiresIn: config.accessTokenDuration + 'm',
   });
-
-  let refreshToken = await createRefreshTokenforUser(user.id);
 
   return {
     user: basicUser(user),
@@ -123,13 +123,13 @@ export const refreshToken = async (refToken) => {
 
   const user = token.user;
 
-  const jwtToken = jwt.sign({ id: user.id }, config.jwtSecret, {
-    expiresIn: config.accessTokenDuration + 'm',
-  });
-
   await invalidateRefreshTokenInstance(token.id);
 
   const refreshToken = await createRefreshTokenforUser(user.id, token.parent_id ?? token.id);
+
+  const jwtToken = jwt.sign({ id: user.id, pid: refreshToken.parent_id }, config.jwtSecret, {
+    expiresIn: config.accessTokenDuration + 'm',
+  });
 
   return {
     accessToken: jwtToken,
@@ -146,7 +146,7 @@ export const revokeToken = async (refToken, userId) => {
   if (!token) throw new Failure('Invalid refresh token given', 'INVALID_TOKEN');
 
   await deleteRefreshTokenChain(token.parent_id ?? token.id);
-  userCache.del(userId);
+  userCache.del(USER_PARENT_REFRESH_KEY(userId));
   return true;
 };
 
