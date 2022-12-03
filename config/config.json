@@ -27,7 +27,6 @@
   "refreshCookieOption": {
     "httpOnly": true,
     "path": "/auth/refresh-token",
-    "secure": false,
     "sameSite": "Strict"
   }
 }

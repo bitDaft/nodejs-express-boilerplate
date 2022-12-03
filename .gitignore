@@ -93,7 +93,3 @@ lerna-debug.log
 # System Files
 .DS_Store
 Thumbs.db
-
-#lock file
-pnpm-lock.yaml
-yarn-lock.json
