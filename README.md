@@ -259,6 +259,7 @@ The features and structure will be explained below in sections building upon eac
 - [x] Auto detection of tenant (with little initial setup work)
 - [x] Complete proper documentation
 - [ ] Add unit, integration test
+- [ ] API versioning capability. v1, v2 
 - [ ] Add Multi tenancy connection example
 - [ ] socket integration?
 - [ ] use redis cache instead of memory cache?
