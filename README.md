@@ -21,6 +21,30 @@
 
 # Quick start
 
+To create a new project based on this template using degit:
+
+```shell
+npx degit bitDaft/nodejs-express-boilerplate new-app-backend
+```
+
+> _Note that you will need to have Node.js installed_
+
+Get started
+Install the dependencies...
+
+```shell
+cd new-app-backend
+npm install
+```
+
+Run the server in development mode
+
+```shell
+npm run dev-a
+```
+
+# Quick Overview
+
 ### Modules
 
 The most important section is the `modules` folder.  
@@ -259,7 +283,7 @@ The features and structure will be explained below in sections building upon eac
 - [x] Auto detection of tenant (with little initial setup work)
 - [x] Complete proper documentation
 - [ ] Add unit, integration test
-- [ ] API versioning capability. v1, v2 
+- [ ] API versioning capability. v1, v2
 - [ ] Add Multi tenancy connection example
 - [ ] socket integration?
 - [ ] use redis cache instead of memory cache?
