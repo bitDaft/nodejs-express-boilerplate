@@ -2,9 +2,36 @@
 
 [![CodeFactor](https://www.codefactor.io/repository/github/bitdaft/nodejs-express-boilerplate/badge)](https://www.codefactor.io/repository/github/bitdaft/nodejs-express-boilerplate)
 
-### :rocket: An opinionated template to kickstart your Nodejs/Express project.
+### :rocket: An [Opinionated](#my-opinions) template to kickstart your Nodejs/Express project.
 
 <img src="https://64.media.tumblr.com/126fc1df4e999677f554c471139b3754/tumblr_oq9dm3D8J11relg8bo1_500.gif" height="150" />
+
+# Table of Content
+
+- [Features](#features)
+- [Quick Start](#quick-start)
+- [Quick Overview](#quick-overview)
+  - [Modules](#modules)
+  - [Database](#database)
+  - [Config](#config)
+- [File Structure](#file-structure)
+- [My Opinions](#my-opinions)
+- [The Boilerplate in depth](#the-boilerplate-in-depth)
+  - [File Loader](#file-loader)
+  - [Config](#config-1)
+  - [Uniform success and error response](#uniform-success-and-error-response)
+  - [Global throw and automatic success response](#global-throw-and-automatic-success-response)
+  - [Centralized response handling](#centralized-response-handling)
+  - [Logger](#logger)
+  - [Modules](#modules-1)
+  - [Message queues](#message-queues)
+  - [Database & Models](#database-and-models)
+  - [Migrations & Seeds](#migrations-and-seeds)
+  - [Multi-Tenancy](#multi-tenancy)
+  - [Docker](#docker)
+  - [Utils & lib](#utils-and-lib)
+  - []()
+- [TODO](#todo)
 
 # Features
 
@@ -129,6 +156,60 @@ For example
 
 > The removal/replacement of almost all folders except for `config` folder is trivially possible, with very little to change in other files.
 
+# My Opinions
+
+#### ([skip](#the-boilerplate-in-depth) this section or [go back to top](#nodejsexpress-template-robot) if you don't care :P)
+
+- It uses JS over TS.
+  - You may convert it to TS if needed. or if i find a need for it.
+  - I have nothing against static typing, in fact i really like it. but i am waiting for typing in JS.
+- There is separation of concerns but it does not properly follow the [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html), as there no proper injection of dependencies which is needed to prevent the business logic from knowing about its dependencies.
+  - So the business logic does know about caches and such.
+  - For the data layer, the DAO is not injected but instead stored in its own file, imported and called.
+  - Dependencies can be/are abstracted by a layer(another file, function) to provide an abstraction which can be mocked for testing.
+  - This is in favor of having to only pass needed variables as parameters to controller and not include dependencies, which will pollute the parameter list and not having to wrap functions up in a class or return them in an object with dependency closure.
+- It does not use schema validation on database mutating operations(although there is support in objectionjs, which is used), as i think that it is useless and should be handled by properly implementing the db with proper indexes, constraints, relations and such.
+- It uses objection/knex as opposed to sequelize or other more popular ORM, as they do not have great support for properly managing joins and relations, which are a core part of using SQL, plus its a light wrapper over SQL itself.
+- All the db calls for a module will lie in the module's own `<module>.db.js` file.
+  - Even if there are common db queries between modules, it will be duplicated in both modules to keep the modules as independent as possible.
+- It does not support swagger or any such API documentation tools, as i feel that is not something the code should be worried about.
+  - If you need to document your API, use postman or such other tools instead of polluting the codebase with such documentation.
+- The route handler only handles the request response cycle. It does not do any kind of business logic.
+  - It will get the data from the request. send them to controller. get response from controller. make and send the response.
+  - Sending the response can include anything to prepare the data to be sent. doesnt simply have to be send the response from controller.
+  - It can setup the headers, or it can turn the reponse into a stream of data to be able to stream the response.
+  - This can cause an issue with having to set up headers or such like based on business logic.
+    - in such cases, return some extra metadata from the controller, along with the actual response data to setup the headers or such, which are needed to send the response.
+  - but do not break the concern where route handler handles the request and controller does business logic.
+- There is no request body, query or params data validation happening in the route handlers, as that is handled inside the controllers themselves.
+  - This is so that controllers may call each other, or even between modules, thus validation should happen on controller level and not route level.
+    - I would advise against calling directly between modules as that could increase coupling, instead create an interface function or even more preferably, use message queues(already implemented and available) to interact between modules.
+- It does not use any validation library, like joi or zod, instead it is left upto the user to decide what they want.
+  - All the validation should lie within `<module>.validate.js` so we have an abstraction for it from the business logic
+  - It does not use a library since i have encountered situations where there could be complex validation requirement or data transformation needed based on other parameters.
+    - As such it is a "validation, sanitization and transformation" layer.
+    - After validation, it should return the final data that is usable by the controller.
+  - I do not like the fact that we have to call the validation function for each controller manually, and would like to abstract it away.
+- It uses pino as a logger. It does not write to a file or do any log management functionality, as i believe it not the job of the code to manage its logs.
+  - It simply prints to the console, in an parseable object structure.
+  - An external log handler like fluentd, ELK or so should be handling and managing the log data.
+- It uses BullMQ for message queue, jobs and workers. It does not use Kafka or any such mainstream solutions.
+  - This is because this template is not meant to be used as microservices architecture.
+  - It is more of modular monolith. thus this is used to facilitate communication between modules or to move out long running jobs.
+- Since it is a modular monolith, do not write the code to scale as if it is a microservice.
+
+  - Although i say that, it is still possible to scale the app in different pieces or modules.
+    - The workers can be run separately and are thus scalable.
+    - Each module is also able to run independently from other modules and can thus be scaled.
+    - The other units of code like config, database, utils, middleware(which are needed) etc will be the common code for each of these deployments. so those units should be present for all the deployments(if they are a dependency).
+
+- This template uses job queues via BullMQ(can be removed if not needed), BullMQ uses redis, which means redis should be available in the code, so redis should be used as cache, **but it is not**, It uses memory cache.
+  - It can be changed to use redis if needed.
+  - The apps I and many others build are not used on the scale of 1 million users or even 100,000. therefore i do not really scale to multiple instances most of the time(you can though if you need).
+  - Even a lot of SME's do not build apps of this scale and have no requirement to scale it to even have a second instance.
+  - So memory cache is more than enough for most needs.
+  - If it is needed to be scale-proof, you can start by using memory cache with an abstraction layer, probably move all cache calls in a module to its own functions in a file like `<module>.cache.js`. and then when the need arises, just change the implementation to use redis, memcached or anything else.
+
 # The Boilerplate in depth
 
 The features and structure will be explained below in sections building upon each other
@@ -215,7 +296,7 @@ The features and structure will be explained below in sections building upon eac
 - You can easily scale up the number of workers as needed, in the same machine or even a different machine.
 - The `MailQueue` is already in usage in the `auth` module. refer to it to gain an understanding of its usage.
 
-## Database & Models
+## Database and Models
 
 - The `database` folder contains the details regarding all database connection and models.
 - The `database/models` folder contain all the models that will be required in the application and used throughout the project.
@@ -277,12 +358,11 @@ The features and structure will be explained below in sections building upon eac
 - [x] update all packages to latest version
 - [x] Fix Knex cli command execution issues
 - [x] Add docker support
-- [x] Add testing support
 - [x] Allow dynamic rate limit based on whether request is API key or session API call
 - [x] Fixed working of multi tenancy and multi database
 - [x] Auto detection of tenant (with little initial setup work)
 - [x] Complete proper documentation
-- [ ] Add unit, integration test
+- [ ] abstracting away the manual call for validation function
 - [ ] API versioning capability. v1, v2
 - [ ] Add Multi tenancy connection example
 - [ ] socket integration?
