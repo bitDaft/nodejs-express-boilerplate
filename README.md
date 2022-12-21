@@ -190,6 +190,12 @@ For example
     - As such it is a "validation, sanitization and transformation" layer.
     - After validation, it should return the final data that is usable by the controller.
   - I do not like the fact that we have to call the validation function for each controller manually, and would like to abstract it away.
+- It does not have test suites built in to it, as i believe the test suites should not be part of the codebase.
+  - The test suites for a codebase should be an independent codebase maintained separately.
+  - intermingling test files with code files simply pollutes the codebase.
+  - Deployment which has a test runner could be challenging to implement.
+    - but that is a challenge i like to ignore.
+  - **This does not under any circumstance say that the code should be untestable. It should still be written in a way that makes it testable.**
 - It uses pino as a logger. It does not write to a file or do any log management functionality, as i believe it not the job of the code to manage its logs.
   - It simply prints to the console, in an parseable object structure.
   - An external log handler like fluentd, ELK or so should be handling and managing the log data.
