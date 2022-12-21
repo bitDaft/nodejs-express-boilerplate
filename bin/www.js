@@ -19,7 +19,7 @@ const server = http.createServer(app);
 
 const start = () => {
   server.listen(port, host, () => {
-    log.info(`Running -> Listening on port : ${port}`);
+    log.info(`Running -> Listening on: ${host}:${port}`);
   });
 };
 
