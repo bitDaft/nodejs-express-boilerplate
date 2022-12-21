@@ -2,9 +2,14 @@ import { expressjwt as jwt } from 'express-jwt';
 
 import config from '#config';
 import { Failure } from '#lib/responseHelpers';
-import { userCache, USER_PARENT_REFRESH_KEY } from '#utils/cache';
 import { dbInstanceStorage } from '#lib/asyncContexts';
 
+import {
+  getCacheUser,
+  getCacheUserParentTokens,
+  setCacheUser,
+  setCacheUserParentTokens,
+} from './cache.js';
 import { getUserById, getUserRefreshTokenById } from './db.js';
 
 const defaultOptions = {
@@ -38,21 +43,21 @@ export default (roles = [], options = {}) => {
 
     // # Authorize based on user role
     async (req, res, next) => {
-      let parentRefreshTokens = userCache.get(USER_PARENT_REFRESH_KEY(req.user.id));
+      let parentRefreshTokens = getCacheUserParentTokens(req.user.id);
       if (!parentRefreshTokens) {
         parentRefreshTokens = await getUserRefreshTokenById(req.user.id);
-        userCache.set(USER_PARENT_REFRESH_KEY(req.user.id), parentRefreshTokens);
+        setCacheUserParentTokens(req.user.id, parentRefreshTokens);
       }
 
       if (!parentRefreshTokens.find((rft) => rft.id === req.user.pid)) {
         throw new Failure('Unauthorized', 401);
       }
 
-      let user = userCache.get(req.user.id);
+      let user = getCacheUser(req.user.id);
       if (!user) {
         const users = await getUserById(req.user.id);
         user = users[0];
-        userCache.set(req.user.id, user);
+        setCacheUser(req.user.id, user);
       }
 
       // # role not authorized or account no longer exists

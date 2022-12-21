@@ -2,6 +2,7 @@ import { default as jwt } from 'jsonwebtoken';
 
 import { Failure } from '#lib/responseHelpers';
 import config from '#config';
+import { MINUTE } from '#utils/timeConstants';
 
 import {
   sendRegistrationSuccessEmail,
@@ -32,8 +33,7 @@ import {
   validateValidateResetToken,
   validateVerify,
 } from './auth.validate.js';
-import { MINUTE } from '#utils/timeConstants';
-import { userCache, USER_PARENT_REFRESH_KEY } from '#cache';
+import { deleteCacheUserParentTokens } from './auth.cache.js';
 
 const getJWTExpiresTime = () =>
   new Date(Date.now() + config.accessTokenDuration * MINUTE).getTime();
@@ -146,7 +146,7 @@ export const revokeToken = async (refToken, userId) => {
   if (!token) throw new Failure('Invalid refresh token given', 'INVALID_TOKEN');
 
   await deleteRefreshTokenChain(token.parent_id ?? token.id);
-  userCache.del(USER_PARENT_REFRESH_KEY(userId));
+  deleteCacheUserParentTokens(userId);
   return true;
 };
 

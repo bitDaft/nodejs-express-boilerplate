@@ -158,7 +158,7 @@ For example
 
 # My Opinions
 
-#### ([skip](#the-boilerplate-in-depth) this section or [go back to top](#nodejsexpress-template-robot) if you don't care :P)
+#### ([skip](#the-boilerplate-in-depth) this section or [go back to top](#nodejsexpress-template-robot) if you don't care :stuck_out_tongue_closed_eyes:)
 
 - It uses JS over TS.
   - You may convert it to TS if needed. or if i find a need for it.
@@ -211,10 +211,10 @@ For example
 
 - This template uses job queues via BullMQ(can be removed if not needed), BullMQ uses redis, which means redis should be available in the code, so redis should be used as cache, **but it is not**, It uses memory cache.
   - It can be changed to use redis if needed.
-  - The apps I and many others build are not used on the scale of 1 million users or even 100,000. therefore i do not really scale to multiple instances most of the time(you can though if you need).
+  - The apps I and many others build are not used on the scale of 100,000 users or even 10,000. therefore i do not really scale to multiple instances most of the time(you can though if you need).
   - Even a lot of SME's do not build apps of this scale and have no requirement to scale it to even have a second instance.
   - So memory cache is more than enough for most needs.
-  - If it is needed to be scale-proof, you can start by using memory cache with an abstraction layer, probably move all cache calls in a module to its own functions in a file like `<module>.cache.js`. and then when the need arises, just change the implementation to use redis, memcached or anything else.
+  - If it is needed to be scale-proof, when the need arises, just change the implementation in `<module>.cache.js` to use redis, memcached or anything else.
 
 # The Boilerplate in depth
 
