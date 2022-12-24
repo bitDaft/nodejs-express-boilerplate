@@ -29,5 +29,6 @@
     "httpOnly": true,
     "path": "/auth/refresh-token",
     "sameSite": "Strict"
-  }
+  },
+  "corsWhitelist": ["http://localhost", "http://example.com"]
 }

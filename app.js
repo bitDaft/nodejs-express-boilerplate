@@ -22,10 +22,14 @@ let app = express();
 // # Check proxy enabled or not
 if (config.proxy) app.set('trust proxy', config.proxy);
 
+// # Remove x-powered-by header
+app.disable('x-powered-by');
+
 const corsOptions = {
   credentials: true,
   origin: function (origin, callback) {
-    callback(null, origin);
+    if (config.isDev || !origin || ~config.corsWhitelist.indexOf(origin)) callback(null, true);
+    else callback(new Error('Not allowed by CORS'), null);
   },
 };
 
