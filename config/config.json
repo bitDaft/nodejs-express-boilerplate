@@ -23,6 +23,7 @@
   "accessTokenDuration": 15,
   "refreshTokenDuration": 90,
   "verificationTokenDuration": 15,
+  "refreshCookieName": "__Secure-rft_app",
   "resetTokenDuration": 30,
   "refreshCookieOption": {
     "httpOnly": true,

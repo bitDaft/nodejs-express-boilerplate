@@ -17,12 +17,10 @@ import config from '#config';
 
 const router = express.Router();
 
-const REFRESH_TOKEN_KEY = '__Secure-refresh_token';
-
 const loginExistingUserHandler = async (req, res) => {
   const { email, password } = req.body;
   const userData = await loginExistingUser(email, password);
-  res.cookie(REFRESH_TOKEN_KEY, userData.refreshToken, {
+  res.cookie(config.refreshCookieName, userData.refreshToken, {
     expires: new Date(Date.now() + config.refreshTokenDuration * DAY),
     secure: !config.isDev,
     ...config.refreshCookieOption,
@@ -43,9 +41,9 @@ const verifyUserHandler = async (req) => {
 };
 
 const refreshTokenHandler = async (req, res) => {
-  const _refreshToken = req.cookies[REFRESH_TOKEN_KEY];
+  const _refreshToken = req.cookies[config.refreshCookieName];
   const refreshData = await refreshToken(_refreshToken);
-  res.cookie(REFRESH_TOKEN_KEY, refreshData.refreshToken, {
+  res.cookie(config.refreshCookieName, refreshData.refreshToken, {
     expires: new Date(Date.now() + config.refreshTokenDuration * DAY),
     secure: !config.isDev,
     ...config.refreshCookieOption,
