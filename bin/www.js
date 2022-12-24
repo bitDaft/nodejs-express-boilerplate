@@ -29,4 +29,10 @@ init()
     log.fatal({ e });
   });
 
-process.on('SIGINT', process.exit);
+process.on('SIGTERM', () => {
+  log.info('SIGTERM signal received: closing HTTP server');
+  server.close(() => {
+    log.info('HTTP server closed');
+    process.exit();
+  });
+});
