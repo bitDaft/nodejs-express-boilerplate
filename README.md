@@ -357,7 +357,7 @@ The features and structure will be explained below in sections building upon eac
 >
 > ###### [Postman collection link](https://documenter.getpostman.com/view/5939662/2s8Yt1r96h)
 
-**_Made with :heart: :computer: :pizza: by bitDaft_**
+***:hammer_and_wrench: with :heart: :computer: :pizza: by bitDaft***
 
 # TODO
 
