@@ -37,6 +37,8 @@ const morganConfig = {
   stream: { write: (msg) => log.info(msg.trim()) },
 };
 
+app.use('/', express.static('public'));
+
 // # Setup middlewares
 app.use(idLogsMiddleware);
 app.use(morgan(config.isDev ? 'dev' : 'combined', morganConfig));

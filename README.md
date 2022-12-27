@@ -368,6 +368,7 @@ The features and structure will be explained below in sections building upon eac
 - [x] Fixed working of multi tenancy and multi database
 - [x] Auto detection of tenant (with little initial setup work)
 - [x] Complete proper documentation
+- [ ] Consolidate closing exit scripts in www.js
 - [ ] abstracting away the manual call for validation function
 - [ ] API versioning capability. v1, v2
 - [ ] Add Multi tenancy connection example
