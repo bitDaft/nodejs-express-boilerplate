@@ -1,8 +1,8 @@
 import Knex from 'knex';
 
+import log from '#logger';
 import config from '#config';
 import { generateKnexConfig } from '#knexfile';
-import log from '#logger';
 
 const knexMain = {};
 const knexTenant = {};
@@ -48,14 +48,4 @@ const getKnexTenantInstance = async (tenantId, tenantInfo) => {
 const dbKeys = Object.keys(config.db);
 delete config.db;
 
-process.on('SIGTERM', () => {
-  debug('SIGTERM signal received: closing Database connections');
-  for (let key in knexMain) {
-    let instance = knexMain[key];
-    instance.destroy?.((conn) => {
-      log.info('Closed db connection ' + conn.userParams.client);
-    });
-  }
-});
-
-export { dbKeys, getKnexTenantInstance, getKnexDBInstance };
+export { dbKeys, getKnexTenantInstance, getKnexDBInstance, knexMain, knexTenant };
