@@ -1,6 +1,7 @@
 import { expressjwt as jwt } from 'express-jwt';
 
 import config from '#config';
+import { isObject } from '#utils/isObject';
 import { Failure } from '#lib/responseHelpers';
 import { dbInstanceStorage } from '#lib/asyncContexts';
 
@@ -17,10 +18,10 @@ const defaultOptions = {
 };
 
 export default (roles = [], options = {}) => {
-  if (!(typeof options === 'object' && !Array.isArray(options) && options !== null)) options = {};
+  if (!isObject(options)) options = {};
   options = Object.assign({}, defaultOptions, options);
 
-  if (typeof roles === 'object' && !Array.isArray(roles) && roles !== null) {
+  if (isObject(roles)) {
     options = Object.assign({}, defaultOptions, roles);
     roles = [];
   }

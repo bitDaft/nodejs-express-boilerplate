@@ -5,6 +5,7 @@ import { hideBin } from 'yargs/helpers';
 
 import { __dirname } from '#lib/getFileDir';
 import { jsonLoaderSync } from '#lib/fileLoader';
+import { isObject } from '#utils/isObject';
 
 // TODO: this needs to be replaced once node supports json imports natively
 const config = jsonLoaderSync(path.join(__dirname(import.meta), 'config.json'));
@@ -18,8 +19,7 @@ config.isDev = config.NODE_ENV === 'development';
 const validateAndParseConfig = (config) => {
   for (const key in config) {
     let value = config[key];
-    if (typeof value === 'object' && !Array.isArray(value) && value !== null)
-      validateAndParseConfig(value);
+    if (isObject(value)) validateAndParseConfig(value);
     else if (value === 'true') config[key] = true;
     else if (value === 'false') config[key] = false;
     else if (value === '') throw new Error(`Config key ${key} has no value`);
