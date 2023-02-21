@@ -24,4 +24,7 @@ COPY --chown=node:node . .
 
 EXPOSE 5000
 
+# running it like this will not allow the workers to also run
+# but if the we run it via npm ctrl+c and such signals may not pass through to node process
+
 CMD ["dumb-init", "node", "./bin/www.js"]
