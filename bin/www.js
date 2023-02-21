@@ -4,6 +4,7 @@
 // # Application entry point.
 import http from 'http';
 
+import { knexMain, knexTenant } from '#conns';
 import config from '#config';
 import '#file';
 import log from '#logger';
@@ -35,4 +36,16 @@ process.on('SIGTERM', () => {
     log.info('HTTP server closed');
     process.exit();
   });
+  for (let key in knexMain) {
+    let instance = knexMain[key];
+    instance.destroy?.((conn) => {
+      log.info('Closed db connection ' + conn.userParams.client);
+    });
+  }
+  for (let key in knexTenant) {
+    let instance = knexMain[key];
+    instance.destroy?.((conn) => {
+      log.info('Closed db connection ' + conn.userParams.client);
+    });
+  }
 });
