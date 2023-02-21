@@ -2,7 +2,7 @@ import Knex from 'knex';
 
 import config from '#config';
 import { generateKnexConfig } from '#knexfile';
-import log from '#lib/logger';
+import log from '#logger';
 
 const knexMain = {};
 const knexTenant = {};

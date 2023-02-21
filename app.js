@@ -14,7 +14,7 @@ import routes from '#routes';
 import { injectSuccessHandlerMiddleware } from '#lib/routerInjectSuccesHandler';
 import { normalErrorHandler, standardErrorHandler, finalErrorHandler } from '#lib/responseHandlers';
 import { idLogsMiddleware, rateLimiterMiddleware } from '#middlewares';
-import log from '#lib/logger';
+import log from '#logger';
 
 // # Create express application
 let app = express();

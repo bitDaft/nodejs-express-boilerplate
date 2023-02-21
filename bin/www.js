@@ -6,7 +6,7 @@ import http from 'http';
 
 import config from '#config';
 import '#file';
-import log from '#lib/logger';
+import log from '#logger';
 import app from '#app';
 
 import { init } from './init.js';

@@ -3,7 +3,7 @@ import { Worker } from 'bullmq';
 import fs from 'fs';
 
 import config from '#config';
-import log from '#lib/logger';
+import log from '#logger';
 import { __dirname } from '#lib/getFileDir';
 
 const QUEUE_NAME = config.w;

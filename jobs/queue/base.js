@@ -1,6 +1,6 @@
 import { Queue, QueueEvents } from 'bullmq';
 
-import log from '#lib/logger';
+import log from '#logger';
 import config from '#config';
 
 class _BaseQueue {
