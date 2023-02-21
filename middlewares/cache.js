@@ -12,6 +12,6 @@ export const getCacheUser = (id) => {
   return userCache.get(id);
 };
 
-export const setCacheUser = (id) => {
-  return userCache.get(id);
+export const setCacheUser = (id, user) => {
+  return userCache.set(id, user);
 };
