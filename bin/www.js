@@ -30,12 +30,12 @@ init()
     log.fatal({ e });
   });
 
-process.on('SIGTERM', () => {
-  log.info('SIGTERM signal received: closing HTTP server');
+const closeAllHandles = () => {
+  log.info('closing HTTP server');
   server.close(() => {
     log.info('HTTP server closed');
-    process.exit();
   });
+  log.info('closing Database connections');
   for (let key in knexMain) {
     let instance = knexMain[key];
     instance.destroy?.((conn) => {
@@ -48,4 +48,15 @@ process.on('SIGTERM', () => {
       log.info('Closed db connection ' + conn.userParams.client);
     });
   }
+  process.exit();
+};
+
+process.on('SIGTERM', () => {
+  log.info('SIGTERM signal received:');
+  closeAllHandles();
+});
+
+process.on('SIGINT', () => {
+  log.info('SIGINT signal received:');
+  closeAllHandles();
 });
