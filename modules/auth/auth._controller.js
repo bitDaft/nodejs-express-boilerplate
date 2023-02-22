@@ -94,11 +94,7 @@ export const verifyUser = async (token) => {
 
   if (new Date(user.verification_expiry).getTime() < Date.now()) {
     await deleteUserInstance(user);
-    throw new Failure(
-      'Verification time has expired. please register again',
-      409,
-      'VERIFICATION_EXPIRY'
-    );
+    throw new Failure('Verification time expired. please register again', 'VERIFICATION_EXPIRY');
   }
 
   user.verify();
