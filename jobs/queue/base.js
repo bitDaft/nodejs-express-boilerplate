@@ -3,6 +3,7 @@ import { Queue, QueueEvents } from 'bullmq';
 import log from '#logger';
 import config from '#config';
 
+// TODO: go through bullmq and make sure everything is working as it should be
 class _BaseQueue {
   constructor(name, opts = {}) {
     if (typeof name !== 'string' || !name) {
@@ -16,7 +17,10 @@ class _BaseQueue {
     this.queueEvents = new QueueEvents(name, { connection });
     this.log = log.child({ queueName: name });
 
-    process.on('exit', async () => await this.queueEvents.close());
+    process.on('exit', async () => {
+      await this.queueEvents.close();
+      this.queue.close();
+    });
   }
 
   async add(jobName, jobData, jobOpts = {}) {
@@ -37,7 +41,7 @@ class _BaseQueue {
     if (typeof cron !== 'string' || !cron) {
       throw new Error('Please provide valid cron string');
     }
-    this.log.info({ jobData, jobOpts }, `adding '${jobName}' repeatable job`);
+    this.log.info({ jobData, jobOpts, cron }, `adding '${jobName}' repeatable job`);
     return await this.queue.add(
       jobName,
       jobData,
@@ -46,7 +50,7 @@ class _BaseQueue {
   }
 
   async removeRepeat(name, cron, jobId) {
-    this.log.info({ jobId }, `removing repeating job`);
+    this.log.info({ jobId, cron }, `removing ${name} repeating job`);
     return await this.queue.removeRepeatable(name, { pattern: cron }, jobId);
   }
 }
