@@ -4,9 +4,10 @@
 // # Application entry point.
 import http from 'http';
 
+import { knexMain, knexTenant } from '#conns';
 import config from '#config';
 import '#file';
-import log from '#lib/logger';
+import log from '#logger';
 import app from '#app';
 
 import { init } from './init.js';
@@ -29,4 +30,33 @@ init()
     log.fatal({ e });
   });
 
-process.on('SIGINT', process.exit);
+const closeAllHandles = () => {
+  log.info('closing HTTP server');
+  server.close(() => {
+    log.info('HTTP server closed');
+  });
+  log.info('closing Database connections');
+  for (let key in knexMain) {
+    let instance = knexMain[key];
+    instance.destroy?.((conn) => {
+      log.info('Closed db connection ' + conn.userParams.client);
+    });
+  }
+  for (let key in knexTenant) {
+    let instance = knexMain[key];
+    instance.destroy?.((conn) => {
+      log.info('Closed db connection ' + conn.userParams.client);
+    });
+  }
+  process.exit();
+};
+
+process.on('SIGTERM', () => {
+  log.info('SIGTERM signal received:');
+  closeAllHandles();
+});
+
+process.on('SIGINT', () => {
+  log.info('SIGINT signal received:');
+  closeAllHandles();
+});

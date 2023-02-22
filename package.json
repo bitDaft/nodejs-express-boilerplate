@@ -1,6 +1,6 @@
 {
   "name": "nodejs-starter",
-  "version": "1.0.3",
+  "version": "1.0.10",
   "private": true,
   "type": "module",
   "description": "an opinionated nodejs express starter app boilerplate",
@@ -17,23 +17,24 @@
   "funding": "https://ko-fi.com/bitdaft",
   "repository": {
     "type": "git",
-    "url": "https://github.com/bitDaft/nodejs-starter.git"
+    "url": "https://github.com/bitDaft/nodejs-express-boilerplate.git"
   },
   "main": "./bin/www.js",
   "scripts": {
-    "start": "run-p prod:**",
-    "prod:app": "NODE_ENV=production node ./bin/www.js",
-    "startWorkerProd": "NODE_ENV=production node ./jobs/worker/worker.js -- -w",
-    "prod:worker:mail": "npm run startWorkerProd mail",
-    "prod:worker:general": "npm run startWorkerProd general",
-    "prod:worker:results": "npm run startWorkerProd results",
-    "dev-a": "run-p dev worker",
-    "dev": "NODE_ENV=development nodemon ./bin/www.js",
-    "startWorker": "NODE_ENV=development nodemon ./jobs/worker/worker.js -- -w",
-    "worker": "run-p worker:*",
+    "start": "run-p app worker:*",
+    "app": "NODE_ENV=production node ./bin/www.js",
+    "startWorker": "NODE_ENV=production node ./jobs/worker/worker.js -- -w",
     "worker:mail": "npm run startWorker mail",
     "worker:general": "npm run startWorker general",
     "worker:results": "npm run startWorker results",
+    "dev": "NODE_ENV=development nodemon ./bin/www.js",
+    "dev-a": "run-p dev:app dev:worker",
+    "dev:app": "NODE_ENV=development nodemon ./bin/www.js",
+    "dev:startWorker": "NODE_ENV=development nodemon ./jobs/worker/worker.js -- -w",
+    "dev:worker": "run-p dev:worker:*",
+    "dev:worker:mail": "npm run dev:startWorker mail",
+    "dev:worker:general": "npm run dev:startWorker general",
+    "dev:worker:results": "npm run dev:startWorker results",
     "migrate": "knex migrate:latest -- ",
     "migrate:one": "knex migrate:up -- ",
     "migrate:make": "knex migrate:make -- ",
@@ -43,7 +44,7 @@
     "seed": "knex seed:run -- ",
     "seed:make": "knex seed:make -- ",
     "h": "node ./bin/www.js -- -h",
-    "test": "jest .",
+    "test": "echo \"Error: no test specified\" && exit 1",
     "FIX_ERR_REQUIRE_ESM_BULLMQ": "node -e \"['cjs','esm'].map(a=>'./node_modules/bullmq/dist/'+a+'/classes/child-processor.js').map(a=>require('fs').writeFileSync(a,require('fs').readFileSync(a,{encoding:'utf8'}).replace('require(processorFile)','await import(processorFile)')))\""
   },
   "imports": {
@@ -56,6 +57,7 @@
     "#file": "./loadFile/index.js",
     "#cache": "./utils/cache.js",
     "#knexfile": "./knexfile.js",
+    "#logger": "./lib/logger.js",
     "#routes": "./modules/_route.js",
     "#route/*": "./modules/*/*._route.js",
     "#controller/*": "./modules/*/*._controller.js",
@@ -67,27 +69,27 @@
   "devDependencies": {
     "dotenv": "^16.0.3",
     "nodemon": "^2.0.20",
-    "pino-pretty": "^9.1.1"
+    "pino-pretty": "^9.3.0"
   },
   "dependencies": {
-    "axios": "^1.2.0",
-    "bullmq": "^3.2.2",
+    "axios": "^1.3.3",
+    "bullmq": "^3.7.0",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "express": "^4.18.2",
-    "express-jwt": "^7.7.7",
-    "helmet": "^6.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "knex": "^2.3.0",
+    "express-jwt": "^8.4.1",
+    "helmet": "^6.0.1",
+    "jsonwebtoken": "^9.0.0",
+    "knex": "^2.4.2",
     "morgan": "^1.10.0",
-    "mysql2": "^2.3.3",
+    "mysql2": "^3.1.2",
     "node-cache": "^5.1.2",
-    "nodemailer": "^6.8.0",
+    "nodemailer": "^6.9.1",
     "npm-run-all": "^4.1.5",
     "objection": "^3.0.1",
-    "pino": "^8.7.0",
+    "pino": "^8.10.0",
     "rate-limiter-flexible": "^2.4.1",
     "uuid": "^9.0.0",
-    "yargs": "^17.6.2"
+    "yargs": "^17.7.0"
   }
 }

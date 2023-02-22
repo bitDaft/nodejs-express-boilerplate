@@ -16,17 +16,19 @@
       "type": "exponential",
       "delay": 1000
     },
-    "removeOnComplete": true,
-    "removeOnFail": 1000
+    "removeOnComplete": 100,
+    "removeOnFail": 100
   },
   "smtpFrom": "no-reply@bitdaft.dev",
   "accessTokenDuration": 15,
   "refreshTokenDuration": 90,
   "verificationTokenDuration": 15,
+  "refreshCookieName": "__Secure-rft_app",
   "resetTokenDuration": 30,
   "refreshCookieOption": {
     "httpOnly": true,
     "path": "/auth/refresh-token",
     "sameSite": "Strict"
-  }
+  },
+  "corsWhitelist": ["http://localhost", "http://example.com"]
 }

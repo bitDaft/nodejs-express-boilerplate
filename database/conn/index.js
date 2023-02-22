@@ -1,4 +1,10 @@
-import { dbKeys, getKnexDBInstance, getKnexTenantInstance } from './dbinit.js';
+import {
+  dbKeys,
+  getKnexDBInstance,
+  getKnexTenantInstance,
+  knexMain,
+  knexTenant,
+} from './dbinit.js';
 import BaseModel from './BaseModel.js';
 
-export { dbKeys, BaseModel, getKnexDBInstance, getKnexTenantInstance };
+export { dbKeys, BaseModel, getKnexDBInstance, getKnexTenantInstance, knexMain, knexTenant };

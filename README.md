@@ -158,7 +158,7 @@ For example
 
 # My Opinions
 
-#### ([skip](#the-boilerplate-in-depth) this section or [go back to top](#nodejsexpress-template-robot) if you don't care :P)
+#### ([skip](#the-boilerplate-in-depth) this section or [go back to top](#nodejsexpress-template-robot) if you don't care :stuck_out_tongue_closed_eyes:)
 
 - It uses JS over TS.
   - You may convert it to TS if needed. or if i find a need for it.
@@ -211,10 +211,10 @@ For example
 
 - This template uses job queues via BullMQ(can be removed if not needed), BullMQ uses redis, which means redis should be available in the code, so redis should be used as cache, **but it is not**, It uses memory cache.
   - It can be changed to use redis if needed.
-  - The apps I and many others build are not used on the scale of 1 million users or even 100,000. therefore i do not really scale to multiple instances most of the time(you can though if you need).
+  - The apps I and many others build are not used on the scale of 100,000 users or even 10,000. therefore i do not really scale to multiple instances most of the time(you can though if you need).
   - Even a lot of SME's do not build apps of this scale and have no requirement to scale it to even have a second instance.
   - So memory cache is more than enough for most needs.
-  - If it is needed to be scale-proof, you can start by using memory cache with an abstraction layer, probably move all cache calls in a module to its own functions in a file like `<module>.cache.js`. and then when the need arises, just change the implementation to use redis, memcached or anything else.
+  - If it is needed to be scale-proof, when the need arises, just change the implementation in `<module>.cache.js` to use redis, memcached or anything else.
 
 # The Boilerplate in depth
 
@@ -357,7 +357,7 @@ The features and structure will be explained below in sections building upon eac
 >
 > ###### [Postman collection link](https://documenter.getpostman.com/view/5939662/2s8Yt1r96h)
 
-**_Made with :heart: :computer: :pizza: by bitDaft_**
+***:hammer_and_wrench: with :heart: :computer: :pizza: by bitDaft***
 
 # TODO
 
@@ -368,8 +368,8 @@ The features and structure will be explained below in sections building upon eac
 - [x] Fixed working of multi tenancy and multi database
 - [x] Auto detection of tenant (with little initial setup work)
 - [x] Complete proper documentation
-- [ ] abstracting away the manual call for validation function
-- [ ] API versioning capability. v1, v2
-- [ ] Add Multi tenancy connection example
+- [x] Consolidate closing exit scripts in www.js
+- [ ] abstracting away the manual call for validation function, if possible
+- [ ] Add Multi tenancy connection example 
 - [ ] socket integration?
 - [ ] use redis cache instead of memory cache?

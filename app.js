@@ -2,19 +2,18 @@
 import '#lib/routerExceptionHandler';
 
 // # Package imports
-import express from 'express';
-import morgan from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
+import morgan from 'morgan';
+import express from 'express';
 import cookieParser from 'cookie-parser';
 
 // # Other imports
+import log from '#logger';
 import config from '#config';
 import routes from '#routes';
-import { injectSuccessHandlerMiddleware } from '#lib/routerInjectSuccesHandler';
-import { normalErrorHandler, standardErrorHandler, finalErrorHandler } from '#lib/responseHandlers';
 import { idLogsMiddleware, rateLimiterMiddleware } from '#middlewares';
-import log from '#lib/logger';
+import { normalErrorHandler, standardErrorHandler, finalErrorHandler } from '#lib/responseHandlers';
 
 // # Create express application
 let app = express();
@@ -22,16 +21,22 @@ let app = express();
 // # Check proxy enabled or not
 if (config.proxy) app.set('trust proxy', config.proxy);
 
+// # Remove x-powered-by header
+app.disable('x-powered-by');
+
 const corsOptions = {
   credentials: true,
   origin: function (origin, callback) {
-    callback(null, origin);
+    if (config.isDev || !origin || ~config.corsWhitelist.indexOf(origin)) callback(null, true);
+    else callback(new Error('Not allowed by CORS'), null);
   },
 };
 
 const morganConfig = {
   stream: { write: (msg) => log.info(msg.trim()) },
 };
+
+app.use('/', express.static('public'));
 
 // # Setup middlewares
 app.use(idLogsMiddleware);
@@ -46,9 +51,6 @@ app.use(rateLimiterMiddleware);
 
 // # Initialize routes
 app.use(routes);
-
-// # Inject Success handler
-injectSuccessHandlerMiddleware(routes);
 
 // # Error handlers
 app.use(normalErrorHandler);

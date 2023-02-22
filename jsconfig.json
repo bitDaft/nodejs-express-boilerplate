@@ -14,6 +14,7 @@
       "#file": ["./loadFile/index.js"],
       "#cache": ["./utils/cache.js"],
       "#knexfile": ["./knexfile.js"],
+      "#logger": ["./lib/logger.js"],
       "#routes": ["./modules/_route.js"],
       // "#route/*": ["./modules/*/*._route.js"], // wont work due to multiple '*' chars
       // "#controller/*": ["./modules/*/*._controller.js"], // wont work due to multiple '*' chars

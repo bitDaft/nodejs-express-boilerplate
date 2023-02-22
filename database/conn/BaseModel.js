@@ -1,20 +1,12 @@
 import { Model, compose } from 'objection';
 
 // ^ this config import is not used in this file
-// ^ but due to module resolution of TLA, we need this to prevent loading of this file prematurely
+// ^ but due to module resolution order of TLA, we need this to prevent loading of this file prematurely
 // ! DO NOT REMOVE THIS CONFIG IMPORT
-import config from '#config';
+import '#config';
 import { __dirname } from '#lib/getFileDir';
-import { dbKeys, getKnexDBInstance, getKnexTenantInstance } from '#conns';
 import { dbInstanceStorage } from '#lib/asyncContexts';
-
-const returningCache = {};
-
-for (const key of dbKeys) {
-  const inst = getKnexDBInstance(key);
-  const clientParam = inst.context.userParams.client;
-  returningCache[clientParam] = ['pg', 'mssql'].includes(clientParam.split('_')[0]);
-}
+import { dbKeys, getKnexDBInstance, getKnexTenantInstance } from '#conns';
 
 const mixins = compose();
 const singleDb = dbKeys.length === 1;
@@ -69,47 +61,15 @@ export default class BaseModel extends mixins(Model) {
       const dynLoad = store?.get('isDynamicLoadTenant');
       const tenantId = store?.get('tenantId');
       const tenantInfo = store?.get('tenantInfo');
-      if (dynLoad === true) {
+      if (dynLoad) {
         knexInstance = getKnexTenantInstance(tenantId, tenantInfo);
-      } else if (dynLoad === false) {
+      } else {
         knexInstance = getKnexDBInstance(tenantId);
       }
     } else {
       knexInstance = args;
     }
-    if (knexInstance) this.knex(knexInstance);
     const superVal = super.query(knexInstance);
-    if (knexInstance) this.knex(singleDb ? getKnexDBInstance(dbKeys[0]) : null);
     return superVal;
-  }
-
-  static get QueryBuilder() {
-    let supportsReturning = false;
-    const clientParam = this.knex()?.context?.userParams?.client;
-    if (clientParam) supportsReturning = returningCache[clientParam];
-    return class extends Model.QueryBuilder {
-      // # Wrapping some fns to use returning if it supports it
-      insertAndFetch(body) {
-        return supportsReturning
-          ? Array.isArray(body)
-            ? this.insert(body).returning('*')
-            : this.insert(body).returning('*').first()
-          : super.insertAndFetch(body);
-      }
-
-      patchAndFetchById(id, body) {
-        return supportsReturning
-          ? this.findById(id).patch(body).returning('*').first()
-          : super.patchAndFetchById(id, body);
-      }
-
-      patchAndFetch(body) {
-        return supportsReturning
-          ? Array.isArray(body)
-            ? this.patch(body).returning('*')
-            : this.patch(body).returning('*').first()
-          : super.patchAndFetch(body);
-      }
-    };
   }
 }

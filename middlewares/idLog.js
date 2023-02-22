@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { _baseLogger } from '#lib/logger';
+import { _baseLogger } from '#logger';
 import { loggingStorage } from '#lib/asyncContexts';
 
 export const idLogsMiddleware = async (req, res, next) => {
