@@ -1,5 +1,7 @@
 import express from 'express';
 
+import { injectSuccessHandlerMiddleware } from '#lib/routerInjectSuccesHandler';
+
 import test from '#route/test';
 import auth from '#route/auth';
 
@@ -20,5 +22,8 @@ router.use('/auth', auth);
 // # Other routes
 //
 //
+
+// # Inject Success handler
+injectSuccessHandlerMiddleware(router);
 
 export default router;

@@ -2,19 +2,18 @@
 import '#lib/routerExceptionHandler';
 
 // # Package imports
-import express from 'express';
-import morgan from 'morgan';
 import cors from 'cors';
 import helmet from 'helmet';
+import morgan from 'morgan';
+import express from 'express';
 import cookieParser from 'cookie-parser';
 
 // # Other imports
+import log from '#logger';
 import config from '#config';
 import routes from '#routes';
-import { injectSuccessHandlerMiddleware } from '#lib/routerInjectSuccesHandler';
-import { normalErrorHandler, standardErrorHandler, finalErrorHandler } from '#lib/responseHandlers';
 import { idLogsMiddleware, rateLimiterMiddleware } from '#middlewares';
-import log from '#logger';
+import { normalErrorHandler, standardErrorHandler, finalErrorHandler } from '#lib/responseHandlers';
 
 // # Create express application
 let app = express();
@@ -52,9 +51,6 @@ app.use(rateLimiterMiddleware);
 
 // # Initialize routes
 app.use(routes);
-
-// # Inject Success handler
-injectSuccessHandlerMiddleware(routes);
 
 // # Error handlers
 app.use(normalErrorHandler);
