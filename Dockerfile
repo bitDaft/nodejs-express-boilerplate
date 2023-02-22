@@ -1,7 +1,5 @@
 FROM node:18-alpine
 
-RUN apk add dumb-init
-
 ENV NODE_ENV=production
 
 RUN mkdir -p /home/node/app/node_modules 
@@ -23,6 +21,8 @@ RUN npm run FIX_ERR_REQUIRE_ESM_BULLMQ
 COPY --chown=node:node . .
 
 EXPOSE 5000
+
+RUN apk --no-cache add dumb-init
 
 # running it like this will not allow the workers to also run
 # but if the we run it via npm ctrl+c and such signals may not pass through to node process
