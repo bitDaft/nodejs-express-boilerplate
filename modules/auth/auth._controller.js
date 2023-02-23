@@ -2,7 +2,6 @@ import { default as jwt } from 'jsonwebtoken';
 
 import { Failure } from '#lib/responseHelpers';
 import config from '#config';
-import { MINUTE } from '#utils/timeConstants';
 
 import {
   sendRegistrationSuccessEmail,
@@ -10,7 +9,7 @@ import {
   sendPasswordResetSuccessEmail,
   sendForgotPasswordEmail,
 } from './auth.notification.js';
-import { basicUser } from './auth.util.js';
+import { basicUser, getJWTExpiresTime } from './auth.util.js';
 import {
   getUserWithEmail,
   getUserWithEmailAndValid,
@@ -34,9 +33,6 @@ import {
   validateVerify,
 } from './auth.validate.js';
 import { deleteCacheUserParentTokens } from './auth.cache.js';
-
-const getJWTExpiresTime = () =>
-  new Date(Date.now() + config.accessTokenDuration * MINUTE).getTime();
 
 export const loginExistingUser = async (email, password) => {
   const inputData = validateLogin({ email, password });
