@@ -2,6 +2,8 @@ import express from 'express';
 
 import { injectSuccessHandlerMiddleware } from '#lib/routerInjectSuccesHandler';
 
+import config from '#config';
+
 import test from '#route/test';
 import auth from '#route/auth';
 
@@ -17,7 +19,9 @@ router.get('/favicon.ico', (_, res) => res.status(404).send());
 router.use('/test', test);
 
 // # Auth route
-router.use('/auth', auth);
+if (config.isDev) {
+  router.use('/auth', auth);
+}
 
 // # Other routes
 //
