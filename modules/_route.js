@@ -16,12 +16,12 @@ router.get('/healthcheck', (_, res) => res.status(204).send());
 router.get('/favicon.ico', (_, res) => res.status(404).send());
 
 // # Test route
-router.use('/test', test);
+if (config.isDev) {
+  router.use('/test', test);
+}
 
 // # Auth route
-if (config.isDev) {
   router.use('/auth', auth);
-}
 
 // # Other routes
 //
