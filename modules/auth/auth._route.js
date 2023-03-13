@@ -77,15 +77,15 @@ const resetUserPasswordHandler = async (req) => {
   return "User's password has been reset";
 };
 
-router.post('/login', loginExistingUserHandler);
-router.post('/register', registerNewUserHandler);
-router.get('/verify', verifyUserHandler);
+router.post(`/login`, loginExistingUserHandler);
+router.post(`/register`, registerNewUserHandler);
+router.get(`/verify`, verifyUserHandler);
 
-router.get('/refresh-token', refreshTokenHandler);
-router.get('/revoke-token', authorize(), revokeTokenHandler);
+router.get(`/refresh-token`, refreshTokenHandler);
+router.get(`/revoke-token`, authorize(), revokeTokenHandler);
 
-router.post('/forgot-password', requestPasswordChangeHandler);
-router.get('/validate-reset-token', validateResetTokenHandler);
-router.post('/reset-password', resetUserPasswordHandler);
+router.post(`/forgot-password`, requestPasswordChangeHandler);
+router.get(`/validate-reset-token`, validateResetTokenHandler);
+router.post(`/reset-password`, resetUserPasswordHandler);
 
 export default router;

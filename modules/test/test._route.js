@@ -6,6 +6,6 @@ const router = express.Router();
 
 const pingHandler = async (req, res) => await ping();
 
-router.get('/ping', pingHandler);
+router.get(`/ping`, pingHandler);
 
 export default router;
