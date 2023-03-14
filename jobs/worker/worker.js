@@ -37,11 +37,11 @@ const closeAll = async () => {
 
 process.on('SIGTERM', async () => {
   log.info('SIGTERM signal received:');
-  closeAll();
+  await closeAll();
 });
 process.on('SIGINT', async () => {
   log.info('SIGINT signal received:');
-  closeAll();
+  await closeAll();
 });
 
 export default worker;

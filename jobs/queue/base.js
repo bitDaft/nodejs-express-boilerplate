@@ -20,16 +20,16 @@ class _BaseQueue {
     const closeAll = async () => {
       log.info('closing Queue ' + name);
       await this.queueEvents.close();
-      this.queue.close();
+      await this.queue.close();
       process.exit(0);
     };
     process.on('SIGTERM', async () => {
       log.info('SIGTERM signal received:');
-      closeAll();
+      await closeAll();
     });
     process.on('SIGINT', async () => {
       log.info('SIGINT signal received:');
-      closeAll();
+      await closeAll();
     });
   }
 
