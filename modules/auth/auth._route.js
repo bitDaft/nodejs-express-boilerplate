@@ -22,8 +22,8 @@ const loginExistingUserHandler = async (req, res) => {
   const userData = await loginExistingUser(email, password);
   res.cookie(config.refreshCookieName, userData.refreshToken, {
     expires: new Date(Date.now() + config.refreshTokenDuration * DAY),
-    secure: !config.isDev,
     ...config.refreshCookieOption,
+    sameSite: config.isDev ? 'None' : 'Lax',
   });
   return userData;
 };
@@ -45,8 +45,8 @@ const refreshTokenHandler = async (req, res) => {
   const refreshData = await refreshToken(_refreshToken);
   res.cookie(config.refreshCookieName, refreshData.refreshToken, {
     expires: new Date(Date.now() + config.refreshTokenDuration * DAY),
-    secure: !config.isDev,
     ...config.refreshCookieOption,
+    sameSite: config.isDev ? 'None' : 'Lax',
   });
   return refreshData;
 };

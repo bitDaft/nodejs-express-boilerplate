@@ -28,7 +28,8 @@
   "refreshCookieOption": {
     "httpOnly": true,
     "path": "/auth/refresh-token",
-    "sameSite": "Strict"
+    "sameSite": "Strict",
+    "secure": true
   },
   "corsWhitelist": ["http://localhost", "http://example.com"]
 }
