@@ -6,6 +6,6 @@ const router = express.Router();
 
 const getHandler = async (req, res) => await getData();
 
-router.get('/', getHandler);
+router.get(`/`, getHandler);
 
 export default router;

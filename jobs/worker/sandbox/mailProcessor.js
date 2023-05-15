@@ -1,12 +1,7 @@
-import nodemailer from 'nodemailer';
-
-import config from '#config';
-
-const transporter = nodemailer.createTransport(config.smtp);
+import sendMail from '#utils/sendMail';
 
 const mailJobProcessor = async (job) => {
-  const data = job.data;
-  return transporter.sendMail(data);
+  return sendMail(job.data);
 };
 
 export default mailJobProcessor;

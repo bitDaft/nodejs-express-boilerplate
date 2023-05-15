@@ -48,9 +48,10 @@ export const loginExistingUser = async (email, password) => {
     expiresIn: config.accessTokenDuration + 'm',
   });
 
+  deleteCacheUserParentTokens(user.id);
+
   return {
     user: basicUser(user),
-    role: user.role.name,
     accessToken: jwtToken,
     refreshToken: refreshToken.refresh_token,
     expiresAt: getJWTExpiresTime(),
@@ -124,6 +125,7 @@ export const refreshToken = async (refToken) => {
   });
 
   return {
+    user: basicUser(user),
     accessToken: jwtToken,
     refreshToken: refreshToken.refresh_token,
     expiresAt: getJWTExpiresTime(),

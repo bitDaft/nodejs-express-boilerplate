@@ -29,6 +29,19 @@ worker.on('error', (err) => {
   log.fatal({ err, workerName: QUEUE_NAME });
 });
 
-process.on('exit', async () => await worker.close());
+const closeAll = async () => {
+  log.info('closing Worker ' + QUEUE_NAME)
+  await worker.close();
+  process.exit(0);
+};
+
+process.on('SIGTERM', async () => {
+  log.info('SIGTERM signal received:');
+  await closeAll();
+});
+process.on('SIGINT', async () => {
+  log.info('SIGINT signal received:');
+  await closeAll();
+});
 
 export default worker;

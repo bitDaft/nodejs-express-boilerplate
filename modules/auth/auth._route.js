@@ -22,8 +22,8 @@ const loginExistingUserHandler = async (req, res) => {
   const userData = await loginExistingUser(email, password);
   res.cookie(config.refreshCookieName, userData.refreshToken, {
     expires: new Date(Date.now() + config.refreshTokenDuration * DAY),
-    secure: !config.isDev,
     ...config.refreshCookieOption,
+    sameSite: config.isDev ? 'None' : 'Lax',
   });
   return userData;
 };
@@ -45,8 +45,8 @@ const refreshTokenHandler = async (req, res) => {
   const refreshData = await refreshToken(_refreshToken);
   res.cookie(config.refreshCookieName, refreshData.refreshToken, {
     expires: new Date(Date.now() + config.refreshTokenDuration * DAY),
-    secure: !config.isDev,
     ...config.refreshCookieOption,
+    sameSite: config.isDev ? 'None' : 'Lax',
   });
   return refreshData;
 };
@@ -77,15 +77,15 @@ const resetUserPasswordHandler = async (req) => {
   return "User's password has been reset";
 };
 
-router.post('/login', loginExistingUserHandler);
-router.post('/register', registerNewUserHandler);
-router.get('/verify', verifyUserHandler);
+router.post(`/login`, loginExistingUserHandler);
+router.post(`/register`, registerNewUserHandler);
+router.get(`/verify`, verifyUserHandler);
 
-router.get('/refresh-token', refreshTokenHandler);
-router.get('/revoke-token', authorize(), revokeTokenHandler);
+router.get(`/refresh-token`, refreshTokenHandler);
+router.get(`/revoke-token`, authorize(), revokeTokenHandler);
 
-router.post('/forgot-password', requestPasswordChangeHandler);
-router.get('/validate-reset-token', validateResetTokenHandler);
-router.post('/reset-password', resetUserPasswordHandler);
+router.post(`/forgot-password`, requestPasswordChangeHandler);
+router.get(`/validate-reset-token`, validateResetTokenHandler);
+router.post(`/reset-password`, resetUserPasswordHandler);
 
 export default router;
