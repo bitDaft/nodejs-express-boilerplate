@@ -32,6 +32,7 @@ worker.on('error', (err) => {
 const closeAll = async () => {
   log.info('closing Worker ' + QUEUE_NAME)
   await worker.close();
+  await worker.disconnect();
   process.exit(0);
 };
 

@@ -37,13 +37,13 @@ const closeAllHandles = () => {
   });
   log.info('closing Database connections');
   for (let key in knexMain) {
-    let instance = knexMain[key];
+    let instance = knexMain.get(key);
     instance.destroy?.((conn) => {
       log.info('Closed db connection ' + instance.context.userParams.client);
     });
   }
   for (let key in knexTenant) {
-    let instance = knexMain[key];
+    let instance = knexTenant.get(key);
     instance.destroy?.((conn) => {
       log.info('Closed db connection ' + instance.context.userParams.client);
     });
