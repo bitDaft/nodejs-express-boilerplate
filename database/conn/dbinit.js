@@ -4,8 +4,8 @@ import log from '#logger';
 import config from '#config';
 import { generateKnexConfig } from '#knexfile';
 
-const knexMain = {};
-const knexTenant = {};
+const knexMain = new Map();
+const knexTenant = new Map();
 
 const knexLog = {
   warn(msg) {
@@ -27,21 +27,22 @@ const knexLog = {
 for (let key in config.db) {
   const knexConfig = generateKnexConfig(config.db[key], key);
   knexConfig.log = knexLog;
-  knexMain[key] = Knex(knexConfig);
+  knexMain.set(key, Knex(knexConfig));
 }
 
 // ^ this function is used to get the different database connections as defined in the env file
 const getKnexDBInstance = (dbId) => {
-  return knexMain[dbId];
+  return knexMain.get(dbId);
 };
 
 // ^ this function is when connection details of tenants are stored in a db and need to fetch them and make the connection at runtime
 const getKnexTenantInstance = async (tenantId, tenantInfo) => {
-  let knexInstance = knexTenant[tenantId];
+  let knexInstance = knexTenant.get(tenantId);
   if (knexInstance === undefined) {
     const knexConfig = generateKnexConfig(tenantInfo, tenantId + '_tenant');
     knexConfig.log = knexLog;
-    knexTenant[tenantId] = knexInstance = Knex(knexConfig);
+    knexInstance = Knex(knexConfig);
+    knexTenant.set(tenantId, knexInstance);
   }
   return knexInstance;
 };
